@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Customization</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>MiscellaneousRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Miscellaneous</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>NowPlayingUIRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Now Playing UI</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>CarModeUIRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Car Mode UI</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>SearchPageRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Search Page</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>label</key>
+			<string>Donate To Luki</string>
+			<key>subtitle</key>
+			<string>Appreciated 🥰</string>
+			<key>url</key>
+			<string>https://paypal.me/Luki120</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>label</key>
+			<string>Source Code</string>
+			<key>subtitle</key>
+			<string>GitHub 🔥</string>
+			<key>url</key>
+			<string>https://github.com/Luki120/PerfectSpotify</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>myReddit:</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>HBTintedTableCell</string>
+			<key>label</key>
+			<string>Reddit</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Big thanks to ETHN, MTAC and SouthernGirlWhoCode for helping out to make this tweak. 
+
+Thank you Litten for helping with critical parts of OLED dark mode, you're amazing ❤️
+
+Preferences layout based off Litten’s awesome tweaks.
+
+Icon by Chimera_RedsnOw, banner by ETHN.</string>
+			<key>isStaticText</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerAlignment</key>
+			<real>1</real>
+			<key>footerText</key>
+			<string>made by Luki with ❤️</string>
+			<key>isStaticText</key>
+			<true/>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>PerfectSpotify</string>
+</dict>
+</plist>

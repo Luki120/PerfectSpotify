@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>enableCarMode</string>
+			<key>label</key>
+			<string>Enable Car Mode</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hidePlaylistTitle</string>
+			<key>label</key>
+			<string>Hide Playlist Title</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideCarButton</string>
+			<key>label</key>
+			<string>Hide Car Button</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideCarLikeButton</string>
+			<key>label</key>
+			<string>Hide Like Button</string>
+		</dict>
+             <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideChooseMusicButton</string>
+			<key>label</key>
+			<string>Hide Choose Music Button</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>PerfectSpotify</string>
+</dict>
+</plist>

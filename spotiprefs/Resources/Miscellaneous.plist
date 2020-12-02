@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+   <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>oledSpotify</string>
+			<key>label</key>
+			<string>OLED Spotify</string>
+		</dict>
+             <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>blackoutContextMenu</string>
+			<key>label</key>
+			<string>Blackout Context Menu</string>
+		</dict>
+             <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>trueShuffle</string>
+			<key>label</key>
+			<string>True Shuffle</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>enableLibraryX</string>
+			<key>label</key>
+			<string>Enable Library X</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideConnectButton</string>
+			<key>label</key>
+			<string>Hide Connect Button</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideAddSongsButton</string>
+			<key>label</key>
+			<string>Hide Add Songs Button</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideBigPlayShuffleButton</string>
+			<key>label</key>
+			<string>Hide Big Play Shuffle Button</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>enableLyricsForAllTracks</string>
+			<key>label</key>
+			<string>Lyrics For All Tracks</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>disableGeniusLyrics</string>
+			<key>label</key>
+			<string>Disable Genius Lyrics</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>disableStorylines</string>
+			<key>label</key>
+			<string>Disable Storylines</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>showStatusBar</string>
+			<key>label</key>
+			<string>Show Status Bar</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideSearchBar</string>
+			<key>label</key>
+			<string>Hide Search Bar</string>
+		</dict>
+             <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideTabBarLabels</string>
+			<key>label</key>
+			<string>Hide Tab Bar Labels</string>
+		</dict>
+              <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideRemoveButton</string>
+			<key>label</key>
+			<string>Hide Remove Button (Daily Mix)</string>
+		</dict>
+             <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Please NOTE: The Lyrics feature DOESN'T enable Lyrics if you never had them. Is meant for very new songs/albums which drop out and don't have the Lyrics yet. If Spotify for some stupid reason doesn't natively allow Lyrics in your country I can't do anything about it since it's most likely server-sided :/</string>
+			<key>isStaticText</key>
+			<true/>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>PerfectSpotify</string>
+</dict>
+</plist>
