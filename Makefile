@@ -3,9 +3,6 @@ TARGET := iphone:clang:latest:latest
 DEBUG = 0
 FINALPACKAGE = 1
 
-export THEOS_DEVICE_IP = 192.168.0.7
-export THEOS_DEVICE_PORT = 22
-
 INSTALL_TARGET_PROCESSES = SpringBoard
 
 include $(THEOS)/makefiles/common.mk
