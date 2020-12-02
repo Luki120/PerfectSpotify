@@ -1287,4 +1287,4 @@ return %orig;
     %init(EnableTweak, ConnectButton=objc_getClass("ConnectUIFeatureImpl.ConnectButtonView"));
 
 
-}
+} // The text that follows EnableTweak is the way to hook into a Swift class, ConnectButton is the name I give it for simplicity, between () is the actual name of the Swift class.
