@@ -9,6 +9,8 @@ UIColor* tintColor;
 UIColor* setBackgroundColor;
 
 
+// Interfaces give the ability to the custom Spotify class to inherit the methods from the respective iOS class, useful if the method you're trying to use isn't in the custom class.
+
 @interface SPTContextMenuAccessoryButton : UIView
 @property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
 @end
