@@ -3,9 +3,6 @@ export TARGET := iphone:clang:latest:latest
 DEBUG = 0
 FINALPACKAGE = 1
 
-THEOS_DEVICE_IP = 192.168.0.7
-#THEOS_DEVICE_IP = 192.168.0.15
-
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = PerfectSpotify
