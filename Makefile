@@ -1,24 +1,20 @@
-ARCHS = arm64 arm64e
-TARGET := iphone:clang:latest:latest
-DEBUG = 0
-FINALPACKAGE = 1
-
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = PerfectSpotify
 
-PerfectSpotify_FILES = Tweak.xm
-PerfectSpotify_CFLAGS = -fobjc-arc
+BUNDLE_NAME = PerfectSpotify
+
+
+
+PerfectSpotify_FILES = SPTRootListController.xm MiscellaneousRootListController.m ContributorsRootListController.m KRTableCell.m KRLinkCell.m KRTwitterCell.m
 PerfectSpotify_FRAMEWORKS = UIKit
-PerfectSpotify_PRIVATE_FRAMEWORKS = MediaRemote
-PerfectSpotify_EXTRA_FRAMEWORKS += Cephei # Add Cephei to extra frameworks and ws.hbang.common (>= 1.14) to control file
+PerfectSpotify_PRIVATE_FRAMEWORKS = Preferences
+PerfectSpotify_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
+PerfectSpotify_INSTALL_PATH = /Library/PreferenceBundles
+PerfectSpotify_CFLAGS = -fobjc-arc -Wdeprecated-declarations -Wno-deprecated-declarations
 PerfectSpotify_LIBRARIES += sparkcolourpicker Kitten
 
-include $(THEOS_MAKE_PATH)/tweak.mk
+include $(THEOS_MAKE_PATH)/bundle.mk
 
-SUBPROJECTS += spotiprefs
-
-include $(THEOS_MAKE_PATH)/aggregate.mk
-
-after-install::
-	install.exec "sbreload"
+internal-stage::
+	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
+	$(ECHO_NOTHING)cp entry.plist $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences/PerfectSpotify.plist$(ECHO_END)
