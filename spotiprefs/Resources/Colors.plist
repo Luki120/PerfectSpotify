@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>enableTextColor</string>
+			<key>label</key>
+			<string>Enable Text Color</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>enableTintColor</string>
+			<key>label</key>
+			<string>Enable Tint Color</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>lyricsCardColor</string>
+			<key>label</key>
+			<string>Enable Lyrics Card Color</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>enableBackgroundUIColor</string>
+			<key>label</key>
+			<string>Enable Now Playing UI Color</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>gradientColors</string>
+			<key>label</key>
+			<string>Enable Gradient Background Colors</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>key</key>
+			<string>tintTextColor</string>
+			<key>label</key>
+			<string>Text Color</string>
+			<key>libsparkcolourpicker</key>
+			<dict>
+				<key>alpha</key>
+				<true/>
+				<key>defaults</key>
+				<string>com.perfect.spotifycolors</string>
+				<key>fallback</key>
+				<string>#ffffff</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>key</key>
+			<string>tintColor</string>
+			<key>label</key>
+			<string>Tint Color</string>
+			<key>libsparkcolourpicker</key>
+			<dict>
+				<key>alpha</key>
+				<true/>
+				<key>defaults</key>
+				<string>com.perfect.spotifycolors</string>
+				<key>fallback</key>
+				<string>#ffffff</string>
+			</dict>
+			</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>key</key>
+			<string>lyricsCardColor</string>
+			<key>label</key>
+			<string>Lyrics Card Color</string>
+			<key>libsparkcolourpicker</key>
+			<dict>
+				<key>alpha</key>
+				<true/>
+				<key>defaults</key>
+				<string>com.perfect.spotifycolors</string>
+				<key>fallback</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>key</key>
+			<string>backgroundUIColor</string>
+			<key>label</key>
+			<string>Background Color</string>
+			<key>libsparkcolourpicker</key>
+			<dict>
+				<key>alpha</key>
+				<true/>
+				<key>defaults</key>
+				<string>com.perfect.spotifycolors</string>
+				<key>fallback</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>PerfectSpotify</string>
+</dict>
+</plist>

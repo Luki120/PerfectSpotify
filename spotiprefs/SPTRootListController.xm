@@ -1,5 +1,10 @@
 #include "SPTRootListController.h"
 #import <AudioToolbox/AudioServices.h>
+#import "../PerfectSpotify.h"
+
+UIBlurEffect* blur;
+UIVisualEffectView* blurView;
+
 
 @implementation SPTRootListController
 
@@ -12,13 +17,14 @@
 }
 
 
+
+
 - (instancetype)init {
 
     self = [super init];
 
     if (self) {
 
-        
         SPTAppearanceSettings *appearanceSettings = [[SPTAppearanceSettings alloc] init];
         self.hb_appearanceSettings = appearanceSettings;
         self.killButton = [[UIBarButtonItem alloc] initWithTitle:@"Kill Spotify"
@@ -81,6 +87,71 @@
     _table.tableHeaderView = self.headerView;
 
 }
+
+
+-(void)resetPrompt {
+
+    UIAlertController* resetAlert = [UIAlertController alertControllerWithTitle:@"PerfectSpotify"
+	message:@"Do You Really Want To Reset Your Preferences?"
+	preferredStyle:UIAlertControllerStyleAlert];
+	
+    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Yeah man" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+        [self resetPreferences];
+	}];
+
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Nah just messing" style:UIAlertActionStyleCancel handler:nil];
+
+	[resetAlert addAction:confirmAction];
+	[resetAlert addAction:cancelAction];
+
+	[self presentViewController:resetAlert animated:YES completion:nil];
+ 
+}
+
+- (void)resetPreferences {
+
+    HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier: @"com.perfect.spotify"];
+    for (NSString* key in [preferences dictionaryRepresentation]) {
+        [preferences removeObjectForKey:key];
+
+    }
+    
+    [[self enableSwitch] setOn:NO animated: YES];
+    [self respring];
+
+}
+
+
+- (void)respring {
+
+    blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
+    [blurView setFrame:self.view.bounds];
+    [blurView setAlpha:0.0];
+    [[self view] addSubview:blurView];
+
+    [UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [blurView setAlpha:1.0];
+    } completion:^(BOOL finished) {
+
+        [self respringUtil];
+    }];
+
+}
+
+
+
+- (void)respringUtil {
+
+    pid_t pid;
+    const char* args[] = {"killall", "backboardd", NULL};
+
+    [HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=PerfectSpotify"]];
+
+    posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char *const *)args, NULL);
+
+}
+
 
 
 - (void)killSpotify {
@@ -167,5 +238,3 @@
 }
 
 @end
-
-

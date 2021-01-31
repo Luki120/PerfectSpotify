@@ -10,10 +10,19 @@
 @interface MiscellaneousRootListController : PSListController
 @end
 
+@interface ColorsRootListController : PSListController
+@end
+
 @interface NowPlayingUIRootListController : PSListController
 @end
 
 @interface CarModeUIRootListController : PSListController
+@end
+
+@interface PodcastsUIRootListController : PSListController
+@end
+
+@interface LyricsUIRootListController : PSListController
 @end
 
 @interface SearchPageRootListController : PSListController

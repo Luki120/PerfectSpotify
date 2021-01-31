@@ -40,6 +40,36 @@
 			<key>label</key>
 			<string>Car Mode UI</string>
 		</dict>
+      <dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>PodcastsUIRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Podcasts UI</string>
+		</dict>
+      <dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>LyricsUIRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Lyrics UI</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>ColorsRootListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Colors</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
@@ -50,9 +80,61 @@
 			<key>label</key>
 			<string>Search Page</string>
 		</dict>
+
+      <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Respring to apply changes is NOT necessary</string>
+			<key>isStaticText</key>
+			<true/>
+		</dict>
+      <dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Respring</string>
+			<key>action</key>
+			<string>respring</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>resetPrompt</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Reset Preferences</string>
+		</dict>
+
+      <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Credits</string>
+		</dict>
+		<dict>
+ 			<key>cell</key>
+ 			<string>PSLinkCell</string>
+ 			<key>label</key>
+ 			<string>Contributors</string>
+ 			<key>detail</key>
+ 			<string>ContributorsRootListController</string>
+ 			<key>SPTContributors</key>
+ 			<string>Contributors</string>
+ 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>label</key>
+			<string>Can I Use Native Lyrics?</string>
+			<key>subtitle</key>
+			<string>Check this post</string>
+			<key>url</key>
+			<string>https://techcrunch.com/2020/06/29/in-a-significant-expansion-spotify-to-launch-real-time-lyrics-in-26-markets/</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>
@@ -83,20 +165,6 @@
 			<string>HBTintedTableCell</string>
 			<key>label</key>
 			<string>Reddit</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>Big thanks to ETHN, MTAC and SouthernGirlWhoCode for helping out to make this tweak. 
-
-Thank you Litten for helping with critical parts of OLED dark mode, you're amazing ❤️
-
-Preferences layout based off Litten’s awesome tweaks.
-
-Icon by Chimera_RedsnOw, banner by ETHN.</string>
-			<key>isStaticText</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>cell</key>

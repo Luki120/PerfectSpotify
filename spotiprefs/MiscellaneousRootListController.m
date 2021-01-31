@@ -13,6 +13,19 @@
 @end
 
 
+@implementation ColorsRootListController
+
+- (NSArray *)specifiers {
+	if (!_specifiers) {
+		_specifiers = [self loadSpecifiersFromPlistName:@"Colors" target:self];
+	}
+
+	return _specifiers;
+}
+
+@end
+
+
 @implementation NowPlayingUIRootListController
 
 - (NSArray *)specifiers {
@@ -44,6 +57,32 @@
 - (NSArray *)specifiers {
 	if (!_specifiers) {
 		_specifiers = [self loadSpecifiersFromPlistName:@"Search Page" target:self];
+	}
+
+	return _specifiers;
+}
+
+@end
+
+
+@implementation PodcastsUIRootListController
+
+- (NSArray *)specifiers {
+	if (!_specifiers) {
+		_specifiers = [self loadSpecifiersFromPlistName:@"Podcasts UI" target:self];
+	}
+
+	return _specifiers;
+}
+
+@end
+
+
+@implementation LyricsUIRootListController
+
+- (NSArray *)specifiers {
+	if (!_specifiers) {
+		_specifiers = [self loadSpecifiersFromPlistName:@"Lyrics UI" target:self];
 	}
 
 	return _specifiers;

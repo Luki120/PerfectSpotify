@@ -1,109 +1,44 @@
 #import <UIKit/UIKit.h>
 #import <MediaRemote/MediaRemote.h>
-#import <substrate.h>
-#import <Foundation/Foundation.h>
-
-UIColor* backgroundColor;
-UIButton* rightButton;
-UIColor* tintColor;
-UIColor* setBackgroundColor;
+#import <libKitten.h>
 
 
-// Interfaces give the ability to the custom Spotify class to inherit the methods from the respective iOS class, useful if the method you're trying to use isn't in the custom class.
-
-@interface SPTContextMenuAccessoryButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
 
 
-@interface SPTNowPlayingQueueButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface SPTGaiaDevicesAvailableViewImplementation : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface SPTNowPlayingAnimatedLikeButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface SPTNowPlayingShuffleButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface SPTNowPlayingRepeatButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface SPTNowPlayingSliderV2 : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface SPTNowPlayingDurationViewV2 : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
+// Text to the top
 
 
 @interface SPTNowPlayingInformationUnitViewController : UIViewController
-@property UIView *titleLabel, *subtitleLabel;
+@property UIView *titleLabel;
+@property UIView *subtitleLabel;
+@property UIViewController *heartButtonViewController;
 @end
 
 
-@interface SPTNowPlayingTitleButton : UIView
-@end
-
-@interface SPTNowPlayingMarqueeLabel : UIView
-@end
-
-
-@interface SPTNowPlayingPreviousTrackButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
+@interface SPTNowPlayingCoverArtCell : UICollectionViewCell
+@property(getter=_collectionView) UICollectionView *collectionView;
+@property UIImageView *imageView;
 @end
 
 
-@interface SPTNowPlayingNextTrackButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
+@interface SPTNowPlayingContentLayerViewController : UIViewController
+@property UICollectionView *collectionView;
 @end
 
 
-@interface SPTNowPlayingPlayButtonV2 : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
+@interface SPTNowPlayingViewController : UIViewController
+- (void)setColors; // libKitten
 @end
 
 
-@interface SPTSortingFilteringFilterBarView : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
+// libKitten stuff
 
 
-@interface SPTDrivingModeHeadUnitFeedbackButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
+UIImage* currentArtwork;
+CAGradientLayer* gradient;
 
 
-@interface _TtC20EncoreConsumerMobile16HeaderPlayButton : UIView
-@property (nonatomic, assign, readwrite, getter=isHidden) BOOL hidden;
-@end
-
-
-@interface _UIVisualEffectSubview : UIView
-@end
-
-
-@interface GLUEGradientView : UIView
-@property (nonatomic, assign, readwrite) CGFloat alpha;
-@end
-
-
-@interface SPTHomeView : UIView
-@end
+// Miscellaneous
 
 
 @interface SPTHomeGradientBackgroundView : UIView
@@ -114,15 +49,15 @@ UIColor* setBackgroundColor;
 @end
 
 
-@interface UITabBarButtonLabel: UIView
+@interface GLUEGradientView : UIView
+@property (nonatomic, assign, readwrite) CGFloat alpha;
+@end
+
+@interface SPTHomeView : UIView
 @end
 
 
-@interface SPTTableView : UIView
-@end
-
-
-@interface SPTSettingsTableViewCell : UIView
+@interface SPTSearch2ViewController : UIViewController
 @end
 
 
@@ -130,15 +65,111 @@ UIColor* setBackgroundColor;
 @end
 
 
-@interface GLUEEntityRowView : UIView
+@interface _UIVisualEffectSubview : UIView
 @end
 
 
-@interface GLUEEntityRowContentView : UIView
+@interface SPTSortingFilteringFilterBarView : UIView
 @end
 
 
-@interface SPTNowPlayingFreeTierFeedbackButton : UIView
+@interface UITabBarButtonLabel: UIView
+@end
+
+
+@interface SPTNowPlayingFreeTierFeedbackButton : UIButton
+@end
+
+
+@interface SPTNowPlayingShareButtonViewController : UIViewController
+@end
+
+
+@interface SPTNowPlayingBarPlayButton : UIButton
+@end
+
+
+@interface SPTSnackbarView : UIView
+@end
+
+
+@interface SPTProgressView : UIView
+@end
+
+
+// Tint Color
+
+
+@interface GLUELabel : UILabel
+@property (nonatomic, strong, readwrite) UIColor *textColor;
+@end
+
+
+@interface SPTIconConfiguration : UIView
+@end
+
+
+@interface SPTNowPlayingBackgroundViewController : UIViewController
+@end    
+
+
+// Now Playing UI
+
+
+@interface SPTGaiaDevicesAvailableViewImplementation : UIView
+@end
+
+
+@interface SPTNowPlayingTitleButton : UIButton
+@end
+
+
+@interface SPTContextMenuAccessoryButton : UIButton
+@end
+
+
+@interface SPTNowPlayingQueueButton : UIButton
+@end
+
+
+@interface SPTNowPlayingAnimatedLikeButton : UIButton
+@end
+
+
+@interface SPTNowPlayingShuffleButton : UIButton
+@end
+
+
+@interface SPTNowPlayingRepeatButton : UIButton
+@end
+
+
+@interface SPTNowPlayingSliderV2 : UIView
+@end
+
+
+@interface SPTNowPlayingMarqueeLabel : UIView
+@property UIView *topLabel, *bottomLabel;
+@property UIColor *textColor;
+@end
+
+
+@interface SPTNowPlayingPreviousTrackButton : UIButton
+@end
+
+
+@interface SPTNowPlayingPlayButtonV2 : UIButton
+@end
+
+
+@interface SPTNowPlayingNextTrackButton : UIButton
+@end
+
+
+// Car Mode UI
+
+
+@interface SPTDrivingModeHeadUnitFeedbackButton : UIButton
 @end
 
 
@@ -146,16 +177,7 @@ UIColor* setBackgroundColor;
 @end
 
 
-@interface SPTSearchUIRecentsClearAllHubComponentView : UIView
-@end
-
-
-@interface SPTPlaylistExtenderRefreshButtonCell : UIView
-@end
-
-
-@interface SPTNowPlayingBackgroundViewModel : UIView
-@end
+// Search Page
 
 
 @interface SPTBrowseUICardComponentView : UIView

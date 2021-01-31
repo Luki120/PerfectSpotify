@@ -10,21 +10,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
-			<key>key</key>
-			<string>blackoutModeEnabled</string>
-			<key>label</key>
-			<string>Blackout</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -38,7 +24,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -52,7 +38,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -66,7 +52,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -80,7 +66,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -94,7 +80,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -108,7 +94,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -122,7 +108,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -136,7 +122,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -150,7 +136,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -164,7 +150,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -178,7 +164,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -186,13 +172,27 @@
 			<key>label</key>
 			<string>Center Artist/Song Title</string>
 		</dict>
-            <dict>
+		<dict>
 			<key>PostNotification</key>
 			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>textToTheTop</string>
+			<key>label</key>
+			<string>Align Text To The Top</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -200,13 +200,13 @@
 			<key>label</key>
 			<string>Hide Previous Track Button</string>
 		</dict>
-             <dict>
+		<dict>
 			<key>PostNotification</key>
 			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
@@ -214,13 +214,13 @@
 			<key>label</key>
 			<string>Hide Play/Pause Button</string>
 		</dict>
-             <dict>
+		<dict>
 			<key>PostNotification</key>
 			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>

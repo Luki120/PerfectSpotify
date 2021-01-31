@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+    <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Lead Developer</string>
+		</dict>
+   <dict>
+        <key>cell</key>
+        <string>PSButtonCell</string>
+        <key>label</key>
+        <string>@Lukii120</string>
+        <key>cellClass</key>
+        <string>HBTwitterCell</string>
+        <key>label</key>
+        <string>Luki120</string>
+        <key>user</key>
+        <string>Lukii120</string>
+    </dict>
+
+   <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Overall Help With The Tweak</string>
+		</dict>
+		<dict>
+        <key>cell</key>
+        <string>PSButtonCell</string>
+        <key>label</key>
+        <string>@EthanWhited</string>
+        <key>cellClass</key>
+        <string>HBTwitterCell</string>
+        <key>label</key>
+        <string>ETHN</string>
+        <key>user</key>
+        <string>EthanWhited</string>
+    </dict>
+<dict>
+            <key>cell</key>
+            <string>PSButtonCell</string>
+            <key>label</key>
+            <string>@MTAC8</string>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>MTAC</string>
+            <key>user</key>
+            <string>MTAC8</string>
+        </dict>
+
+        <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Help With OLED dark mode, credits for the gradients colors and preference panel idea</string>
+		</dict>
+        <dict>
+            <key>cell</key>
+            <string>PSButtonCell</string>
+            <key>label</key>
+            <string>@Litteeen</string>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>Litten</string>
+            <key>user</key>
+            <string>Litteeen</string>
+        </dict>
+
+        <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Help with implementing the color picker because I'm dumb</string>
+		</dict>
+        <dict>
+            <key>cell</key>
+            <string>PSButtonCell</string>
+            <key>label</key>
+            <string>@AzzouDuGhetto</string>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>Azzou</string>
+            <key>user</key>
+            <string>AzzouDuGhetto</string>
+        </dict>
+
+        <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Special thanks</string>
+		</dict>
+        <dict>
+            <key>cell</key>
+            <string>PSButtonCell</string>
+            <key>label</key>
+            <string>@SouthGalWhoCode</string>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>SouthernGirlWhoCode</string>
+            <key>user</key>
+            <string>SouthGalWhoCode</string>
+        </dict>
+        <dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Huge thanks to RuntimeOverflow for extensively helping with the option to align the text to the top, icon by Nightwind, banner by ETHN.</string>
+			<key>isStaticText</key>
+			<true/>
+		</dict>
+    </array>
+	<key>title</key>
+	<string>PerfectSpotify</string>
+</dict>
+</plist>
