@@ -1,6 +1,3 @@
-ARCHS = arm64 arm64e
-TARGET := iphone:clang:latest:latest
-
 include $(THEOS)/makefiles/common.mk
 
 
@@ -8,13 +5,13 @@ BUNDLE_NAME = PerfectSpotify
 
 
 
-$(BUNDLE_NAME)_FILES = $(wildcard *.m *.xm)
-$(BUNDLE_NAME)_FRAMEWORKS = UIKit
-$(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences
-$(BUNDLE_NAME)_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
-$(BUNDLE_NAME)_INSTALL_PATH = /Library/PreferenceBundles
-$(BUNDLE_NAME)_CFLAGS = -fobjc-arc -Wdeprecated-declarations -Wno-deprecated-declarations
-$(BUNDLE_NAME)_LIBRARIES += sparkcolourpicker Kitten
+PerfectSpotify_FILES = SPTRootListController.xm MiscellaneousRootListController.m ContributorsRootListController.m KRTableCell.m KRLinkCell.m KRTwitterCell.m
+PerfectSpotify_FRAMEWORKS = UIKit
+PerfectSpotify_PRIVATE_FRAMEWORKS = Preferences
+PerfectSpotify_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
+PerfectSpotify_INSTALL_PATH = /Library/PreferenceBundles
+PerfectSpotify_CFLAGS = -fobjc-arc -Wdeprecated-declarations -Wno-deprecated-declarations
+PerfectSpotify_LIBRARIES += sparkcolourpicker Kitten
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
