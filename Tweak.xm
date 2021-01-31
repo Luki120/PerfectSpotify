@@ -2596,8 +2596,8 @@ return %orig;
     if(gradientColors) {
 
 	    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"kleiUpdateColors" object:nil];
-        });
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"kleiUpdateColors" object:nil];
+            });
 
 
     }
@@ -2672,15 +2672,12 @@ return %orig;
 - (void)viewWillAppear:(BOOL)animated { // update colors when now playing view appears
 
 
-    //if(gradientColors) {
+    %orig;
 
-        %orig;
+	[self setColors];
 
-	    [self setColors];
+}
 
-    }
-
-//return %orig; 
 
 %end
 %end
