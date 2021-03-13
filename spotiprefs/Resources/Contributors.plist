@@ -110,11 +110,31 @@
             <key>user</key>
             <string>SouthGalWhoCode</string>
         </dict>
+		
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Help with implementing the align the text to the top option</string>
+		</dict>
+        <dict>
+            <key>cell</key>
+            <string>PSButtonCell</string>
+            <key>label</key>
+            <string>@RuntimeOverflow</string>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>RuntimeOverflow</string>
+            <key>user</key>
+            <string>RuntimeOverflow</string>
+        </dict>
+		
         <dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Huge thanks to RuntimeOverflow for extensively helping with the option to align the text to the top, icon by Nightwind, banner by ETHN.</string>
+			<string>Icon by Nightwind, banner by ETHN.</string>
 			<key>isStaticText</key>
 			<true/>
 		</dict>
