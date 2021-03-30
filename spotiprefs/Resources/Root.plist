@@ -92,6 +92,8 @@
       <dict>
 			<key>cell</key>
 			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>HBTintedTableCell</string>
 			<key>label</key>
 			<string>Respring</string>
 			<key>action</key>
@@ -102,6 +104,8 @@
 			<string>resetPrompt</string>
 			<key>cell</key>
 			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>HBTintedTableCell</string>
 			<key>label</key>
 			<string>Reset Preferences</string>
 		</dict>
@@ -115,6 +119,8 @@
 		<dict>
  			<key>cell</key>
  			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
  			<key>label</key>
  			<string>Contributors</string>
  			<key>detail</key>

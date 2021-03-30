@@ -1,9 +1,9 @@
 Package: com.perfect.spotify
 Name: PerfectSpotify
-Version: 1.7
+Version: 1.8
 Architecture: iphoneos-arm
 Description: ;)
 Maintainer: Luki
 Author: Luki
 Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000), preferenceloader, ws.hbang.common (>= 1.14), com.spark.libsparkcolourpicker, love.litten.libkitten
+Depends: mobilesubstrate, preferenceloader, ws.hbang.common (>= 1.14), com.spark.libsparkcolourpicker, love.litten.libkitten

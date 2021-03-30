@@ -76,16 +76,3 @@
 }
 
 @end
-
-
-@implementation LyricsUIRootListController
-
-- (NSArray *)specifiers {
-	if (!_specifiers) {
-		_specifiers = [self loadSpecifiersFromPlistName:@"Lyrics UI" target:self];
-	}
-
-	return _specifiers;
-}
-
-@end

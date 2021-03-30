@@ -84,20 +84,6 @@
 			<key>defaults</key>
 			<string>com.perfect.spotify</string>
 			<key>key</key>
-			<string>hideBigPlayShuffleButton</string>
-			<key>label</key>
-			<string>Hide Big Play Shuffle Button</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
-			<key>key</key>
 			<string>enableLyricsForAllTracks</string>
 			<key>label</key>
 			<string>Lyrics For All Tracks</string>

@@ -4,6 +4,20 @@
 <dict>
 	<key>items</key>
 	<array>
+	<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideCancelButton</string>
+			<key>label</key>
+			<string>Hide Cancel Button</string>
+		</dict>
        <dict>
 			<key>PostNotification</key>
 			<string>com.perfect.spotify/ReloadPrefs</string>
@@ -18,6 +32,20 @@
 			<key>label</key>
 			<string>Unclutter Me Please</string>
 		</dict>
+		 <dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hidePlayWhatYouLoveText</string>
+			<key>label</key>
+			<string>Hide Play What You Love Text</string>
+   		</dict>
              <dict>
 			<key>PostNotification</key>
 			<string>com.perfect.spotify/ReloadPrefs</string>
@@ -32,48 +60,6 @@
 			<key>label</key>
 			<string>Hide Clear Recent Searches Button</string>
 		</dict>
-      <dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
-			<key>key</key>
-			<string>hideCancelButton</string>
-			<key>label</key>
-			<string>Hide Cancel Button</string>
-		</dict>
-      <dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
-			<key>key</key>
-			<string>hideCameraButton</string>
-			<key>label</key>
-			<string>Hide Camera Button</string>
-   </dict>
-   <dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
-			<key>key</key>
-			<string>hidePlayWhatYouLoveText</string>
-			<key>label</key>
-			<string>Hide Play What You Love Text</string>
-   </dict>
 	</array>
 	<key>title</key>
 	<string>PerfectSpotify</string>

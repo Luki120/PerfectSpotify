@@ -1,6 +1,8 @@
 #import <UIKit/UIKit.h>
 #import <MediaRemote/MediaRemote.h>
+#import <Cephei/HBPreferences.h> // Import the cephei framework
 #import <libKitten.h>
+#import "SparkColourPickerUtils.h"
 
 
 
@@ -110,7 +112,10 @@ CAGradientLayer* gradient;
 
 
 @interface SPTNowPlayingBackgroundViewController : UIViewController
-@end    
+@end
+
+@interface _TtC20EncoreConsumerMobileP33_2A16C636D5EEE9FB65CAD14C6E4A0A8B9ECMButton : UIButton
+@end
 
 
 // Now Playing UI

@@ -5,6 +5,30 @@
 	<key>items</key>
 	<array>
 		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Gradients</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>gradientColors</string>
+			<key>label</key>
+			<string>Enable Klei Colors</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
 			<key>PostNotification</key>
 			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
@@ -61,18 +85,8 @@
 			<string>Enable Now Playing UI Color</string>
 		</dict>
 		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
-			<key>key</key>
-			<string>gradientColors</string>
-			<key>label</key>
-			<string>Enable Gradient Background Colors</string>
+			<string>PSGroupCell</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -87,6 +101,10 @@
 			<dict>
 				<key>alpha</key>
 				<true/>
+				 <key>PreviewGradient</key>
+            <true/>
+            <key>PreviewStyle</key>
+            <integer>4</integer>
 				<key>defaults</key>
 				<string>com.perfect.spotifycolors</string>
 				<key>fallback</key>
@@ -106,6 +124,10 @@
 			<dict>
 				<key>alpha</key>
 				<true/>
+				<key>PreviewGradient</key>
+            <true/>
+            <key>PreviewStyle</key>
+            <integer>4</integer>
 				<key>defaults</key>
 				<string>com.perfect.spotifycolors</string>
 				<key>fallback</key>
@@ -125,6 +147,10 @@
 			<dict>
 				<key>alpha</key>
 				<true/>
+				<key>PreviewGradient</key>
+            <true/>
+            <key>PreviewStyle</key>
+            <integer>4</integer>
 				<key>defaults</key>
 				<string>com.perfect.spotifycolors</string>
 				<key>fallback</key>
@@ -144,6 +170,10 @@
 			<dict>
 				<key>alpha</key>
 				<true/>
+				<key>PreviewGradient</key>
+            <true/>
+            <key>PreviewStyle</key>
+            <integer>4</integer>
 				<key>defaults</key>
 				<string>com.perfect.spotifycolors</string>
 				<key>fallback</key>

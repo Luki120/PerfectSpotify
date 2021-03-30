@@ -22,8 +22,5 @@
 @interface PodcastsUIRootListController : PSListController
 @end
 
-@interface LyricsUIRootListController : PSListController
-@end
-
 @interface SearchPageRootListController : PSListController
 @end

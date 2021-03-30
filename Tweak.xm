@@ -1,6 +1,5 @@
 #import "PerfectSpotify.h"
-#import "SparkColourPickerUtils.h"
-#import <Cephei/HBPreferences.h> // Import the cephei framework
+
 
 
 
@@ -14,7 +13,6 @@ static BOOL blackoutContextMenu;
 static BOOL trueShuffle;
 static BOOL hideConnectButton;
 static BOOL hideAddSongsButton;
-static BOOL hideBigPlayShuffleButton;
 static BOOL enableLyricsForAllTracks;
 static BOOL disableGeniusLyrics;
 static BOOL disableStorylines;
@@ -63,7 +61,6 @@ static BOOL hideChooseMusicButton;
 static BOOL hideSpeedButton;
 static BOOL hideBackButton;
 static BOOL hideForwardButton;
-static BOOL hideMoonButton;
 
 
 // Lyrics UI
@@ -89,7 +86,6 @@ static BOOL lyricsCardColor;
 static BOOL unclutterSearchPage;
 static BOOL hideClearRecentSearchesButton;
 static BOOL hideCancelButton;
-static BOOL hideCameraButton;
 static BOOL hidePlayWhatYouLoveText;
 
 
@@ -491,58 +487,6 @@ return %orig;
 
 
 
-// Library X
-
-
-/*%hook _TtC23YourLibraryXFeatureImpl23YourLibraryXTestManager
-
-
-- (bool)isYourLibraryXEnabled {
-
-
-    if (enableLibraryX) {
-
-
-        return 1;
-
-
-    }
-
-    
-return %orig;
-
-
-}
-
-
-%end
-
-
-%hook SPTYourLibraryTestManagerImplementation
-
-
-- (bool)isYourLibraryXEnabled {
-
-
-    if (enableLibraryX) {
-
-
-        return 1;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end*/
-
-
-
 // Connect Button in main page
 
 
@@ -593,39 +537,6 @@ return %orig;
 
 
 return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Big Play Shuffle button in Playlist
-
-// Fuck you Spotify, this is the first layoutSubviews in the code
-
-// Couldn't figure another way after the update to 8.5.93
-
-
-%hook BigPlayShuffleButton
-
-
--(void)layoutSubviews {
-
-
-    %orig;
-
-
-    if(hideBigPlayShuffleButton) {
-
-
-        [self removeFromSuperview];
-
-
-    }
 
 
 }
@@ -1029,7 +940,7 @@ return %orig;
 
 
         NSString *tintTextColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-objectForKey:@"tintTextColor"];
+        objectForKey:@"tintTextColor"];
 
 
         UIColor *color = [SparkColourPickerUtils colourWithString:tintTextColor withFallback:@"#ffffff"];
@@ -1044,7 +955,7 @@ objectForKey:@"tintTextColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1065,7 +976,7 @@ objectForKey:@"tintTextColor"];
 
 
         NSString *tintTextColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-objectForKey:@"tintTextColor"];
+        objectForKey:@"tintTextColor"];
 
 
         UIColor *color = [SparkColourPickerUtils colourWithString:tintTextColor withFallback:@"#ffffff"];
@@ -1080,7 +991,7 @@ objectForKey:@"tintTextColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1105,7 +1016,7 @@ objectForKey:@"tintTextColor"];
 
 
         NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-objectForKey:@"tintColor"];
+        objectForKey:@"tintColor"];
 
 
             if (tintColor != nil) {
@@ -1162,7 +1073,7 @@ objectForKey:@"tintColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1183,7 +1094,7 @@ objectForKey:@"tintColor"];
 
 
         NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-objectForKey:@"tintColor"];
+        objectForKey:@"tintColor"];
 
 
             if (tintColor != nil) {
@@ -1209,66 +1120,28 @@ objectForKey:@"tintColor"];
 
 
 
-%hook SPTNowPlayingPreviousTrackButton
+%hook _TtC20EncoreConsumerMobileP33_2A16C636D5EEE9FB65CAD14C6E4A0A8B9ECMButton
 
 
--(UIColor *)iconColor {
-
-
-    if(enableTintColor) {
-
-
-        NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-objectForKey:@"tintColor"];
-
-
-        return [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];   
-
-
-    } else {
-
-
-    return %orig;
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-%hook SPTNowPlayingNextTrackButton
-
-
--(UIColor *)iconColor {
+-(void)didMoveToWindow {
 
 
     if(enableTintColor) {
 
 
-        NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-objectForKey:@"tintColor"];
+        NSString *tintColor = [[NSMutableDictionary
+        dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
+        objectForKey:@"tintColor"];
 
 
-        return [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];
-
-
-    } else {
-
-
-    return %orig;
+        self.tintColor = [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];
 
 
     }
 
+return %orig;
 
 }
-
 
 %end
 
@@ -1344,7 +1217,7 @@ objectForKey:@"tintColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1355,7 +1228,7 @@ objectForKey:@"tintColor"];
 
 
 
-//Lyrics Card Color
+// Lyrics Card Color
 
 
 %hook SPTLyricsV2NowPlayingCardViewStyle
@@ -1383,7 +1256,7 @@ objectForKey:@"tintColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1418,7 +1291,7 @@ objectForKey:@"tintColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1454,7 +1327,7 @@ objectForKey:@"tintColor"];
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1516,7 +1389,7 @@ return %orig;
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -1552,7 +1425,7 @@ return %orig;
         return %orig;
 
 
-       }
+    }
 
 
 }
@@ -2114,7 +1987,7 @@ return %orig;
 
 
 
-// Podcasts UI / Hide Speed, Back, Forward, Moon Buttons
+// Podcasts UI / Hide Speed, Back, Forward Buttons
 
 
 %hook SPTNowPlayingHeadUnitView
@@ -2123,7 +1996,7 @@ return %orig;
 -(void)didMoveToWindow {
 
 
-    if(hideBackButton) {
+    if(hideBackButton || hidePreviousTrackButton) {
 
 
         UIButton* leftSecondaryButton = MSHookIvar<UIButton *>(self, "_leftSecondaryButton");
@@ -2147,150 +2020,13 @@ return %orig;
     }
 
 
-    if(hideForwardButton) {
+    if(hideForwardButton || hideNextTrackButton) {
 
 
         UIButton* rightSecondaryButton = MSHookIvar<UIButton *>(self, "_rightSecondaryButton");
 		
 
         [rightSecondaryButton setHidden:YES];
-
-
-    }
-
-
-    if(hideMoonButton) {
-
-
-        UIButton* rightTertiaryButton = MSHookIvar<UIButton *>(self, "_rightTertiaryButton");
-		
-
-        [rightTertiaryButton setHidden:YES];
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Lyrics UI
-
-
-
-
-// Hide Play Button on Lyrics view
-
-
-%hook SPTLyricsV2FullscreenFooterView
-
-
--(void)didMoveToWindow {
-
-
-    if(hidePlayButtonOnLyrics) {
-
-
-        SPTNowPlayingPlayButtonV2* playPauseButton = MSHookIvar<SPTNowPlayingPlayButtonV2 *>(self, "_playPauseButton");
-		
-
-        [playPauseButton setHidden:YES];
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// No X Button on Lyrics view
-
-
-%hook SPTLyricsV2FullscreenViewController
-
-
--(void)viewDidLoad {
-
-
-    %orig;
-
-
-    if(hideXButton) {
-
-
-        UIButton* closeButton = MSHookIvar<UIButton *>(self, "_closeButton");
-		
-
-        [closeButton setHidden:YES];
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Artwork / Song/Artist Titles
-
-
-%hook SPTLyricsV2FullscreenHeaderView
-
-
--(void)didMoveToWindow {
-
-
-    if(hideArtwork) {
-
-
-        UIImageView* imageView = MSHookIvar<UIImageView *>(self, "_imageView");
-		
-
-        [imageView setHidden:YES];
-
-
-    }
-
-
-    if(hideSongLabel) {
-
-
-        GLUELabel* titleLabel = MSHookIvar<GLUELabel *>(self, "_titleLabel");
-		
-
-        [titleLabel setHidden:YES];
-
-
-    }
-
-
-    if(hideArtistLabel) {
-
-
-        GLUELabel* subtitleLabel = MSHookIvar<GLUELabel *>(self, "_subtitleLabel");
-		
-
-        [subtitleLabel setHidden:YES];
 
 
     }
@@ -2396,7 +2132,7 @@ return %orig;
 
 
 
-// Hide Cancel/Camera Buttons in search page
+// Hide Cancel Button in search page
 
 
 %hook SPTSearchUISearchControls
@@ -2412,18 +2148,6 @@ return %orig;
 
 
         [cancelButton setHidden:YES];
-
-
-    }
-
-
-    if(hideCameraButton) {
-
-
-        UIButton* scannablesButton = MSHookIvar<UIButton *>(self, "_scannablesButton");
-
-
-        [scannablesButton setHidden:YES];
 
 
     }
@@ -2545,6 +2269,7 @@ return %orig;
 %hook SPTNowPlayingCoverArtCell
 
 -(void)didMoveToSuperview{
+    
 	%orig;
 	
 	if(!textToTheTop) return;
@@ -2588,6 +2313,9 @@ return %orig;
 
 
 
+//Litten's Klei gradients, thank you <3
+
+
 %hook MPNowPlayingInfoCenter
 
 
@@ -2595,10 +2323,9 @@ return %orig;
 
     if(gradientColors) {
 
-	    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"kleiUpdateColors" object:nil];
-            });
-
+	    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"kleiUpdateColors" object:nil];
+        });
 
     }
 
@@ -2606,51 +2333,39 @@ return %orig;
 
 }
 
-
 %end
 
 
 
 
-%hook SPTNowPlayingViewController // Litten's gradient thingy, thank you so much for this <3
+%hook SPTNowPlayingViewController
 
 
 %new
 
-
 - (void)setColors { // get artwork colors
 
-
-    if(gradientColors) {
-
-
-        //NSLog(@"[PERFECTSPOTIFY] %@", [libKitten backgroundColor:currentArtwork]);
-
-	    MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
+	MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
 		NSDictionary* dict = (__bridge NSDictionary *)information;
-		    if (dict) {
-			    if (dict[(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData]) {
+		if (dict) {
+			if (dict[(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData]) {
 				currentArtwork = [UIImage imageWithData:[dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtworkData]];
-				    if (currentArtwork)
+				if (currentArtwork)
 					[gradient setColors:[NSArray arrayWithObjects:(id)[[libKitten backgroundColor:currentArtwork] CGColor], (id)[[libKitten primaryColor:currentArtwork] CGColor], nil]];
-			        }
-      	        } else {
-			    [gradient setColors:[NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
-		    }
-    	});
-    }
+			}
+      	} else {
+			[gradient setColors:[NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
+		}
+  	});
 
 }
 
 
 - (void)viewDidLoad { // add gradient
 
-
-    %orig;
-
+	%orig;
 
     if(gradientColors) {
-
 	    if (!gradient) {
 		    gradient = [[CAGradientLayer alloc] init];
 		    [gradient setFrame:[[self view] bounds]];
@@ -2661,18 +2376,17 @@ return %orig;
 		    [[[self view] layer] insertSublayer:gradient atIndex:0];
 	    }
 
-	        [[NSNotificationCenter defaultCenter] removeObserver:self];
-	        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil]; // add notification observer to dynamically change artwork
-
     }
 
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil]; // add notification observer to dynamically change artwork
 
 }
 
+
 - (void)viewWillAppear:(BOOL)animated { // update colors when now playing view appears
 
-
-    %orig;
+	%orig;
 
 	[self setColors];
 
@@ -2685,7 +2399,7 @@ return %orig;
 
 
 
-    // You'll need to add another %end if you're grouping all hooks
+  // You'll need to add another %end if you're grouping all hooks
 
 
 
@@ -2697,8 +2411,7 @@ return %orig;
 
   // Create HBPreferences instance with your identifier, usually I just add prefs to the end of my package identifier
 
-
-HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.perfect.spotify"];
+    HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.perfect.spotify"];
 
   // Register preference variables, naming the preference key and variable the same thing reduces confusion for me.
 
@@ -2706,7 +2419,6 @@ HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.per
   [preferences registerBool:&hideConnectButton default:NO forKey:@"hideConnectButton"];
   [preferences registerBool:&hideAddSongsButton default:NO forKey:@"hideAddSongsButton"];
   [preferences registerBool:&hideDevicesButton default:NO forKey:@"hideDevicesButton"];
-  [preferences registerBool:&hideBigPlayShuffleButton default:NO forKey:@"hideBigPlayShuffleButton"];
   [preferences registerBool:&hideCloseButton default:NO forKey:@"hideCloseButton"];
   [preferences registerBool:&hidePlaylistNameText default:NO forKey:@"hidePlaylistNameText"];
   [preferences registerBool:&hideContextMenuButton default:NO forKey:@"hideContextMenuButton"];
@@ -2743,13 +2455,11 @@ HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.per
   [preferences registerBool:&hideTabBarPlayButton default:NO forKey:@"hideTabBarPlayButton"];
   [preferences registerBool:&hidePlayButtonOnLyrics default:NO forKey:@"hidePlayButtonOnLyrics"];
   [preferences registerBool:&hideCancelButton default:NO forKey:@"hideCancelButton"];
-  [preferences registerBool:&hideCameraButton default:NO forKey:@"hideCameraButton"];
   [preferences registerBool:&hideXButton default:NO forKey:@"hideXButton"];
   [preferences registerBool:&noPopUp default:NO forKey:@"noPopUp"];
   [preferences registerBool:&hideBackButton default:NO forKey:@"hideBackButton"];
   [preferences registerBool:&hideSpeedButton default:NO forKey:@"hideSpeedButton"];
   [preferences registerBool:&hideForwardButton default:NO forKey:@"hideForwardButton"];
-  [preferences registerBool:&hideMoonButton default:NO forKey:@"hideMoonButton"];
   [preferences registerBool:&hideArtwork default:NO forKey:@"hideArtwork"];
   [preferences registerBool:&hideSongLabel default:NO forKey:@"hideSongLabel"];
   [preferences registerBool:&hideArtistLabel default:NO forKey:@"hideArtistLabel"];
@@ -2764,7 +2474,7 @@ HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.per
 
     // Check if the toggles switches are enabled from preferences then init the group hooks
 
-    %init(PerfectSpotify, ConnectButton=objc_getClass("ConnectUIFeatureImpl.ConnectButtonView"), BigPlayShuffleButton=objc_getClass("EncoreConsumerMobile.PlayButtonView"), ClearRecentSearchesButton=objc_getClass("SPTTing.ChipView"), PlayWhatYouLoveText=objc_getClass("SPTTing.EmptyState"));
+    %init(PerfectSpotify, ConnectButton=objc_getClass("ConnectUIFeatureImpl.ConnectButtonView"), ClearRecentSearchesButton=objc_getClass("SPTTing.ChipView"), PlayWhatYouLoveText=objc_getClass("SPTTing.EmptyState"));
 
 
 }
