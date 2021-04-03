@@ -6,7 +6,7 @@
 // Create preference variables
 
 
-//Miscellaneous
+// Miscellaneous
 
 static BOOL oledSpotify;
 static BOOL blackoutContextMenu;
@@ -45,6 +45,7 @@ static BOOL textToTheTop;
 static BOOL hidePreviousTrackButton;
 static BOOL hidePlayPauseButton;
 static BOOL hideNextTrackButton;
+static BOOL hideSliderKnob;
 
 
 // Car Mode UI
@@ -63,22 +64,12 @@ static BOOL hideBackButton;
 static BOOL hideForwardButton;
 
 
-// Lyrics UI
-
-static BOOL hidePlayButtonOnLyrics;
-static BOOL hideXButton;
-static BOOL hideArtwork;
-static BOOL hideSongLabel;
-static BOOL hideArtistLabel;
-
-
 // Colors
 
 static BOOL enableTextColor;
 static BOOL enableTintColor;
 static BOOL gradientColors;
 static BOOL enableBackgroundUIColor;
-static BOOL lyricsCardColor;
 
 
 // Search Page
@@ -939,11 +930,7 @@ return %orig;
      if(enableTextColor) {
 
 
-        NSString *tintTextColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"tintTextColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:tintTextColor withFallback:@"#ffffff"];
+        UIColor *color = [GcColorPickerUtils colorWithHex:tintTextColor];
 
     
         %orig(color);
@@ -975,11 +962,7 @@ return %orig;
     if(enableTextColor) {
 
 
-        NSString *tintTextColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"tintTextColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:tintTextColor withFallback:@"#ffffff"];
+        UIColor *color = [GcColorPickerUtils colorWithHex:tintTextColor];
 
     
         %orig(color);
@@ -1015,17 +998,12 @@ return %orig;
     if(enableTintColor) {
 
 
-        NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"tintColor"];
+        if (tintColor != nil) {
 
 
-            if (tintColor != nil) {
+            return [GcColorPickerUtils colorWithHex:tintColor];
 
-
-                return [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];
-
-
-            }
+        }
 
 
     }
@@ -1093,17 +1071,12 @@ return %orig;
     if(enableTintColor) {
 
 
-        NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"tintColor"];
+        if (tintColor != nil) {
 
 
-            if (tintColor != nil) {
+            return [GcColorPickerUtils colorWithHex:tintColor];
 
-
-                return [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];
-
-
-            }
+        }
 
 
     }
@@ -1129,17 +1102,13 @@ return %orig;
     if(enableTintColor) {
 
 
-        NSString *tintColor = [[NSMutableDictionary
-        dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"tintColor"];
-
-
-        self.tintColor = [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];
-
+        self.tintColor = [GcColorPickerUtils colorWithHex:tintColor];
 
     }
 
+
 return %orig;
+
 
 }
 
@@ -1165,11 +1134,7 @@ return %orig;
     if(enableBackgroundUIColor) {
 
 
-        NSString *backgroundUIColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"backgroundUIColor"];
-
-
-            return [SparkColourPickerUtils colourWithString:backgroundUIColor withFallback:@"#000000"];
+        return [GcColorPickerUtils colorWithHex:backgroundUIColor];
 
 
     } else {
@@ -1201,219 +1166,7 @@ return %orig;
     if(enableTintColor) {
 
 
-        NSString *tintColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"tintColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:tintColor withFallback:@"#ffffff"];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-// Lyrics Card Color
-
-
-%hook SPTLyricsV2NowPlayingCardViewStyle
-
-
--(void)setBackgroundColor:(id)arg1 {
-
-
-    if(lyricsCardColor) {
-
-
-        NSString *lyricsCardColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"lyricsCardColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:lyricsCardColor withFallback:@"#ffffff"];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
-
-
-}
-
-%end
-
-
-
-
-%hook SPTLyricsV2FullscreenViewStyle
-
-
--(void)setBackgroundColor:(id)arg1 {
-
-
-    if(lyricsCardColor) {
-
-
-        NSString *lyricsCardColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"lyricsCardColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:lyricsCardColor withFallback:@"#ffffff"];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-%hook SPTLyricsV2TextViewStyle
-
-
--(void)setBackgroundColor:(id)arg1 {
-
-
-    if(lyricsCardColor) {
-
-
-        NSString *lyricsCardColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"lyricsCardColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:lyricsCardColor withFallback:@"#ffffff"];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-%hook SPTLyricsV2TextViewStyle
-
-
--(void)setTextColor:(id)arg1 {
-
-
-    if(lyricsCardColor) {
-
-
-        arg1 = [UIColor whiteColor];
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-%hook SPTLyricsV2FullscreenHeaderViewStyle
-
-
--(void)setBackgroundColor:(id)arg1 {
-
-
-    if(lyricsCardColor) {
-
-
-        NSString *lyricsCardColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"lyricsCardColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:lyricsCardColor withFallback:@"#ffffff"];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-%hook SPTLyricsV2FullscreenFooterViewStyle
-
-
--(void)setBackgroundColor:(id)arg1 {
-
-
-    if(lyricsCardColor) {
-
-
-        NSString *lyricsCardColor = [[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.perfect.spotifycolors.plist"]
-        objectForKey:@"lyricsCardColor"];
-
-
-        UIColor *color = [SparkColourPickerUtils colourWithString:lyricsCardColor withFallback:@"#ffffff"];
+        UIColor *color = [GcColorPickerUtils colorWithHex:tintColor];
 
     
         %orig(color);
@@ -1850,6 +1603,34 @@ return %orig;
 
 }
 
+
+%end
+
+
+
+
+%hook _UISlideriOSVisualElement
+
+
+-(void)layoutSubviews {
+
+
+    if(hideSliderKnob) {
+
+
+        UIImageView* Knob = MSHookIvar<UIImageView *>(self, "_thumbView");
+
+
+        [Knob setAlpha:0];
+
+    }
+
+
+return %orig;
+
+
+}
+   
 
 %end
 
@@ -2321,15 +2102,13 @@ return %orig;
 
 - (void)setNowPlayingInfo:(id)arg1 { // update colors when artwork changed
 
-    if(gradientColors) {
+    %orig;
 
-	    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    //if(!gradientColors) return;
+
+	    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"kleiUpdateColors" object:nil];
         });
-
-    }
-
-return %orig;
 
 }
 
@@ -2366,7 +2145,7 @@ return %orig;
 	%orig;
 
     if(gradientColors) {
-	    if (!gradient) {
+	    //if (!gradient) {
 		    gradient = [[CAGradientLayer alloc] init];
 		    [gradient setFrame:[[self view] bounds]];
 		    [gradient setStartPoint:CGPointMake(0.0, 0.5)];
@@ -2374,7 +2153,7 @@ return %orig;
 		    [gradient setColors:[NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
 		    [gradient setLocations:[NSArray arrayWithObjects:@(-0.5), @(1.5), nil]];
 		    [[[self view] layer] insertSublayer:gradient atIndex:0];
-	    }
+	    //}
 
     }
 
@@ -2412,10 +2191,11 @@ return %orig;
   // Create HBPreferences instance with your identifier, usually I just add prefs to the end of my package identifier
 
     HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.perfect.spotify"];
+    HBPreferences *colorsP = [[HBPreferences alloc] initWithIdentifier:@"com.perfect.spotifycolors"];
+
 
   // Register preference variables, naming the preference key and variable the same thing reduces confusion for me.
 
-  [preferences registerBool:&lyricsCardColor default:NO forKey:@"lyricsCardColor"];
   [preferences registerBool:&hideConnectButton default:NO forKey:@"hideConnectButton"];
   [preferences registerBool:&hideAddSongsButton default:NO forKey:@"hideAddSongsButton"];
   [preferences registerBool:&hideDevicesButton default:NO forKey:@"hideDevicesButton"];
@@ -2453,16 +2233,11 @@ return %orig;
   [preferences registerBool:&hideShareButton default:NO forKey:@"hideShareButton"];
   [preferences registerBool:&hideSettingsButton default:NO forKey:@"hideSettingsButton"];
   [preferences registerBool:&hideTabBarPlayButton default:NO forKey:@"hideTabBarPlayButton"];
-  [preferences registerBool:&hidePlayButtonOnLyrics default:NO forKey:@"hidePlayButtonOnLyrics"];
   [preferences registerBool:&hideCancelButton default:NO forKey:@"hideCancelButton"];
-  [preferences registerBool:&hideXButton default:NO forKey:@"hideXButton"];
   [preferences registerBool:&noPopUp default:NO forKey:@"noPopUp"];
   [preferences registerBool:&hideBackButton default:NO forKey:@"hideBackButton"];
   [preferences registerBool:&hideSpeedButton default:NO forKey:@"hideSpeedButton"];
   [preferences registerBool:&hideForwardButton default:NO forKey:@"hideForwardButton"];
-  [preferences registerBool:&hideArtwork default:NO forKey:@"hideArtwork"];
-  [preferences registerBool:&hideSongLabel default:NO forKey:@"hideSongLabel"];
-  [preferences registerBool:&hideArtistLabel default:NO forKey:@"hideArtistLabel"];
   [preferences registerBool:&enableTextColor default:NO forKey:@"enableTextColor"];
   [preferences registerBool:&enableTintColor default:NO forKey:@"enableTintColor"];
   [preferences registerBool:&enableBackgroundUIColor default:NO forKey:@"enableBackgroundUIColor"];
@@ -2470,7 +2245,15 @@ return %orig;
   [preferences registerBool:&gradientColors default:NO forKey:@"gradientColors"];
   [preferences registerBool:&hidePlayWhatYouLoveText default:NO forKey:@"hidePlayWhatYouLoveText"];
   [preferences registerBool:&hideQueuePopUp default:NO forKey:@"hideQueuePopUp"];
-  //[preferences registerBool:&hideVolumeSliderKnob default:NO forKey:@"hideVolumeSliderKnob"];  
+  [preferences registerBool:&hideSliderKnob default:NO forKey:@"hideSliderKnob"];
+
+
+  // Colors
+
+
+    [colorsP registerObject:&tintColor default:@"ffffff" forKey:@"tintColor"];
+    [colorsP registerObject:&tintTextColor default:@"ffffff" forKey:@"tintTextColor"];
+    [colorsP registerObject:&backgroundUIColor default:@"ffffff" forKey:@"backgroundUIColor"];
 
     // Check if the toggles switches are enabled from preferences then init the group hooks
 

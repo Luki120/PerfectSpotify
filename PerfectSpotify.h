@@ -2,7 +2,17 @@
 #import <MediaRemote/MediaRemote.h>
 #import <Cephei/HBPreferences.h> // Import the cephei framework
 #import <libKitten.h>
-#import "SparkColourPickerUtils.h"
+#import "GcColorPickerUtils.h"
+
+
+
+
+//Colors
+
+
+NSString* tintColor = @"ffffff";
+NSString* tintTextColor = @"ffffff";
+NSString* backgroundUIColor = @"ffffff";
 
 
 
@@ -168,6 +178,10 @@ CAGradientLayer* gradient;
 
 
 @interface SPTNowPlayingNextTrackButton : UIButton
+@end
+
+
+@interface _UISlideriOSVisualElement : UIView
 @end
 
 

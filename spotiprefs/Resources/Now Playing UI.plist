@@ -228,6 +228,20 @@
 			<key>label</key>
 			<string>Hide Next Track Button</string>
 		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.perfect.spotify/ReloadPrefs</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.perfect.spotify</string>
+			<key>key</key>
+			<string>hideSliderKnob</string>
+			<key>label</key>
+			<string>Hide Slider Knob</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>PerfectSpotify</string>

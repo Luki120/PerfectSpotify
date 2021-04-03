@@ -97,6 +97,7 @@ UIVisualEffectView* blurView;
 	
     UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Yeah man" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
         [self resetPreferences];
+        [self resetColors];
 	}];
 
 	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Nah just messing" style:UIAlertActionStyleCancel handler:nil];
@@ -106,6 +107,18 @@ UIVisualEffectView* blurView;
 
 	[self presentViewController:resetAlert animated:YES completion:nil];
  
+}
+
+- (void)resetColors {
+
+
+    HBPreferences *colorsP = [[HBPreferences alloc] initWithIdentifier: @"com.perfect.spotifycolors"];
+    [colorsP removeAllObjects];
+
+
+    [self respringUtil];
+
+
 }
 
 - (void)resetPreferences {

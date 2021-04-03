@@ -50,16 +50,6 @@
 			<key>label</key>
 			<string>Podcasts UI</string>
 		</dict>
-      <dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>LyricsUIRootListController</string>
-			<key>isController</key>
-			<true/>
-			<key>label</key>
-			<string>Lyrics UI</string>
-		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
