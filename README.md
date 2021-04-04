@@ -1,5 +1,6 @@
-#Currently:
-#Miscellaneous:
+# Currently:
+
+# Miscellaneous:
 
 - OLED Spotify
 - Blackout Context Menu
@@ -19,7 +20,7 @@
 - No Pop-Up When Liking Songs
 - No Pop-Up When Queueing
 
-Now Playing UI:
+# Now Playing UI:
 
 - Hide Devices Button
 - Hide Close Button
@@ -40,27 +41,27 @@ Now Playing UI:
 - Hide Next Track Button
 - Hide Slider Knob
 
-Car Mode UI:
+# Car Mode UI:
 
--    Hide Car Like Button
 -    Hide Car Button
 -    Hide Playlist Title
+-    Hide Car Like Button
 -   Hide Choose Music Button
 
-Podcasts UI:
+# Podcasts UI:
 
 - Hide Speed Button
 - Hide Back Button
 - Hide Forward Button
 
-Colors:
+# Colors:
 
 - Text Color
 - Tint Color
 - Gradient Background Colors
 - Now Playing UI Background Color
 
-Search Page:
+# Search Page:
 
 - Hide Cancel Button
 - Unclutter Me Please
