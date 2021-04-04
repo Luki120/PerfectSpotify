@@ -126,6 +126,16 @@
 			<key>cellClass</key>
 			<string>HBLinkTableCell</string>
 			<key>label</key>
+			<string>Chat With Us On Discord</string>
+			<key>subtitle</key>
+			<string>Support 🛠</string>
+			<key>url</key>
+			<string>https://discord.gg/3ktkSq5ACK</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>label</key>
 			<string>Can I Use Native Lyrics?</string>
 			<key>subtitle</key>
 			<string>Check this post</string>
@@ -151,16 +161,6 @@
 			<string>GitHub 🔥</string>
 			<key>url</key>
 			<string>https://github.com/Luki120/PerfectSpotify</string>
-		</dict>
-		<dict>
-			<key>action</key>
-			<string>myReddit:</string>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>cellClass</key>
-			<string>HBTintedTableCell</string>
-			<key>label</key>
-			<string>Reddit</string>
 		</dict>
 		<dict>
 			<key>cell</key>

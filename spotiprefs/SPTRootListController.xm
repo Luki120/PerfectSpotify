@@ -221,11 +221,6 @@ UIVisualEffectView* blurView;
     [self.navigationController.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
 }
 
-- (void)myReddit:(id)sender {
-    NSString *myReddit = @"https://www.reddit.com/user/Luki120";
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:myReddit] options:@{} completionHandler:nil];
-}
-
 @end
 
 @implementation SPTAppearanceSettings: HBAppearanceSettings
