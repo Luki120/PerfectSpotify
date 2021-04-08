@@ -5,7 +5,7 @@ BUNDLE_NAME = PerfectSpotify
 
 
 
-PerfectSpotify_FILES = SPTRootListController.xm MiscellaneousRootListController.m ContributorsRootListController.m KRTableCell.m KRLinkCell.m KRTwitterCell.m
+PerfectSpotify_FILES = SPTRootListController.m MiscellaneousRootListController.m ContributorsRootListController.m KRTableCell.m KRLinkCell.m KRTwitterCell.m
 PerfectSpotify_FRAMEWORKS = UIKit
 PerfectSpotify_PRIVATE_FRAMEWORKS = Preferences
 PerfectSpotify_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
