@@ -11,7 +11,7 @@ PerfectSpotify_PRIVATE_FRAMEWORKS = Preferences
 PerfectSpotify_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
 PerfectSpotify_INSTALL_PATH = /Library/PreferenceBundles
 PerfectSpotify_CFLAGS = -fobjc-arc -Wdeprecated-declarations -Wno-deprecated-declarations
-PerfectSpotify_LIBRARIES += sparkcolourpicker Kitten
+PerfectSpotify_LIBRARIES += gcuniversal Kitten
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
