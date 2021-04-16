@@ -43,10 +43,10 @@
 
 # Car Mode UI:
 
--    Hide Car Button
--    Hide Playlist Title
--    Hide Car Like Button
--   Hide Choose Music Button
+- Hide Car Button
+- Hide Playlist Title
+- Hide Car Like Button
+- Hide Choose Music Button
 
 # Podcasts UI:
 
@@ -70,6 +70,8 @@
 
 Compatible with Spotify versions: 
 
+- 8.6.16
+- 8.6.14
 - 8.6.12
 - 8.6.10
 - 8.6.8

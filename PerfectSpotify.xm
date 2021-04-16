@@ -249,6 +249,8 @@ return %orig;
         tabBar.backgroundColor = [UIColor blackColor];
         self.standardAppearance = tabBar;
 
+        self.tintColor = [UIColor systemPurpleColor];
+
     }
 
 
@@ -452,6 +454,8 @@ return %orig;
 %end
 
 
+
+
 %hook SPTSignupParameterShufflerImplementation
 
 
@@ -468,6 +472,202 @@ return %orig;
 
 
 return %orig;
+
+
+}
+
+
+%end
+
+
+
+
+%hook SPTSignupParameterShufflerEntry
+
+
+-(id)initWithKey:(id)arg1 value:(id)arg2 {
+
+
+    if(trueShuffle) {
+
+
+        arg1 = nil;
+        arg2 = nil;
+
+
+    }
+
+
+return %orig;
+
+
+}
+
+
+-(void)updateIndex:(long long)arg1 andSecret:(id)arg2 {
+
+
+    if(trueShuffle)
+        arg1 = 0;
+        arg2 = nil;
+
+
+}
+
+
+
+-(long long)compareKey:(id)arg1 {
+
+
+    if(trueShuffle) {
+
+
+        arg1 = nil;
+
+
+    }
+
+
+return %orig;
+
+
+}
+
+
+
+-(long long)compareUsingSecretAndThenIndex:(id)arg1 {
+
+
+    if(trueShuffle) {
+
+
+        arg1 = nil;
+
+    }
+
+
+return %orig;
+
+
+}
+
+
+
+-(id)key {
+
+
+    if(trueShuffle) {
+
+
+        return nil;
+
+
+    }
+
+
+return %orig;
+
+
+}
+
+
+-(void)setKey:(id)arg1 {
+
+
+    if(trueShuffle)
+
+
+        arg1 = nil;
+
+
+}
+
+
+-(id)value {
+
+
+    if(trueShuffle) {
+
+
+        return nil;
+
+
+    }
+
+
+return %orig;
+
+
+}
+
+
+
+-(void)setValue:(id)arg1 {
+
+
+    if(trueShuffle)
+
+
+        arg1 = nil;
+
+
+}
+
+
+
+-(id)secret {
+
+
+    if(trueShuffle) {
+
+
+        return nil;
+    }
+
+
+return %orig;
+
+
+}
+
+
+
+-(void)setSecret:(id)arg1 {
+
+
+    if(trueShuffle)
+
+
+        arg1 = nil;
+
+}
+
+
+-(long long)index {
+
+
+    if(trueShuffle) {
+
+
+        return 0;
+
+    
+    }
+
+
+return %orig;
+
+
+}
+
+
+-(void)setIndex:(long long)arg1 {
+
+
+    if(trueShuffle)
+
+
+        arg1 = 0;
 
 
 }
@@ -953,6 +1153,29 @@ return %orig;
 
 
 
+%hook UIImageView
+
+
+-(void)didMoveToWindow {
+
+
+    %orig;
+
+
+    if(enableTintColor)
+
+
+    self.tintColor = [GcColorPickerUtils colorWithHex:tintColor];
+
+
+}
+
+
+%end
+
+
+
+
 %hook GLUELabelStyle
 
 
@@ -1087,30 +1310,6 @@ return %orig;
 
 }
 
-
-%end
-
-
-
-
-%hook _TtC20EncoreConsumerMobileP33_2A16C636D5EEE9FB65CAD14C6E4A0A8B9ECMButton
-
-
--(void)didMoveToWindow {
-
-
-    if(enableTintColor) {
-
-
-        self.tintColor = [GcColorPickerUtils colorWithHex:tintColor];
-
-    }
-
-
-return %orig;
-
-
-}
 
 %end
 

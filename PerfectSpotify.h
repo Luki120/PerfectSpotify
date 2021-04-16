@@ -124,9 +124,6 @@ CAGradientLayer* gradient;
 @interface SPTNowPlayingBackgroundViewController : UIViewController
 @end
 
-@interface _TtC20EncoreConsumerMobileP33_2A16C636D5EEE9FB65CAD14C6E4A0A8B9ECMButton : UIButton
-@end
-
 
 // Now Playing UI
 
