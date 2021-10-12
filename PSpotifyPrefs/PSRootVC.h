@@ -15,7 +15,6 @@ static NSString *prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectsp
 }
 
 @property (nonatomic, strong) UIButton *killButton;
-@property (nonatomic, strong) NSArray *versionArray;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UIImageView *iconView;

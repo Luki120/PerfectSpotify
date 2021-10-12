@@ -13,12 +13,31 @@
 }
 
 
-- (instancetype)init {
+- (id)readPreferenceValue:(PSSpecifier*)specifier {
 
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+
+}
+
+
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:prefsKeys atomically:YES];
+
+}
+
+
+- (instancetype)init {
 
 	self = [super init];
 
 	UIImage *icon = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSIcon@2x.png"];;
+	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSBanner.png"];
 
 	if(self) {
 
@@ -37,14 +56,21 @@
 		self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.navigationItem.titleView addSubview:self.iconView];
 
-		[NSLayoutConstraint activateConstraints:@[
+		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
+		self.headerImageView = [UIImageView new];
+		self.headerImageView.image = banner;
+		self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+		self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.headerView addSubview:self.headerImageView];
 
-			[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-			[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-			[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-			[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
-
-		]];
+		[self.iconView.topAnchor constraintEqualToAnchor : self.navigationItem.titleView.topAnchor].active = YES;
+		[self.iconView.leadingAnchor constraintEqualToAnchor : self.navigationItem.titleView.leadingAnchor].active = YES;
+		[self.iconView.trailingAnchor constraintEqualToAnchor : self.navigationItem.titleView.trailingAnchor].active = YES;
+		[self.iconView.bottomAnchor constraintEqualToAnchor : self.navigationItem.titleView.bottomAnchor].active = YES;
+		[self.headerImageView.topAnchor constraintEqualToAnchor : self.headerView.topAnchor].active = YES;
+		[self.headerImageView.leadingAnchor constraintEqualToAnchor : self.headerView.leadingAnchor].active = YES;
+		[self.headerImageView.trailingAnchor constraintEqualToAnchor :self.headerView.trailingAnchor].active = YES;
+		[self.headerImageView.bottomAnchor constraintEqualToAnchor :self.headerView.bottomAnchor].active = YES;
 
 	}
 
@@ -55,30 +81,38 @@
 
 - (void)viewDidLoad {
 
-	
 	[super viewDidLoad];
 
-	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSBanner.png"];
- 
+	_table.tableHeaderView = self.headerView;
 	_table.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
-	self.headerImageView = [UIImageView new];
-	self.headerImageView.image = banner;
-	self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
-	self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.headerView addSubview:self.headerImageView];
+}
 
-	[NSLayoutConstraint activateConstraints:@[
 
-		[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
-		[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-		[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
-		[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
+- (void)viewWillAppear:(BOOL)animated {
 
-	]];
+	[super viewWillAppear:animated];
 
-	_table.tableHeaderView = self.headerView;
+	CGRect frame = self.table.bounds;
+	frame.origin.y = -frame.size.height;
+
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
+	CGFloat offsetY = scrollView.contentOffset.y;
+
+	if(offsetY > 0) offsetY = 0;
+	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 150 - offsetY);
+
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	tableView.tableHeaderView = self.headerView;
+	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
 }
 
@@ -115,7 +149,6 @@
 
 - (void)blurEffect {
 
-
 	UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
 	UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
 	blurView.alpha = 0;
@@ -137,17 +170,14 @@
 
 - (void)respring {
 
-
 	pid_t pid;
 	const char* args[] = {"killall", "backboardd", NULL};
 	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char *const *)args, NULL);
-
 
 }
 
 
 - (void)killSpotify {
-
 
 	AudioServicesPlaySystemSound(1521);
 
@@ -170,7 +200,6 @@
 
 	[self presentViewController:decisiveAlert animated:YES completion:nil];
 
-
 }
 
 
@@ -181,53 +210,6 @@
 		[UIApplication.sharedApplication launchApplicationWithIdentifier:@"com.spotify.client" suspended:0];
 
 	});
-
-}
-
-
- - (void)viewWillAppear:(BOOL)animated {
-
-	[super viewWillAppear:animated];
-
-	CGRect frame = self.table.bounds;
-	frame.origin.y = -frame.size.height;
-
-}
- 
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	tableView.tableHeaderView = self.headerView;
-	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
-
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
-	CGFloat offsetY = scrollView.contentOffset.y;
-
-	if(offsetY > 0) offsetY = 0;
-	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 150 - offsetY);
-
-}
-
-
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
-
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
-
- 
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:prefsKeys atomically:YES];
 
 }
 
@@ -264,47 +246,38 @@
 
 - (void)lyrics {
 
-
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://techcrunch.com/2020/06/29/in-a-significant-expansion-spotify-to-launch-real-time-lyrics-in-26-markets/"] options:@{} completionHandler:nil];
-
 
 }
 
 
 - (void)paypal {
 
-
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
-
 
 }
 
 
 - (void)github {
 
-
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://github.com/Luki120/PerfectSpotify"] options:@{} completionHandler:nil];
-
 
 }
 
 
 - (void)amelija {
 
-
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/me.luki.amelija"] options:@{} completionHandler:nil];
-
 
 }
 
 
 - (void)april {
 
-
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
 
-
 }
+
 
 @end
 
