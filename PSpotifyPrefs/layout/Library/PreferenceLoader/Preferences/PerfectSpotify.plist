@@ -5,13 +5,13 @@
 	<key>entry</key>
 	<dict>
 		<key>bundle</key>
-		<string>PerfectSpotify</string>
+		<string>PSpotifyPrefs</string>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>
-		<string>SPTRootListController</string>
+		<string>PSRootVC</string>
 		<key>icon</key>
-		<string>icon.png</string>
+		<string>Assets/PSIcon.png</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>

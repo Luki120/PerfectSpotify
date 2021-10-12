@@ -11,14 +11,12 @@
 			<string>Gradients</string>
 		</dict>
 		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.perfect.spotify</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>gradientColors</string>
 			<key>label</key>
@@ -29,42 +27,36 @@
 			<string>PSGroupCell</string>
 		</dict>
 		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.perfect.spotify</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>enableTextColor</string>
 			<key>label</key>
 			<string>Enable Text Color</string>
 		</dict>
 		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.perfect.spotify</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>enableTintColor</string>
 			<key>label</key>
 			<string>Enable Tint Color</string>
 		</dict>
 		<dict>
-			<key>PostNotification</key>
-			<string>com.perfect.spotify/ReloadPrefs</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.perfect.spotify</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>enableBackgroundUIColor</string>
 			<key>label</key>
@@ -82,7 +74,7 @@
 			<key>label</key>
 			<string>Text Color</string>
 			<key>defaults</key>
-			<string>com.perfect.spotifycolors</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>tintTextColor</string>
 			<key>supportsAlpha</key>
@@ -98,7 +90,7 @@
 			<key>label</key>
 			<string>Tint Color</string>
 			<key>defaults</key>
-			<string>com.perfect.spotifycolors</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>tintColor</string>
 			<key>supportsAlpha</key>
@@ -114,7 +106,7 @@
 			<key>label</key>
 			<string>Background Color</string>
 			<key>defaults</key>
-			<string>com.perfect.spotifycolors</string>
+			<string>me.luki.perfectspotifyprefs</string>
 			<key>key</key>
 			<string>backgroundUIColor</string>
 			<key>supportsAlpha</key>

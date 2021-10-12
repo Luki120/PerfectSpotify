@@ -1,118 +1,21 @@
 #import "PerfectSpotify.h"
 
 
-
-
-// Create preference variables
-
-
-// Miscellaneous
-
-static BOOL oledSpotify;
-static BOOL blackoutContextMenu;
-static BOOL trueShuffle;
-static BOOL hideConnectButton;
-static BOOL hideAddSongsButton;
-static BOOL enableLyricsForAllTracks;
-static BOOL disableGeniusLyrics;
-static BOOL disableStorylines;
-static BOOL showStatusBar;
-static BOOL hideSearchBar;
-static BOOL hideTabBarLabels;
-static BOOL hideRemoveButton;
-static BOOL hideShareButton;
-static BOOL hideSettingsButton;
-static BOOL hideTabBarPlayButton;
-static BOOL noPopUp;
-static BOOL hideQueuePopUp;
-
-
-// Now Playing UI
-
-static BOOL hideDevicesButton;
-static BOOL hideCloseButton;
-static BOOL hidePlaylistNameText;
-static BOOL hideContextMenuButton;
-static BOOL hideQueueButton;
-static BOOL hideLikeButton;
-static BOOL hideShuffleButton;
-static BOOL hideRepeatButton;
-static BOOL hideTimeSlider;
-static BOOL hideElapsedTime;
-static BOOL hideRemainingTime;
-static BOOL centerText;
-static BOOL textToTheTop;
-static BOOL hidePreviousTrackButton;
-static BOOL hidePlayPauseButton;
-static BOOL hideNextTrackButton;
-static BOOL hideSliderKnob;
-
-
-// Car Mode UI
-
-static BOOL enableCarMode;
-static BOOL hidePlaylistTitle;
-static BOOL hideCarButton;
-static BOOL hideCarLikeButton;
-static BOOL hideChooseMusicButton;
-
-
-// Podcasts UI
-
-static BOOL hideSpeedButton;
-static BOOL hideBackButton;
-static BOOL hideForwardButton;
-
-
-// Colors
-
-static BOOL enableTextColor;
-static BOOL enableTintColor;
-static BOOL gradientColors;
-static BOOL enableBackgroundUIColor;
-
-
-// Search Page
-
-static BOOL unclutterSearchPage;
-static BOOL hideClearRecentSearchesButton;
-static BOOL hideCancelButton;
-static BOOL hidePlayWhatYouLoveText;
-
-
-
-
 // Miscellaneous Settings
-
-
-
-
-// OLED Spotify
-
-
 
 
 %group PerfectSpotify
 
 
-
-
 %hook GLUEGradientView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // OLED Spotify
 
 
-    if(oledSpotify) {
+	%orig;
 
-
-        %orig;
-
-
-        self.alpha = 0;
-
-
-    }
+	if(oledSpotify) self.alpha = 0;
 
 
 }
@@ -126,19 +29,12 @@ static BOOL hidePlayWhatYouLoveText;
 %hook SPTHomeView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow {
 
 
-    if(oledSpotify) {
+	%orig;
 
-
-        self.backgroundColor = [UIColor blackColor];
-
-
-    }
-
-
-return %orig;
+	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 
 }
@@ -152,19 +48,12 @@ return %orig;
 %hook SPTHomeGradientBackgroundView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow {
 
 
-    if(oledSpotify) {
+	%orig;
 
-
-        self.backgroundColor = [UIColor blackColor];
-
-
-    }
-
-
-return %orig;
+	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 
 }
@@ -178,19 +67,12 @@ return %orig;
 %hook SPTHomeUIShortcutsCardView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow {
 
 
-    if(oledSpotify) {
+	%orig;
 
-
-        self.backgroundColor = [UIColor blackColor];
-
-
-    }
-
-
-return %orig;
+	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 
 }
@@ -201,28 +83,64 @@ return %orig;
 
 
 
-// OLED tab bar
-
-
 %hook SPTNowPlayingBarViewController
 
 
--(void)viewDidLoad {
+- (void)viewDidLoad { // OLED tab bar
 
 
-    %orig;
+	%orig;
+
+	if(oledSpotify) {
+
+		UIView *contentView = MSHookIvar<UIView *>(self, "_contentView");
+
+		[contentView setBackgroundColor:[UIColor blackColor]];
+
+	}    
+
+}
 
 
-    if(oledSpotify) {
+%end
 
 
-        UIView* contentView = MSHookIvar<UIView *>(self, "_contentView");
 
 
-        [contentView setBackgroundColor:[UIColor blackColor]];
+%hook UIView
 
 
-    }    
+- (void)didMoveToWindow { // well fuck
+
+
+	%orig;
+
+	ancestor = [self _viewControllerForAncestor];
+
+	if(oledSpotify)
+
+		if([ancestor isKindOfClass:%c(SPTNowPlayingBarV2ViewController)])
+
+			self.backgroundColor = UIColor.blackColor;
+
+
+}
+
+
+%end
+
+
+
+
+%hook SPTBarGradientView
+
+
+- (void)didMoveToWindow {
+
+
+	%orig;
+
+	if(oledSpotify) self.hidden = YES;
 
 
 }
@@ -239,20 +157,15 @@ return %orig;
 - (void)didMoveToWindow {
 
 
-    %orig;
+	%orig;
 
+	if(oledSpotify) {
 
-    if(oledSpotify) {
+		UITabBarAppearance *tabBar = [[UITabBarAppearance alloc] init];
+		tabBar.backgroundColor = [UIColor blackColor];
+		self.standardAppearance = tabBar;
 
-
-        UITabBarAppearance *tabBar = [[UITabBarAppearance alloc] init];
-        tabBar.backgroundColor = [UIColor blackColor];
-        self.standardAppearance = tabBar;
-
-        self.tintColor = [UIColor systemPurpleColor];
-
-    }
-
+	}
 
 }
 
@@ -260,27 +173,17 @@ return %orig;
 %end
 
 
-
-
-// OLED Search page (when you tap on search)
 
 
 %hook GLUEEmptyStateView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // OLED Search page (when you tap on search)
 
 
-    if(oledSpotify) {
+	%orig;
 
-
-        self.backgroundColor = [UIColor blackColor];
-
-
-    }
-
-
-return %orig;
+	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 
 }
@@ -289,27 +192,17 @@ return %orig;
 %end
 
 
-
-
-// OLED Search page (with history)
 
 
 %hook SPTSearch2ViewController
 
 
--(void)viewDidLoad {
+- (void)viewDidLoad { // OLED Search page (with history)
 
 
-    %orig;
+	%orig;
 
-
-    if(oledSpotify) {
-
-
-        self.view.backgroundColor = [UIColor blackColor];
-
-
-    }
+	if(oledSpotify) self.view.backgroundColor = [UIColor blackColor];
 
 
 }
@@ -318,28 +211,15 @@ return %orig;
 %end
 
 
-
-
-
-// OLED liking songs pop-up
 
 
 %hook SPTSimpleSnackbarContentView
 
 
--(void)setBackgroundColor:(id)arg1 {
+- (void)setBackgroundColor:(id)arg1 { // OLED liking songs pop-up
 
 
-    if(oledSpotify) {
-
-
-        arg1 = [UIColor blackColor];
-
-
-    }
-
-
-return %orig;
+	if(oledSpotify) %orig(UIColor.blackColor);
 
 
 }
@@ -348,104 +228,17 @@ return %orig;
 %end
 
 
-
-
-// Blackout context menu
 
 
 %hook _UIVisualEffectSubview
 
 
--(void)didMoveToWindow { 
+- (void)didMoveToWindow { // Blackout context menu
 
 
-    if(blackoutContextMenu) {
+	%orig;
 
-
-        self.backgroundColor = [UIColor blackColor];
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// True Shuffle (experimental)
-
-
-%hook SPTSignupParameterShufflerImplementation
-
-
--(id)createShuffledKeyListFromParameters:(id)arg1 {
-
-
-    if(trueShuffle) {
-
-     
-        return nil;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-%hook SPTSignupParameterShufflerImplementation
-
-
--(id)shuffleEntriesFromQueryParameters:(id)arg1 {
-
-
-    if(trueShuffle) {
-
-    
-        return nil;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-%hook SPTSignupParameterShufflerImplementation
-
-
--(id)createHashFromParameterValues:(id)arg1 {
-
-
-    if(trueShuffle) {
-    
-
-        return nil;
-
-
-    }
-
-
-return %orig;
+	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 
 }
@@ -459,19 +252,69 @@ return %orig;
 %hook SPTSignupParameterShufflerImplementation
 
 
--(id)md5FromString:(id)arg1 {
-
-    
-    if(trueShuffle) {
+- (id)createShuffledKeyListFromParameters:(id)arg1 { // True Shuffle (experimental)
 
 
-        return nil;
+	if(trueShuffle) return nil;
+	
+	return %orig;
 
 
-    }
+}
 
 
-return %orig;
+%end
+
+
+
+
+%hook SPTSignupParameterShufflerImplementation
+
+
+- (id)shuffleEntriesFromQueryParameters:(id)arg1 {
+
+
+	if(trueShuffle) return nil;
+
+	return %orig;
+
+
+}
+
+
+%end
+
+
+
+
+%hook SPTSignupParameterShufflerImplementation
+
+
+- (id)createHashFromParameterValues:(id)arg1 {
+
+
+	if(trueShuffle) return nil;
+
+	return %orig;
+
+
+}
+
+
+%end
+
+
+
+
+%hook SPTSignupParameterShufflerImplementation
+
+
+- (id)md5FromString:(id)arg1 {
+
+	
+	if(trueShuffle) return nil;
+
+	return %orig;
 
 
 }
@@ -485,200 +328,134 @@ return %orig;
 %hook SPTSignupParameterShufflerEntry
 
 
--(id)initWithKey:(id)arg1 value:(id)arg2 {
+- (id)initWithKey:(id)arg1 value:(id)arg2 {
 
 
-    if(trueShuffle) {
+	if(trueShuffle) %orig(nil, nil);
 
-
-        arg1 = nil;
-        arg2 = nil;
-
-
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
 
 
--(void)updateIndex:(long long)arg1 andSecret:(id)arg2 {
+- (void)updateIndex:(long long)arg1 andSecret:(id)arg2 {
 
 
-    if(trueShuffle)
-        arg1 = 0;
-        arg2 = nil;
+	if(trueShuffle) %orig(0, nil);
 
 
 }
 
 
 
--(long long)compareKey:(id)arg1 {
+- (long long)compareKey:(id)arg1 {
 
 
-    if(trueShuffle) {
+	if(trueShuffle) %orig(nil);
 
-
-        arg1 = nil;
-
-
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
 
 
 
--(long long)compareUsingSecretAndThenIndex:(id)arg1 {
+- (long long)compareUsingSecretAndThenIndex:(id)arg1 {
 
 
-    if(trueShuffle) {
+	if(trueShuffle) %orig(nil);
+
+	return %orig;
 
 
-        arg1 = nil;
-
-    }
+}
 
 
-return %orig;
+- (id)key {
+
+
+	if(trueShuffle) return nil;
+
+	return %orig;
+
+
+}
+
+
+- (void)setKey:(id)arg1 {
+
+
+	if(trueShuffle) %orig(nil);
+
+
+}
+
+
+- (id)value {
+
+
+	if(trueShuffle) return nil;
+
+	return %orig;
 
 
 }
 
 
 
--(id)key {
+- (void)setValue:(id)arg1 {
 
 
-    if(trueShuffle) {
-
-
-        return nil;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
--(void)setKey:(id)arg1 {
-
-
-    if(trueShuffle)
-
-
-        arg1 = nil;
-
-
-}
-
-
--(id)value {
-
-
-    if(trueShuffle) {
-
-
-        return nil;
-
-
-    }
-
-
-return %orig;
+	if(trueShuffle) %orig(nil);
 
 
 }
 
 
 
--(void)setValue:(id)arg1 {
+- (id)secret {
 
 
-    if(trueShuffle)
+	if(trueShuffle) return nil;
 
-
-        arg1 = nil;
-
-
-}
-
-
-
--(id)secret {
-
-
-    if(trueShuffle) {
-
-
-        return nil;
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
 
 
 
--(void)setSecret:(id)arg1 {
+- (void)setSecret:(id)arg1 {
 
 
-    if(trueShuffle)
-
-
-        arg1 = nil;
-
-}
-
-
--(long long)index {
-
-
-    if(trueShuffle) {
-
-
-        return 0;
-
-    
-    }
-
-
-return %orig;
+	if(trueShuffle) %orig(nil);
 
 
 }
 
 
--(void)setIndex:(long long)arg1 {
+- (long long)index {
 
 
-    if(trueShuffle)
+	if(trueShuffle) return 0;
+
+	return %orig;
 
 
-        arg1 = 0;
+}
+
+
+- (void)setIndex:(long long)arg1 {
+
+
+	if(trueShuffle) %orig(0);
 
 
 }
 
 
 %end
-
-
-
-
-// Connect Button in main page
 
 
 
@@ -686,19 +463,12 @@ return %orig;
 %hook ConnectButton
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Connect Button in main page
 
 
-    if(hideConnectButton) {
+	%orig;
 
-
-        [self setHidden:YES];
-
-
-    }
-
-
-return %orig;
+	if(hideConnectButton) [self setHidden:YES];
 
 
 }
@@ -707,27 +477,17 @@ return %orig;
 %end
 
 
-
-
-// Hide "Add Songs" button in playlist
 
 
 %hook SPTFreeTierPlaylistAdditionalCallToActionAddSongsImplementation
 
 
--(bool)enabled {
+- (bool)enabled { // Hide "Add Songs" button in playlist
 
 
-    if (hideAddSongsButton) {
+	if(hideAddSongsButton) return NO;
 
-
-        return 0;
-
-    
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
@@ -738,25 +498,15 @@ return %orig;
 
 
 
-// Lyrics for all tracks
-
-
 %hook SPTLyricsV2TestManagerImplementation
 
 
--(bool)isFeatureEnabled { 
+- (bool)isFeatureEnabled { // Lyrics for all tracks
 
 
-    if(enableLyricsForAllTracks) {
+	if(enableLyricsForAllTracks) return YES;
 
-
-        return 1;
-
-
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
@@ -771,19 +521,12 @@ return %orig;
 %hook SPTLyricsV2Service
 
 
--(bool)lyricsAvailableForTrack:(id)arg1 {
+- (bool)lyricsAvailableForTrack:(id)arg1 {
 
 
-    if(enableLyricsForAllTracks) {
+	if(enableLyricsForAllTracks) return YES;
 
-
-        return 1;
-
-
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
@@ -792,27 +535,17 @@ return %orig;
 %end
 
 
-
-
-// Disable Genius Lyrics
 
 
 %hook SPTGeniusService
 
 
--(bool)isTrackGeniusEnabled:(id)arg1 {
+- (bool)isTrackGeniusEnabled:(id)arg1 { // Disable Genius Lyrics
 
 
-    if(disableGeniusLyrics) {
+	if(disableGeniusLyrics) return NO;
 
-
-        return 0;
-
-
-    }
-
-
-return %orig;
+	return %orig;
 
 
 }
@@ -821,27 +554,17 @@ return %orig;
 %end
 
 
-
-
-// Disable Storylines
 
 
 %hook SPTStorylinesEnabledManager
 
 
--(bool)storylinesEnabledForTrack:(id)arg1 {
+- (bool)storylinesEnabledForTrack:(id)arg1 { // Disable Storylines
 
 
-    if(disableStorylines) {
+	if(disableStorylines) return NO;
 
-
-        return 0;
-
-
-}
-
-
-return %orig;
+	return %orig;
 
 
 }
@@ -850,28 +573,17 @@ return %orig;
 %end
 
 
-
-
-// Show Status Bar (Spotify did we asked for you to hide it? No? That's what I thought).
 
 
 %hook SPTStatusBarManager
 
 
--(void)setStatusBarHiddenImmediate:(bool)arg1 withAnimation:(long long)arg2 {
+- (void)setStatusBarHiddenImmediate:(bool)arg1 withAnimation:(long long)arg2 { // Show Status Bar
 
 
-    if (showStatusBar) {
+	if(showStatusBar) arg1 = NO;
 
-
-        arg1 = 0;
-
-
-    }
-
-
-return %orig;
-
+	else %orig;
 
 }
 
@@ -879,56 +591,17 @@ return %orig;
 %end
 
 
-
-
-// Hide search bar in Playlists page
-
-
-%hook SPTSortingFilteringFilterBarView
-
-
--(void)didMoveToWindow {
-
-
-    if(hideSearchBar) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Tab Bar button's labels
 
 
 %hook UITabBarButtonLabel
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Tab Bar button's labels
 
 
-    if(hideTabBarLabels) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideTabBarLabels) self.hidden = YES;
 
 
 }
@@ -937,27 +610,17 @@ return %orig;
 %end
 
 
-
-
-// Hide Remove Button (Daily Mix)
 
 
 %hook SPTNowPlayingFreeTierFeedbackButton
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Remove Button (Daily Mix)
 
 
-    if(hideRemoveButton) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideRemoveButton) self.hidden = YES;
 
 
 }
@@ -966,27 +629,17 @@ return %orig;
 %end
 
 
-
-
-// Hide Share Button (Podcasts UI)
 
 
 %hook SPTNowPlayingShareButtonViewController
 
 
--(void)viewDidLoad {
+- (void)viewDidLoad { // Hide Share Button (Podcasts UI)
 
 
-    %orig;
+	%orig;
 
-
-    if(hideShareButton) {
-
-
-        self.view.hidden = YES;
-
-
-    }
+	if(hideShareButton) self.view.hidden = YES;
 
 
 }
@@ -995,58 +648,17 @@ return %orig;
 %end
 
 
-
-
-// Hide Settings Button
-
-
-%hook SPTHomeUITopBarView
-
-
--(void)didMoveToWindow {
-
-
-    if(hideSettingsButton) {
-
-
-        UIStackView *buttonStack = MSHookIvar<UIStackView *>(self, "_buttonStack");
-		
-        [buttonStack setHidden:YES];
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Play Button (Tab Bar)
 
 
 %hook SPTNowPlayingBarPlayButton
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Play Button (Tab Bar)
 
 
-    %orig;
+	%orig;
 
-
-    if(hideTabBarPlayButton) {
-
-
-        self.hidden = YES;
-
-
-    }
+	if(hideTabBarPlayButton) self.hidden = YES;
 
 
 }
@@ -1057,25 +669,15 @@ return %orig;
 
 
 
-// No Pop-Up when liking songs
-
-
 %hook SPTSnackbarView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // No Pop-Up when liking songs
 
 
-    if(noPopUp) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(noPopUp) self.hidden = YES;
 
 
 }
@@ -1089,19 +691,12 @@ return %orig;
 %hook SPTProgressView // Hide Queue Pop Up
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow {
 
 
-    if(hideQueuePopUp) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideQueuePopUp) self.hidden = YES;
 
 
 }
@@ -1115,34 +710,111 @@ return %orig;
 // Tint Color
 
 
+// Litten's Klei gradients, thank you
 
 
-// Custom Tint Text Color
+%hook MPNowPlayingInfoCenterArtworkContext
+
+
+- (void)setArtworkData:(NSData *)arg1 {
+
+
+	%orig;
+
+	artworkData = arg1;
+
+	[NSNotificationCenter.defaultCenter postNotificationName:@"kleiUpdateColors" object:nil];
+
+}
+
+
+%end
+
+
+
+
+%hook SPTNowPlayingBackgroundViewController
+
+
+%new
+
+- (void)setColors { // get artwork colors
+
+
+	MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
+
+		NSDictionary *dict = (__bridge NSDictionary *)information;
+
+		if(dict) {
+            
+			CATransition *transitionKleiView = [CATransition animation];
+			transitionKleiView.type = kCATransitionFade;
+			transitionKleiView.duration = 1.0f;
+			transitionKleiView.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+
+			[gradient addAnimation:transitionKleiView forKey:nil];
+
+			if(dict[(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData]) {
+
+				currentArtwork = [UIImage imageWithData:[dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtworkData]];
+
+				if(currentArtwork)
+
+					[gradient setColors:[NSArray arrayWithObjects:(id)[[libKitten backgroundColor:currentArtwork] CGColor], (id)[[libKitten primaryColor:currentArtwork] CGColor], nil]];
+
+			}
+
+
+		} else [gradient setColors:[NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil]];
+
+	});
+
+}
+
+
+- (void)viewDidLoad { // add gradient
+
+
+	%orig;
+
+	[self setColors];
+
+	if(gradientColors) {
+
+		if(!gradient) {
+
+			gradient = [CAGradientLayer new];
+			gradient.frame = self.view.bounds;
+			gradient.colors = [NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil];
+			gradient.locations = [NSArray arrayWithObjects:@(-0.5), @(1.5), nil];
+			gradient.startPoint = CGPointMake(0.0, 0.5);
+			gradient.endPoint = CGPointMake(0.5, 1.0);
+			[self.view.layer insertSublayer:gradient atIndex:0];
+
+		}
+
+	}
+
+	[NSNotificationCenter.defaultCenter removeObserver:self];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil]; // add notification observer to dynamically change artwork
+
+}
+
+
+%end
+
 
 
 
 %hook UILabel
 
 
-- (void)setTextColor:(UIColor *)arg1 {
+- (void)setTextColor:(UIColor *)arg1 { // Custom Tint Text Color
 
 
-     if(enableTextColor) {
+	if(enableTextColor) %orig([GcColorPickerUtils colorWithHex:tintTextColor]);
 
-
-        UIColor *color = [GcColorPickerUtils colorWithHex:tintTextColor];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
+	else %orig;
 
 
 }
@@ -1156,16 +828,12 @@ return %orig;
 %hook UIImageView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow {
 
 
-    %orig;
+	%orig;
 
-
-    if(enableTintColor)
-
-
-    self.tintColor = [GcColorPickerUtils colorWithHex:tintColor];
+	if(enableTintColor) self.tintColor = [GcColorPickerUtils colorWithHex:tintColor];
 
 
 }
@@ -1179,25 +847,12 @@ return %orig;
 %hook GLUELabelStyle
 
 
--(void)setTextColor:(id)arg1 {
+- (void)setTextColor:(id)arg1 {
 
 
-    if(enableTextColor) {
+	if(enableTextColor) %orig([GcColorPickerUtils colorWithHex:tintTextColor]);
 
-
-        UIColor *color = [GcColorPickerUtils colorWithHex:tintTextColor];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
+	else %orig;
 
 
 }
@@ -1205,34 +860,18 @@ return %orig;
 
 %end
 
-
-
-
-// Tint Color
 
 
 
 %hook SPTIconConfiguration
 
 
--(id)iconColor {
+- (id)iconColor { // Tint Color
 
 
-    if(enableTintColor) {
+	if(enableTintColor) return [GcColorPickerUtils colorWithHex:tintColor];
 
-
-        if (tintColor != nil) {
-
-
-            return [GcColorPickerUtils colorWithHex:tintColor];
-
-        }
-
-
-    }
-
-    
-    return %orig;
+	return %orig;
 
 
 }
@@ -1243,39 +882,28 @@ return %orig;
 
 
 
-// Tinted Labels on tab bar player
-
-
 %hook SPTNowPlayingBarPageView
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow {
 
 
-    %orig;
+	%orig;
+
+	if(enableTextColor) { // Tinted Labels on tab bar player
 
 
-    if(enableTextColor) {
-
-
-        SPTNowPlayingMarqueeLabel* topLabel = MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_topLabel");
+		SPTNowPlayingMarqueeLabel *topLabel = MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_topLabel");
 		
-        [topLabel setTextColor:[UIColor purpleColor]];
+		[topLabel setTextColor:[GcColorPickerUtils colorWithHex:tintTextColor]];
 
 
-        SPTNowPlayingMarqueeLabel* bottomLabel = MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_bottomLabel");
+		SPTNowPlayingMarqueeLabel *bottomLabel = MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_bottomLabel");
 
-        [bottomLabel setTextColor:[UIColor purpleColor]];
-
-
-    } else {
+		[bottomLabel setTextColor:[GcColorPickerUtils colorWithHex:tintTextColor]];
 
 
-        return %orig;
-
-
-    }
-
+	}
 
 }
 
@@ -1288,24 +916,50 @@ return %orig;
 %hook SPTNowPlayingPlayButtonV2
 
 
--(id)fillColor {
+- (id)fillColor {
 
 
-    if(enableTintColor) {
+	if(enableTintColor) return [GcColorPickerUtils colorWithHex:tintColor];
+
+	return %orig;
 
 
-        if (tintColor != nil) {
+}
 
 
-            return [GcColorPickerUtils colorWithHex:tintColor];
-
-        }
+%end
 
 
-    }
 
 
-    return %orig;
+%hook SPTNowPlayingBackgroundViewController
+
+
+- (id)color { // OLED view to now playing UI or custom colors
+
+
+	if(enableBackgroundUIColor) return [GcColorPickerUtils colorWithHex:backgroundUIColor];
+
+	else return %orig;
+
+
+}    
+
+
+%end
+
+
+
+
+%hook SPTGaiaDevicesAvailableViewModel
+
+
+- (void)setColor:(id)arg1 { // Tint color for the devices button
+
+
+	if(enableTintColor) %orig([GcColorPickerUtils colorWithHex:tintColor]);
+
+	else %orig;
 
 
 }
@@ -1319,126 +973,15 @@ return %orig;
 // Now Playing UI
 
 
-
-
-// OLED view to now playing UI or custom colors
-
-
-%hook SPTNowPlayingBackgroundViewController
-
-
--(id)color {
-
-
-    if(enableBackgroundUIColor) {
-
-
-        return [GcColorPickerUtils colorWithHex:backgroundUIColor];
-
-
-    } else {
-
-
-    return %orig;
-
-
-    }
-
-
-}    
-
-
-%end
-
-
-
-
-// Tint color for the devices button
-
-
-%hook SPTGaiaDevicesAvailableViewModel
-
-
--(void)setColor:(id)arg1 {
-
-
-    if(enableTintColor) {
-
-
-        UIColor *color = [GcColorPickerUtils colorWithHex:tintColor];
-
-    
-        %orig(color);
-
-
-    } else {
-
-
-        return %orig;
-
-
-    }
-
-
-}
-
-
-%end
-
-
-
-
-//Now Playing UI
-
-
-// Hide Devices Button
-
-
-%hook SPTGaiaDevicesAvailableViewImplementation
-
-
--(void)didMoveToWindow {
-
-
-    if (hideDevicesButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Close Button
-
-
 %hook SPTNowPlayingTitleButton
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Close Button
 
 
-    if(hideCloseButton) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideCloseButton) self.hidden = YES;
 
 
 }
@@ -1447,31 +990,23 @@ return %orig;
 %end
 
 
-
-
-// Hide Playlist Name Text
 
 
 %hook SPTNowPlayingNavigationBarViewV2
 
 
--(void)didMoveToWindow { // Following code is from Litten, check her out and her amazing tweaks! https://github.com/Litteeen
+- (void)didMoveToWindow { // Hide Playlist Name Text, following code is from Litten https://github.com/Litteeen
 
 
-    %orig;
+	%orig;
 
+	if(hidePlaylistNameText) {
 
-    if(hidePlaylistNameText) {
+		SPTNowPlayingMarqueeLabel *title = MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_titleLabel");
 
+		[title setHidden:YES];
 
-        SPTNowPlayingMarqueeLabel* title = MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_titleLabel");
-		
-
-        [title setHidden:YES];
-	
-
-    }
-
+	}
 
 }
 
@@ -1479,27 +1014,17 @@ return %orig;
 %end
 
 
-
-
-// Hide Context Menu Button
 
 
 %hook SPTContextMenuAccessoryButton
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Context Menu Button
 
 
-    if(hideContextMenuButton) {
- 
+	%orig;
 
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideContextMenuButton) self.hidden = YES;
 
 
 }
@@ -1508,110 +1033,17 @@ return %orig;
 %end
 
 
-
-// Hide Queue Button
-
-
-%hook SPTNowPlayingQueueButton
-
-
--(void)didMoveToWindow {
-
-
-    if(hideQueueButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-// Hide Like Button
 
 
 %hook SPTNowPlayingAnimatedLikeButton
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Like Button
 
 
-    if(hideLikeButton) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-// Hide Shuffle Button
-
-
-%hook SPTNowPlayingShuffleButton
-
-
--(void)didMoveToWindow {
-
-
-    if(hideShuffleButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-// Hide Repeat Button
-
-
-%hook SPTNowPlayingRepeatButton
-
-
--(void)didMoveToWindow {
-
-
-    if(hideRepeatButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideLikeButton) self.hidden = YES;
 
 
 }
@@ -1622,182 +1054,15 @@ return %orig;
 
 
 
-// Hide Time Slider
+%hook SPTNowPlayingHeartButtonViewController
 
 
-%hook SPTNowPlayingSliderV2
+- (void)setHeartButton:(id)arg1 { // Hide Like Button 8.5.60 +
 
 
--(void)didMoveToWindow {
+	if(hideLikeButton) %orig(nil);
 
-
-    if(hideTimeSlider) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-// Hide elapsed and remaining time labels
-
-
-%hook SPTNowPlayingDurationViewV2
-
-
--(void)didMoveToWindow {
-
-
-    if(hideElapsedTime) { // Following code is from Litten, check her out and her amazing tweaks! https://github.com/Litteeen
-
-
-        UILabel* elapsedTimeLabel = MSHookIvar<UILabel *>(self, "_timeTakenLabel"); 
-        [elapsedTimeLabel setHidden:YES];
-
-
-    }
-
-
-    if (hideRemainingTime) {
-
-
-        UILabel* remainingTimeLabel = MSHookIvar<UILabel *>(self, "_timeRemainingLabel"); 
-        [remainingTimeLabel setHidden:YES];
-
-
-}
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-// Center Artist name and song title
-
-
-%hook SPTNowPlayingInformationUnitViewController
-
-
--(void)viewDidLoad { 
-
-
-    // Following code is from iCrazeiOS, check him out! https://github.com/iCrazeiOS
-
-
-    %orig;
-
-
-    if(centerText) {
-
-
-	    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-	    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.subtitleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-
-
-    }
-
-
-}
-
-%end
-
-
-
-
-// Hide Previous Track Button
-
-
-%hook SPTNowPlayingPreviousTrackButton
-
-
--(void)didMoveToWindow {
-
-
-    if(hidePreviousTrackButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Play/Pause Button
-
-
-%hook SPTNowPlayingPlayButtonV2
-
-
--(void)didMoveToWindow {
-
-
-    if(hidePlayPauseButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-// Hide Next Track Button
-
-
-%hook SPTNowPlayingNextTrackButton
-
-
--(void)didMoveToWindow {
-
-
-    if(hideNextTrackButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	else %orig;
 
 
 }
@@ -1811,50 +1076,36 @@ return %orig;
 %hook _UISlideriOSVisualElement
 
 
--(void)layoutSubviews {
+- (void)setAlpha:(double)arg1 { // Hide Knob View
 
 
-    if(hideSliderKnob) {
+	if(hideSliderKnob) {
 
+		UIImageView *knobView = MSHookIvar<UIImageView *>(self, "_thumbView");
 
-        UIImageView* Knob = MSHookIvar<UIImageView *>(self, "_thumbView");
+		[knobView setAlpha:0];
 
+	}
 
-        [Knob setAlpha:0];
-
-    }
-
-
-return %orig;
-
+	else %orig;
 
 }
-   
+
 
 %end
 
 
 
 
-// Car Mode UI
+%hook SPTNowPlayingSliderV2
 
 
-%hook SPTDrivingModeControllerImplementation
+- (void)didMoveToWindow { // Hide Time Slider
 
 
--(void)setDrivingModeEnabled:(bool)arg1 {
+	%orig;
 
-
-    if(enableCarMode) {
-
-
-        arg1 = 1;
-
-
-    }
-
-
-return %orig;
+	if(hideTimeSlider) self.hidden = YES;
 
 
 }
@@ -1865,40 +1116,45 @@ return %orig;
 
 
 
-// Hide car button
+%hook SPTNowPlayingDurationViewV2
 
 
-%hook SPTDrivingModeNavigationBarView
+- (void)didMoveToWindow { // Hide elapsed and remaining time labels, following code is from Litten, https://github.com/Litteeen
 
 
--(void)didMoveToWindow {
+	if(hideElapsedTime) {
+
+		UILabel *elapsedTimeLabel = MSHookIvar<UILabel *>(self, "_timeTakenLabel"); 
+		[elapsedTimeLabel setHidden:YES];
+
+	}
+
+	if(hideRemainingTime) {
+
+		UILabel *remainingTimeLabel = MSHookIvar<UILabel *>(self, "_timeRemainingLabel"); 
+		[remainingTimeLabel setHidden:YES];
+
+	}
+
+	else %orig;
+
+}
 
 
-    if(hidePlaylistTitle) {
+%end
 
 
-        UIButton* titleLabel = MSHookIvar<UIButton *>(self, "_titleLabel");
 
 
-        [titleLabel setHidden:YES];
+%hook SPTNowPlayingShuffleButtonViewController
 
 
-    }
+- (void)setShuffleButton:(id)arg1 { // Hide Shuffle Button
 
 
-    if(hideCarButton) {
+	if(hideShuffleButton) {}
 
-
-        UIButton* rightButton = MSHookIvar<UIButton *>(self, "_rightButton");
-
-
-        [rightButton setHidden:YES];
-
-
-    }
-
-
-return %orig;
+	else %orig;
 
 
 }
@@ -1909,25 +1165,15 @@ return %orig;
 
 
 
-// Hide Like button in car play UI
+%hook SPTNowPlayingPreviousTrackButton
 
 
-%hook SPTDrivingModeHeadUnitFeedbackButton
+- (void)didMoveToWindow { // Hide Previous Track Button (Legacy versions)
 
 
--(void)didMoveToWindow {
+	%orig;
 
-
-    if(hideCarLikeButton) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hidePreviousTrackButton) self.hidden = YES;
 
 
 }
@@ -1938,25 +1184,15 @@ return %orig;
 
 
 
-// Hide choose music button
+%hook PlayButton
 
 
-%hook SPTDrivingModeFooterUnitViewController
+- (void)setAlpha:(double)arg1 { // Hide Play/Pause Button
 
 
--(void)viewDidLoad {
+	%orig;
 
-
-    if (hideChooseMusicButton) {
-
-
-        self.view.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hidePlayPauseButton) %orig(0);
 
 
 }
@@ -1967,52 +1203,15 @@ return %orig;
 
 
 
-// Podcasts UI / Hide Speed, Back, Forward Buttons
+%hook SPTNowPlayingNextTrackButton
 
 
-%hook SPTNowPlayingHeadUnitView
+- (void)didMoveToWindow { // Hide Next Track Button (Legacy versions)
 
 
--(void)didMoveToWindow {
+	%orig;
 
-
-    if(hideBackButton || hidePreviousTrackButton) {
-
-
-        UIButton* leftSecondaryButton = MSHookIvar<UIButton *>(self, "_leftSecondaryButton");
-		
-
-        [leftSecondaryButton setHidden:YES];
-
-
-    }
-
-
-    if(hideSpeedButton) {
-
-
-        UIButton* leftTertiaryButton = MSHookIvar<UIButton *>(self, "_leftTertiaryButton");
-		
-
-        [leftTertiaryButton setHidden:YES];
-
-
-    }
-
-
-    if(hideForwardButton || hideNextTrackButton) {
-
-
-        UIButton* rightSecondaryButton = MSHookIvar<UIButton *>(self, "_rightSecondaryButton");
-		
-
-        [rightSecondaryButton setHidden:YES];
-
-
-    }
-
-
-return %orig;
+	if(hideNextTrackButton) self.hidden = YES;
 
 
 }
@@ -2023,30 +1222,15 @@ return %orig;
 
 
 
-// Search Page
+%hook SPTNowPlayingRepeatButtonViewController
 
 
+- (void)setRepeatButton:(id)arg1 { // Hide Repeat Button
 
 
-// Hide ugly stuff in search page
+	if(hideRepeatButton) {}
 
-
-%hook SPTBrowseUICardComponentView
-
-
--(void)didMoveToWindow {
-
-
-    if(unclutterSearchPage) {
-
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	else %orig;
 
 
 }
@@ -2057,22 +1241,15 @@ return %orig;
 
 
 
-%hook HUGS2SectionHeaderComponentView
+%hook SPTGaiaDevicesAvailableViewImplementation
 
 
--(void)didMoveToWindow {
+- (void)didMoveToWindow { // Hide Devices Button
 
 
-    if(unclutterSearchPage) {
+	%orig;
 
-
-        self.hidden = YES;
-
-
-    }
-
-
-return %orig;
+	if(hideDevicesButton) self.hidden = YES;
 
 
 }
@@ -2083,26 +1260,15 @@ return %orig;
 
 
 
-// Hide Clear Recent Searches Button
+%hook SPTNowPlayingQueueButton
 
 
-%hook ClearRecentSearchesButton
+- (void)didMoveToWindow { // Hide Queue Button
 
 
--(void)didMoveToWindow {
+	%orig;
 
-
-    if(hideClearRecentSearchesButton) {
-
-
-        [self setHidden:YES];
-
-
-    }
-
-
-return %orig;
-
+	if(hideQueueButton) self.hidden = YES;
 
 }
 
@@ -2112,88 +1278,22 @@ return %orig;
 
 
 
-// Hide Cancel Button in search page
+%hook SPTNowPlayingInformationUnitViewController
 
 
-%hook SPTSearchUISearchControls
+- (void)viewDidLoad { // Center song & artist title
 
 
--(void)didMoveToWindow {
+	// Following code is from iCrazeiOS, https://github.com/iCrazeiOS
 
+	%orig;
 
-    if(hideCancelButton) {
+	if(centerText) {
 
+		[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
+		[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.subtitleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
 
-        UIButton* cancelButton = MSHookIvar<UIButton *>(self, "_cancelButton");
-
-
-        [cancelButton setHidden:YES];
-
-
-    }
-
-
-return %orig;
-
-
-}
-
-
-%end
-
-
-
-
-//Hide the "Play what you love text"
-
-
-%hook PlayWhatYouLoveText
-
-
--(void)didMoveToWindow {
-
-
-    if(hidePlayWhatYouLoveText) {
-
-
-        [self setHidden:YES];
-
-
-    }
-
-
-return %orig;    
-
-
-}
-
-
-%end
-
-
-
-
-// Fix for the shuffle and repeat buttons being hidden in context menu
-
-
-%hook SPTNowPlayingContextMenuHeaderView
-
-
--(void)didMoveToWindow {
-
-
-    %orig;
-
-
-    SPTNowPlayingShuffleButton* shuffleButton = MSHookIvar<SPTNowPlayingShuffleButton *>(self, "_shuffleButton");
-		
-    [shuffleButton setHidden:NO];
-
-
-    SPTNowPlayingRepeatButton* repeatButton = MSHookIvar<SPTNowPlayingRepeatButton *>(self, "_repeatButton");
-		
-    [repeatButton setHidden:NO];
-
+	}
 
 }
 
@@ -2205,258 +1305,266 @@ return %orig;
 
 %hook SPTNowPlayingViewController
 
--(void)viewDidLayoutSubviews{
+
+- (void)viewDidLayoutSubviews { // Align song & artist title to the top
+
 
 	%orig;
-	
+
 	if(!textToTheTop) return;
-	
-	//Declare all the ViewControllers we need
+
+	// Declare all the ViewControllers we need
+
 	SPTNowPlayingInformationUnitViewController *informationUnitViewController = NULL;
 	UIViewController *navigationBarUnitViewController = NULL;
 	SPTNowPlayingContentLayerViewController *contentLayerViewController = NULL;
-	
-	//Get a reference to the ViewControllers by iterating through the children of self
-	for(UIViewController *controller in self.childViewControllers){
+
+	// Get a reference to the ViewControllers by iterating through the children of self
+
+	for(UIViewController *controller in self.childViewControllers) {
+
 		if([controller isKindOfClass:%c(SPTNowPlayingInformationUnitViewController)]) informationUnitViewController = (SPTNowPlayingInformationUnitViewController*)controller;
 		else if([controller isKindOfClass:%c(SPTNowPlayingNavigationBarUnitViewController)]) navigationBarUnitViewController = controller;
 		else if([controller isKindOfClass:%c(SPTNowPlayingContentLayerViewController)]) contentLayerViewController = (SPTNowPlayingContentLayerViewController*)controller;
+
 	}
-	
-	//Only align the label if all controllers have been found (there would be issues otherwise)
-	if(informationUnitViewController && navigationBarUnitViewController && contentLayerViewController){
-		//Remove the old Y-Position of the titleLabel && Like Button
+
+	// Only align the label if all controllers have been found (there would be issues otherwise)
+
+	if(informationUnitViewController && navigationBarUnitViewController && contentLayerViewController) {
+
+		// Remove the old Y-Position of the titleLabel && Like Button
+
 		for (NSLayoutConstraint *c in informationUnitViewController.view.constraints) {
-			if((c.firstItem == informationUnitViewController.titleLabel || c.secondItem == informationUnitViewController.titleLabel) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY)) {
+
+			if((c.firstItem == informationUnitViewController.titleLabel || c.secondItem == informationUnitViewController.titleLabel) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY))
+
 				[informationUnitViewController.view removeConstraint:c];
-			}
+
+
+			if(informationUnitViewController.heartButtonViewController && (c.firstItem == informationUnitViewController.heartButtonViewController.view || c.secondItem == informationUnitViewController.heartButtonViewController.view) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY))
 			
-			if(informationUnitViewController.heartButtonViewController && (c.firstItem == informationUnitViewController.heartButtonViewController.view || c.secondItem == informationUnitViewController.heartButtonViewController.view) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY)) {
 				[informationUnitViewController.view removeConstraint:c];
-			}
+
+
 		}
-		
-		//Align the titleLabel bellow the NavigationBar
+
+		// Align the titleLabel bellow the NavigationBar
+
 		if(informationUnitViewController.titleLabel.window == navigationBarUnitViewController.view.window && informationUnitViewController.titleLabel.window) [informationUnitViewController.titleLabel.topAnchor constraintEqualToAnchor:navigationBarUnitViewController.view.bottomAnchor].active = true;
-		
-		//Move the Like Button down (if it's there)
+
+		// Move the Like Button down (if it's there)
+
 		if(informationUnitViewController.heartButtonViewController && informationUnitViewController.heartButtonViewController.view.window == informationUnitViewController.view.window && informationUnitViewController.heartButtonViewController.view.window) [informationUnitViewController.heartButtonViewController.view.centerYAnchor constraintEqualToAnchor:informationUnitViewController.view.bottomAnchor].active = true;
+
 	}
+
 }
+
 
 %end
 
+
+
+
 %hook SPTNowPlayingCoverArtCell
 
--(void)didMoveToSuperview{
-    
+
+- (void)didMoveToSuperview {
+
+
 	%orig;
-	
+
 	if(!textToTheTop) return;
-	
-	//Declare all the ViewControllers we need
+
+	// Declare all the ViewControllers we need
+
 	SPTNowPlayingInformationUnitViewController *informationUnitViewController = NULL;
 	UIViewController *navigationBarUnitViewController = NULL;
 	SPTNowPlayingViewController *nowPlayingController = ((SPTNowPlayingViewController*)((SPTNowPlayingContentLayerViewController*)self.collectionView.dataSource).parentViewController);
 	
-	//Get a reference to the ViewControllers by iterating through the children of self
-	for(UIViewController *controller in nowPlayingController.childViewControllers){
+	// Get a reference to the ViewControllers by iterating through the children of self
+
+	for(UIViewController *controller in nowPlayingController.childViewControllers) {
+
 		if([controller isKindOfClass:%c(SPTNowPlayingInformationUnitViewController)]) informationUnitViewController = (SPTNowPlayingInformationUnitViewController*)controller;
 		else if([controller isKindOfClass:%c(SPTNowPlayingNavigationBarUnitViewController)]) navigationBarUnitViewController = controller;
+
 	}
-	
-	//Only align the label if all controllers have been found (there would be issues otherwise)
-	if(informationUnitViewController && navigationBarUnitViewController && nowPlayingController){
+
+	// Only align the label if all controllers have been found (there would be issues otherwise)
+
+	if(informationUnitViewController && navigationBarUnitViewController && nowPlayingController) {
+
 		UIImageView *artworkView = self.imageView;
 		
-		//Remove the old Y-Position of the artworkView
+		// Remove the old Y-Position of the artworkView
+
 		for (NSLayoutConstraint *c in artworkView.superview.constraints) {
-			if((c.firstItem == artworkView || c.secondItem == artworkView) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY)) {
+
+			if((c.firstItem == artworkView || c.secondItem == artworkView) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY))
+
 				[artworkView.superview removeConstraint:c];
-			}
+
+
 		}
 		
-		//Create a UILayoutGuide ranging from the Track Title Label to above the Duration Slider
+		// Create a UILayoutGuide ranging from the Track Title Label to above the Duration Slider
+
 		UILayoutGuide *guide = [[UILayoutGuide alloc] init];
 		[nowPlayingController.view addLayoutGuide:guide];
 		
 		if(guide.owningView.window == informationUnitViewController.subtitleLabel.window && guide.owningView.window) [guide.topAnchor constraintEqualToAnchor:informationUnitViewController.subtitleLabel.bottomAnchor].active = true;
 		if(guide.owningView.window == informationUnitViewController.view.window && guide.owningView.window) [guide.bottomAnchor constraintEqualToAnchor:informationUnitViewController.view.bottomAnchor].active = true;
 		
-		//Center the artwork between the Track Title Label and the Duration Slider using the previously created LayoutGuide
+		// Center the artwork between the Track Title Label and the Duration Slider using the previously created LayoutGuide
+
 		if(guide.owningView.window == artworkView.window && guide.owningView.window) [artworkView.centerYAnchor constraintEqualToAnchor:guide.centerYAnchor].active = true;
+
 	}
+
 }
+
 
 %end
 
 
 
 
-//Litten's Klei gradients, thank you <3
+%hook SPTNowPlayingHeadUnitView
 
 
-%hook MPNowPlayingInfoCenter
+- (id)initWithFrame:(CGRect)frame { // get an instance of SPTNowPlayingHeadUnitView
 
+	id orig = %orig;
 
-- (void)setNowPlayingInfo:(id)arg1 { // update colors when artwork changed
+	headUnitView = self;
 
-    %orig;
-
-    //if(!gradientColors) return;
-
-	    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"kleiUpdateColors" object:nil];
-        });
+	return orig;
 
 }
+
+
+- (void)didMoveToWindow { // Podcasts UI / Hide Speed, Back, Forward Buttons
+
+	if(hideBackButton || hidePreviousTrackButton) MSHookIvar<UIButton *>(self, "_leftSecondaryButton").hidden = YES;
+
+	if(hideSpeedButton) MSHookIvar<UIButton *>(self, "_leftTertiaryButton").hidden = YES;
+
+	if(hideForwardButton || hideNextTrackButton) MSHookIvar<UIButton *>(self, "_rightSecondaryButton").hidden = YES;
+
+	else %orig;
+
+}
+
 
 %end
 
 
 
 
-%hook SPTNowPlayingViewController
+%hook SPTNowPlayingSleepTimerButtonViewController
 
 
-%new
+- (void)setSleepTimerButton:(id)arg1 {
 
-- (void)setColors { // get artwork colors
+	if(hideMoonButton) {}
 
-	MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
-		NSDictionary* dict = (__bridge NSDictionary *)information;
-		if (dict) {
-			if (dict[(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData]) {
-				currentArtwork = [UIImage imageWithData:[dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtworkData]];
-				if (currentArtwork)
-					[gradient setColors:[NSArray arrayWithObjects:(id)[[libKitten backgroundColor:currentArtwork] CGColor], (id)[[libKitten primaryColor:currentArtwork] CGColor], nil]];
-			}
-      	} else {
-			[gradient setColors:[NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
-		}
-  	});
+	else %orig;
 
 }
 
 
-- (void)viewDidLoad { // add gradient
+%end
+
+
+
+
+%hook ClearRecentSearchesButton
+
+
+- (void)didMoveToWindow { // Hide Clear Recent Searches Button
+
 
 	%orig;
 
-    if(gradientColors) {
-	    //if (!gradient) {
-		    gradient = [[CAGradientLayer alloc] init];
-		    [gradient setFrame:[[self view] bounds]];
-		    [gradient setStartPoint:CGPointMake(0.0, 0.5)];
-    	    [gradient setEndPoint:CGPointMake(0.5, 1.0)];
-		    [gradient setColors:[NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
-		    [gradient setLocations:[NSArray arrayWithObjects:@(-0.5), @(1.5), nil]];
-		    [[[self view] layer] insertSublayer:gradient atIndex:0];
-	    //}
+	if(hideClearRecentSearchesButton) [self setHidden:YES];
 
-    }
-
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil]; // add notification observer to dynamically change artwork
 
 }
 
 
-- (void)viewWillAppear:(BOOL)animated { // update colors when now playing view appears
+%end
+
+
+
+
+%hook SPTSearchUISearchControls
+
+
+- (void)didMoveToWindow { // Hide Cancel Button in search page
+
 
 	%orig;
 
-	[self setColors];
+	if(hideCancelButton) {
+
+		UIButton *cancelButton = MSHookIvar<UIButton *>(self, "_cancelButton");
+
+		[cancelButton setHidden:YES];
+
+	}
 
 }
 
 
 %end
+
+
+
+
+%hook PlayWhatYouLoveText
+
+
+- (void)didMoveToWindow { // Hide the "Play what you love text"
+
+
+	%orig;
+
+	if(hidePlayWhatYouLoveText) [self setHidden:YES];
+
+
+}
+
+
 %end
 
 
 
 
-  // You'll need to add another %end if you're grouping all hooks
+/*%hook SPTNowPlayingPlaybackActionsHandlerImplementation
+
+
+- (void)playPause:(id)arg1 {
+
+	%orig;
+
+	if(self.isPaused == YES) headUnitView.backgroundColor = UIColor.systemPurpleColor;
+	else if(self.isPaused == NO) headUnitView.backgroundColor = UIColor.systemPinkColor;
+
+}
+
+
+%end*/
+%end
 
 
 
 
 %ctor {
-  
 
+	loadPrefs();
 
-
-  // Create HBPreferences instance with your identifier, usually I just add prefs to the end of my package identifier
-
-    HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"com.perfect.spotify"];
-    HBPreferences *colorsP = [[HBPreferences alloc] initWithIdentifier:@"com.perfect.spotifycolors"];
-
-
-  // Register preference variables, naming the preference key and variable the same thing reduces confusion for me.
-
-  [preferences registerBool:&hideConnectButton default:NO forKey:@"hideConnectButton"];
-  [preferences registerBool:&hideAddSongsButton default:NO forKey:@"hideAddSongsButton"];
-  [preferences registerBool:&hideDevicesButton default:NO forKey:@"hideDevicesButton"];
-  [preferences registerBool:&hideCloseButton default:NO forKey:@"hideCloseButton"];
-  [preferences registerBool:&hidePlaylistNameText default:NO forKey:@"hidePlaylistNameText"];
-  [preferences registerBool:&hideContextMenuButton default:NO forKey:@"hideContextMenuButton"];
-  [preferences registerBool:&hideQueueButton default:NO forKey:@"hideQueueButton"];
-  [preferences registerBool:&hideLikeButton default:NO forKey:@"hideLikeButton"];
-  [preferences registerBool:&hideShuffleButton default:NO forKey:@"hideShuffleButton"];
-  [preferences registerBool:&hideRepeatButton default:NO forKey:@"hideRepeatButton"];
-  [preferences registerBool:&hideTimeSlider default:NO forKey:@"hideTimeSlider"];
-  [preferences registerBool:&hideElapsedTime default:NO forKey:@"hideElapsedTime"];
-  [preferences registerBool:&hideRemainingTime default:NO forKey:@"hideRemainingTime"];
-  [preferences registerBool:&centerText default:NO forKey:@"centerText"];
-  [preferences registerBool:&enableCarMode default:NO forKey:@"enableCarMode"];
-  [preferences registerBool:&enableLyricsForAllTracks default:NO forKey:@"enableLyricsForAllTracks"];
-  [preferences registerBool:&disableGeniusLyrics default:NO forKey:@"disableGeniusLyrics"];
-  [preferences registerBool:&disableStorylines default:NO forKey:@"disableStorylines"];
-  [preferences registerBool:&showStatusBar default:NO forKey:@"showStatusBar"];
-  [preferences registerBool:&hidePreviousTrackButton default:NO forKey:@"hidePreviousTrackButton"];
-  [preferences registerBool:&hidePlayPauseButton default:NO forKey:@"hidePlayPauseButton"];
-  [preferences registerBool:&hideNextTrackButton default:NO forKey:@"hideNextTrackButton"];
-  [preferences registerBool:&hideSearchBar default:NO forKey:@"hideSearchBar"];
-  [preferences registerBool:&blackoutContextMenu default:NO forKey:@"blackoutContextMenu"];
-  [preferences registerBool:&hidePlaylistTitle default:NO forKey:@"hidePlaylistTitle"];
-  [preferences registerBool:&hideCarButton default:NO forKey:@"hideCarButton"];
-  [preferences registerBool:&hideCarLikeButton default:NO forKey:@"hideCarLikeButton"];
-  [preferences registerBool:&hideChooseMusicButton default:NO forKey:@"hideChooseMusicButton"];
-  [preferences registerBool:&oledSpotify default:NO forKey:@"oledSpotify"]; 
-  [preferences registerBool:&hideTabBarLabels default:NO forKey:@"hideTabBarLabels"];
-  [preferences registerBool:&trueShuffle default:NO forKey:@"trueShuffle"];
-  [preferences registerBool:&hideRemoveButton default:NO forKey:@"hideRemoveButton"];
-  [preferences registerBool:&hideClearRecentSearchesButton default:NO forKey:@"hideClearRecentSearchesButton"];
-  [preferences registerBool:&unclutterSearchPage default:NO forKey:@"unclutterSearchPage"];
-  [preferences registerBool:&hideShareButton default:NO forKey:@"hideShareButton"];
-  [preferences registerBool:&hideSettingsButton default:NO forKey:@"hideSettingsButton"];
-  [preferences registerBool:&hideTabBarPlayButton default:NO forKey:@"hideTabBarPlayButton"];
-  [preferences registerBool:&hideCancelButton default:NO forKey:@"hideCancelButton"];
-  [preferences registerBool:&noPopUp default:NO forKey:@"noPopUp"];
-  [preferences registerBool:&hideBackButton default:NO forKey:@"hideBackButton"];
-  [preferences registerBool:&hideSpeedButton default:NO forKey:@"hideSpeedButton"];
-  [preferences registerBool:&hideForwardButton default:NO forKey:@"hideForwardButton"];
-  [preferences registerBool:&enableTextColor default:NO forKey:@"enableTextColor"];
-  [preferences registerBool:&enableTintColor default:NO forKey:@"enableTintColor"];
-  [preferences registerBool:&enableBackgroundUIColor default:NO forKey:@"enableBackgroundUIColor"];
-  [preferences registerBool:&textToTheTop default:NO forKey:@"textToTheTop"];
-  [preferences registerBool:&gradientColors default:NO forKey:@"gradientColors"];
-  [preferences registerBool:&hidePlayWhatYouLoveText default:NO forKey:@"hidePlayWhatYouLoveText"];
-  [preferences registerBool:&hideQueuePopUp default:NO forKey:@"hideQueuePopUp"];
-  [preferences registerBool:&hideSliderKnob default:NO forKey:@"hideSliderKnob"];
-
-
-  // Colors
-
-
-    [colorsP registerObject:&tintColor default:@"ffffff" forKey:@"tintColor"];
-    [colorsP registerObject:&tintTextColor default:@"ffffff" forKey:@"tintTextColor"];
-    [colorsP registerObject:&backgroundUIColor default:@"ffffff" forKey:@"backgroundUIColor"];
-
-    // Check if the toggles switches are enabled from preferences then init the group hooks
-
-    %init(PerfectSpotify, ConnectButton=objc_getClass("ConnectUIFeatureImpl.ConnectButtonView"), ClearRecentSearchesButton=objc_getClass("SPTTing.ChipView"), PlayWhatYouLoveText=objc_getClass("SPTTing.EmptyState"));
-
+	%init(PerfectSpotify, ConnectButton=objc_getClass("ConnectUIFeatureImpl.ConnectButtonView"), ClearRecentSearchesButton=objc_getClass("SPTTing.ChipView"), PlayWhatYouLoveText=objc_getClass("SPTTing.EmptyState"), PlayButton=objc_getClass("EncoreConsumerMobile.PlayButtonView"));
 
 }
