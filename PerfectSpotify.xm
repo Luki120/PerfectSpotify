@@ -783,7 +783,7 @@
 
 		if(!gradient) {
 
-			gradient = [CAGradientLayer new];
+			gradient = [CAGradientLayer layer];
 			gradient.frame = self.view.bounds;
 			gradient.colors = [NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil];
 			gradient.locations = [NSArray arrayWithObjects:@(-0.5), @(1.5), nil];
