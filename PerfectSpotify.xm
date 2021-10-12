@@ -64,7 +64,7 @@
 
 
 
-%hook SPTHomeUIShortcutsCardView
+%hook HUGSCustomViewControl
 
 
 - (void)didMoveToWindow {
@@ -72,7 +72,7 @@
 
 	%orig;
 
-	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
+	if(oledSpotify) self.contentView.backgroundColor = UIColor.blackColor;
 
 
 }

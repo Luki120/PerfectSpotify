@@ -178,7 +178,8 @@ CAGradientLayer *gradient;
 @end
 
 
-@interface SPTHomeUIShortcutsCardView : UIView
+@interface HUGSCustomViewControl : UIView
+@property UIView *contentView;
 @end
 
 
