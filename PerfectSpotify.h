@@ -2,6 +2,7 @@
 #import "MediaRemote.h"
 #import <Kitten/libKitten.h>
 #import <MediaRemote/MediaRemote.h>
+#import <AudioToolbox/AudioServices.h>
 #import <GcUniversal/GcColorPickerUtils.h>
 
 
@@ -65,6 +66,13 @@ static BOOL hideQueueButton;
 
 static BOOL centerText;
 static BOOL textToTheTop;
+
+static BOOL enableSpotifyUI;
+static BOOL enableHaptics;
+static BOOL enableModernButtons;
+static BOOL enableArtworkBasedColors;
+
+static int hapticsStrength;
 
 static BOOL hideSpeedButton;
 static BOOL hideBackButton;
@@ -130,6 +138,12 @@ static void loadPrefs() {
 
 	centerText = prefs[@"centerText"] ? [prefs[@"centerText"] boolValue] : NO;
 	textToTheTop = prefs[@"textToTheTop"] ? [prefs[@"textToTheTop"] boolValue] : NO;
+
+	enableSpotifyUI = prefs[@"enableSpotifyUI"] ? [prefs[@"enableSpotifyUI"] boolValue] : NO;
+	enableHaptics = prefs[@"enableHaptics"] ? [prefs[@"enableHaptics"] boolValue] : NO;
+	enableModernButtons = prefs[@"enableModernButtons"] ? [prefs[@"enableModernButtons"] boolValue] : NO;
+	enableArtworkBasedColors = prefs[@"enableArtworkBasedColors"] ? [prefs[@"enableArtworkBasedColors"] boolValue] : NO;
+	hapticsStrength = prefs[@"hapticsStrength"] ? [prefs[@"hapticsStrength"] integerValue] : 2;
 
 	hideSpeedButton = prefs[@"hideSpeedButton"] ? [prefs[@"hideSpeedButton"] boolValue] : NO;
 	hideBackButton = prefs[@"hideBackButton"] ? [prefs[@"hideBackButton"] boolValue] : NO;
@@ -315,22 +329,23 @@ UIViewController *ancestor;
 // Spotify UI
 
 
-@interface SPTNowPlayingPlaybackActionsHandlerImplementation : NSObject
-@property BOOL isPaused;
+@interface SPTPlayerState : NSObject
+@property (assign, getter=isPaused, nonatomic, readwrite) BOOL paused;
 @end
 
 
 @interface SPTNowPlayingHeadUnitView : UIView
-/*@property (nonatomic, strong) UIButton *rewindButton;
+@property (nonatomic, strong) UIButton *rewindButton;
 @property (nonatomic, strong) UIButton *skipButton;
 @property (nonatomic, strong) UIButton *playPauseButton;
-- (void)rewind:(UIButton *)sender;
-- (void)skip:(UIButton *)sender;
-- (void)playPause:(UIButton *)sender*/
+- (void)rewind;
+- (void)playPause;
+- (void)skip;
+- (void)triggerHaptics;
+- (void)setupSpotifyUI;
+- (void)setupSpotifyUIConstraints;
+- (void)setupSpotifyUIModernButtonsConstraints;
 @end
 
 
 SPTNowPlayingHeadUnitView *headUnitView = nil;
-
-//UIImage *skipButtonImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PerfectSpotify.bundle/skip.png"];
-//UIImage *playPauseButtonImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PerfectSpotify.bundle/play.png"];

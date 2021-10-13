@@ -259,32 +259,16 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>detail</key>
+				<string>ExtraFeaturesVC</string>
+				<key>isController</key>
+				<true/>
 				<key>label</key>
 				<string>++ Features</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false />
-				<key>defaults</key>
-				<string>me.luki.perfectspotifyprefs</string>
-				<key>key</key>
-				<string>centerText</string>
-				<key>label</key>
-				<string>Center Artist/Song Labels</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false />
-				<key>defaults</key>
-				<string>me.luki.perfectspotifyprefs</string>
-				<key>key</key>
-				<string>textToTheTop</string>
-				<key>label</key>
-				<string>Align Song Labels To The Top</string>
 			</dict>
 		</array>
 		<key>title</key>

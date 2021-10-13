@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>++ Features</string>
+				<key>footerText</key>
+				<string>This options may cause crashes or the button images may fail to load.</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>enableSpotifyUI</string>
+				<key>label</key>
+				<string>Enable Spotify UI (Beta)</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>enableModernButtons</string>
+				<key>label</key>
+				<string>Enable Modern Buttons</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>enableArtworkBasedColors</string>
+				<key>label</key>
+				<string>Enable Artwork Based Colors</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>enableHaptics</string>
+				<key>label</key>
+				<string>Enable Haptics</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSegmentCell</string>
+				<key>height</key>
+				<real>50</real>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>default</key>
+				<string>2</string>
+				<key>key</key>
+				<string>hapticsStrength</string>
+				<key>validValues</key>
+				<array>
+					<string>0</string>
+					<string>1</string>
+					<string>2</string>
+				</array>
+				<key>validTitles</key>
+				<array>
+					<string>Soft</string>
+					<string>Medium</string>
+					<string>Strong</string>
+				</array>
+				<key>id</key>
+				<string>SegmentCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>centerText</string>
+				<key>label</key>
+				<string>Center Artist/Song Labels</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>textToTheTop</string>
+				<key>label</key>
+				<string>Align Song Labels To The Top</string>
+			</dict>
+		</array>
+		<key>title</key>
+		<string>PerfectSpotify</string>
+	</dict>
+</plist>

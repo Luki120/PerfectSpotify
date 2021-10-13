@@ -44,3 +44,18 @@
 
 
 @end
+
+
+@implementation ExtraFeaturesVC
+
+
+- (NSArray *)specifiers {
+
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"++ Features" target:self];
+
+	return _specifiers;
+
+}
+
+
+@end

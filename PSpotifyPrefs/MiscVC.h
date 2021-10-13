@@ -12,3 +12,7 @@
 
 @interface NowPlayingUIVC : PSListController
 @end
+
+
+@interface ExtraFeaturesVC : PSListController
+@end

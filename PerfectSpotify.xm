@@ -740,6 +740,7 @@
 
 - (void)setColors { // get artwork colors
 
+	loadPrefs();
 
 	MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
 
@@ -754,18 +755,55 @@
 
 			[gradient addAnimation:transitionKleiView forKey:nil];
 
+			CATransition *transitionRewindButton = [CATransition animation];
+			transitionRewindButton.type = kCATransitionFade;
+			transitionRewindButton.duration = 1.0f;
+			transitionRewindButton.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+
+			[headUnitView.rewindButton.layer addAnimation:transitionRewindButton forKey:nil];
+
+			CATransition *transitionPlayPauseButton = [CATransition animation];
+			transitionPlayPauseButton.type = kCATransitionFade;
+			transitionPlayPauseButton.duration = 1.0f;
+			transitionPlayPauseButton.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+
+			[headUnitView.playPauseButton.layer addAnimation:transitionPlayPauseButton forKey:nil];
+
+			CATransition *transitionSkipButtoon = [CATransition animation];
+			transitionSkipButtoon.type = kCATransitionFade;
+			transitionSkipButtoon.duration = 1.0f;
+			transitionSkipButtoon.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+
+			[headUnitView.skipButton.layer addAnimation:transitionSkipButtoon forKey:nil];
+
 			if(dict[(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData]) {
 
 				currentArtwork = [UIImage imageWithData:[dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtworkData]];
 
-				if(currentArtwork)
+				if(currentArtwork != nil) {
 
-					[gradient setColors:[NSArray arrayWithObjects:(id)[[libKitten backgroundColor:currentArtwork] CGColor], (id)[[libKitten primaryColor:currentArtwork] CGColor], nil]];
+					gradient.colors = [NSArray arrayWithObjects:(id)[libKitten backgroundColor:currentArtwork].CGColor, (id)[libKitten primaryColor:currentArtwork].CGColor, nil];
+
+					if(enableArtworkBasedColors) {
+
+						headUnitView.rewindButton.tintColor = [libKitten secondaryColor:currentArtwork];
+						headUnitView.playPauseButton.tintColor = [libKitten secondaryColor:currentArtwork];
+						headUnitView.skipButton.tintColor = [libKitten secondaryColor:currentArtwork];
+
+					}
+
+				}
 
 			}
 
+		} else {
 
-		} else [gradient setColors:[NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil]];
+			gradient.colors = [NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil];
+			headUnitView.rewindButton.tintColor = UIColor.whiteColor;
+			headUnitView.playPauseButton.tintColor = UIColor.whiteColor;
+			headUnitView.skipButton.tintColor = UIColor.whiteColor;
+
+		}
 
 	});
 
@@ -1434,11 +1472,18 @@
 %hook SPTNowPlayingHeadUnitView
 
 
+%property (nonatomic, strong) UIButton *rewindButton;
+%property (nonatomic, strong) UIButton *skipButton;
+%property (nonatomic, strong) UIButton *playPauseButton;
+
+
 - (id)initWithFrame:(CGRect)frame { // get an instance of SPTNowPlayingHeadUnitView
 
 	id orig = %orig;
 
 	headUnitView = self;
+
+	if(enableSpotifyUI) [self setupSpotifyUI];
 
 	return orig;
 
@@ -1454,6 +1499,193 @@
 	if(hideForwardButton || hideNextTrackButton) MSHookIvar<UIButton *>(self, "_rightSecondaryButton").hidden = YES;
 
 	else %orig;
+
+}
+
+
+%new
+
+- (void)setupSpotifyUI {
+
+	loadPrefs();
+
+	UIImage *rewindButtonImage = [[UIImage systemImageNamed:@"backward.fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIImage *skipButtonImage = [[UIImage systemImageNamed:@"forward.fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIImage *rewindButtonModernImage = [[UIImage imageWithContentsOfFile:@"/Library/Application Support/PSpotifyMusicControls/rewind-modern.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIImage *skipButtonModernImage = [[UIImage imageWithContentsOfFile:@"/Library/Application Support/PSpotifyMusicControls/skip-modern.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
+	self.rewindButton = [UIButton new];
+	if(!enableArtworkBasedColors) self.rewindButton.tintColor = UIColor.whiteColor;
+	self.rewindButton.adjustsImageWhenHighlighted = NO;
+	[self.rewindButton addTarget : self action:@selector(rewind) forControlEvents:UIControlEventTouchUpInside];
+	if(!enableModernButtons) [self.rewindButton setImage : rewindButtonImage forState:UIControlStateNormal];
+	else [self.rewindButton setImage : rewindButtonModernImage forState:UIControlStateNormal];
+	self.rewindButton.translatesAutoresizingMaskIntoConstraints = NO;
+	[self addSubview:self.rewindButton];
+
+	self.playPauseButton = [UIButton new];
+	if(!enableArtworkBasedColors) self.playPauseButton.tintColor = UIColor.whiteColor;
+	self.playPauseButton.adjustsImageWhenHighlighted = NO;
+	[self.playPauseButton addTarget : self action:@selector(playPause) forControlEvents:UIControlEventTouchUpInside];
+	[self.playPauseButton setPreferredSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:35] forImageInState:UIControlStateNormal];
+	self.playPauseButton.translatesAutoresizingMaskIntoConstraints = NO;
+	[self addSubview:self.playPauseButton];
+
+	self.skipButton = [UIButton new];
+	if(!enableArtworkBasedColors) self.skipButton.tintColor = UIColor.whiteColor;
+	self.skipButton.adjustsImageWhenHighlighted = NO;
+	[self.skipButton addTarget : self action:@selector(skip) forControlEvents:UIControlEventTouchUpInside];
+	if(!enableModernButtons) [self.skipButton setImage : skipButtonImage forState:UIControlStateNormal];
+	else [self.skipButton setImage : skipButtonModernImage forState:UIControlStateNormal];
+	self.skipButton.translatesAutoresizingMaskIntoConstraints = NO;
+	[self addSubview:self.skipButton];
+
+	[self setupSpotifyUIConstraints];
+	[self setupSpotifyUIModernButtonsConstraints];
+
+}
+
+
+%new
+
+- (void)setupSpotifyUIConstraints {
+
+	if(enableModernButtons) return;
+
+	[self.rewindButton.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
+	[self.rewindButton.trailingAnchor constraintEqualToAnchor : self.playPauseButton.leadingAnchor constant : 20].active = YES;
+	[self.rewindButton.widthAnchor constraintEqualToConstant : 100].active = YES;
+	[self.rewindButton.heightAnchor constraintEqualToConstant : 90].active = YES;
+
+	[self.playPauseButton.centerXAnchor constraintEqualToAnchor : self.centerXAnchor].active = YES;
+	[self.playPauseButton.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
+
+	[self.skipButton.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
+	[self.skipButton.leadingAnchor constraintEqualToAnchor : self.playPauseButton.trailingAnchor constant : -20].active = YES;
+	[self.skipButton.widthAnchor constraintEqualToConstant : 100].active = YES;
+	[self.skipButton.heightAnchor constraintEqualToConstant : 90].active = YES;
+
+}
+
+
+%new
+
+- (void)setupSpotifyUIModernButtonsConstraints {
+
+	if(!enableModernButtons) return;
+
+	[self.rewindButton.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
+	[self.rewindButton.trailingAnchor constraintEqualToAnchor : self.playPauseButton.leadingAnchor constant : -20].active = YES;
+	[self.rewindButton.widthAnchor constraintEqualToConstant : 30].active = YES;
+	[self.rewindButton.heightAnchor constraintEqualToConstant : 20].active = YES;
+
+	[self.playPauseButton.centerXAnchor constraintEqualToAnchor : self.centerXAnchor].active = YES;
+	[self.playPauseButton.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
+	[self.playPauseButton.widthAnchor constraintEqualToConstant : 35].active = YES;
+	[self.playPauseButton.heightAnchor constraintEqualToConstant : 35].active = YES;
+
+	[self.skipButton.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
+	[self.skipButton.leadingAnchor constraintEqualToAnchor : self.playPauseButton.trailingAnchor constant : 20].active = YES;
+	[self.skipButton.widthAnchor constraintEqualToConstant : 30].active = YES;
+	[self.skipButton.heightAnchor constraintEqualToConstant : 20].active = YES;
+
+}
+
+
+%new
+
+- (void)rewind {
+
+	MRMediaRemoteSendCommand(kMRPreviousTrack, nil);
+	if(enableHaptics) [self triggerHaptics];
+
+}
+
+
+%new
+
+- (void)playPause {
+
+	MRMediaRemoteSendCommand(kMRTogglePlayPause, nil);
+	if(enableHaptics) [self triggerHaptics];
+
+}
+
+
+%new
+
+- (void)skip {
+
+	MRMediaRemoteSendCommand(kMRNextTrack, nil);
+	if(enableHaptics) [self triggerHaptics];
+
+}
+
+
+%new
+
+- (void)triggerHaptics {
+
+	switch(hapticsStrength) {
+
+		case 0:
+
+			AudioServicesPlaySystemSound(1519);
+			break;
+
+		case 1:
+
+			AudioServicesPlaySystemSound(1520);
+			break;
+
+		case 2:
+
+			AudioServicesPlaySystemSound(1521);
+			break;
+
+	}
+
+}
+
+
+%end
+
+
+
+
+%hook SPTPlayerState
+
+
+- (BOOL)isPaused {
+
+	if(!enableSpotifyUI) return %orig;
+
+	UIImage *playButtonImage = [[UIImage systemImageNamed:@"play.fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIImage *pauseButtonImage = [[UIImage systemImageNamed:@"pause.fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIImage *playButtonModernImage = [[UIImage imageWithContentsOfFile:@"/Library/Application Support/PSpotifyMusicControls/play-modern.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIImage *pauseButtonModernImage = [[UIImage imageWithContentsOfFile:@"/Library/Application Support/PSpotifyMusicControls/pause-modern.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
+	BOOL value = %orig;
+
+	[UIView transitionWithView:headUnitView.playPauseButton duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+		if(value == YES) {
+
+			if(!enableModernButtons) [headUnitView.playPauseButton setImage : playButtonImage forState:UIControlStateNormal];
+			else [headUnitView.playPauseButton setImage : playButtonModernImage forState:UIControlStateNormal];
+
+		}
+
+		else {
+
+			if(!enableModernButtons) [headUnitView.playPauseButton setImage : pauseButtonImage forState:UIControlStateNormal];
+			else [headUnitView.playPauseButton setImage : pauseButtonModernImage forState:UIControlStateNormal];
+
+		}
+
+	} completion:nil];
+
+	return value;
 
 }
 
@@ -1538,24 +1770,6 @@
 
 
 %end
-
-
-
-
-/*%hook SPTNowPlayingPlaybackActionsHandlerImplementation
-
-
-- (void)playPause:(id)arg1 {
-
-	%orig;
-
-	if(self.isPaused == YES) headUnitView.backgroundColor = UIColor.systemPurpleColor;
-	else if(self.isPaused == NO) headUnitView.backgroundColor = UIColor.systemPinkColor;
-
-}
-
-
-%end*/
 %end
 
 
