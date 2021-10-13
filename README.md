@@ -62,6 +62,13 @@
 - Center Artist/Song Title
 - Align Text To The Top
 
+## Experimental Features
+
+- Enable Spotify UI
+- Enable Haptics
+- Enable Modern Buttons
+- Enable Artwork Based Colors
+
 ## Best compatibility
 
 - 8.6.14
