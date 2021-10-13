@@ -41,13 +41,23 @@
 
 	if(self) {
 
+		self.changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+		self.changelogButton.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0];
+		[self.changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
+		[self.changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
+
+		UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.changelogButton];
+
 		self.killButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.killButton.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.00];
+		self.killButton.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0];
 		[self.killButton setImage : [UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
 		[self.killButton addTarget : self action:@selector(killSpotify) forControlEvents:UIControlEventTouchUpInside];
 
-		UIBarButtonItem *killButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.killButton];		
-		self.navigationItem.rightBarButtonItem = killButtonItem;
+		UIBarButtonItem *killButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.killButton];
+
+		NSArray *rightButtons;
+		rightButtons = @[killButtonItem, changelogButtonItem];
+		self.navigationItem.rightBarButtonItems = rightButtons;
 
 		self.navigationItem.titleView = [UIView new];
 		self.iconView = [UIImageView new];
@@ -95,6 +105,38 @@
 
 	CGRect frame = self.table.bounds;
 	frame.origin.y = -frame.size.height;
+
+}
+
+
+- (void)showWtfChangedInThisVersion:(id)sender {
+
+	AudioServicesPlaySystemSound(1521);
+
+	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"1.9.1~EOL" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"]];
+
+	[self.changelogController addBulletedListItemWithTitle:@"Code" description:@"Major refactoring. Got rid of Cephei dependency." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+
+	[self.changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• EOL UPDATE.\n• Fixed OLED.\n• Fixed crashes.\n• Preferences revamp.\n• Fixed Hide Like Button." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+
+	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];	
+	backdropView.layer.masksToBounds = YES;
+	backdropView.clipsToBounds = YES;
+	backdropView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
+
+	[backdropView.bottomAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.bottomAnchor].active = YES;
+	[backdropView.leadingAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.leadingAnchor].active = YES;
+	[backdropView.trailingAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.trailingAnchor].active = YES;
+	[backdropView.topAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.topAnchor].active = YES;
+
+	self.changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
+	self.changelogController.view.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0];
+	self.changelogController.modalInPresentation = NO;
+	self.changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
+	[self presentViewController:self.changelogController animated:YES completion:nil];
 
 }
 
