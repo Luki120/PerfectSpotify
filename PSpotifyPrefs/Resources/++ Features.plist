@@ -23,6 +23,8 @@
 				<string>enableSpotifyUI</string>
 				<key>label</key>
 				<string>Enable Spotify UI (Beta)</string>
+				<key>id</key>
+				<string>SpotifyUISwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -35,6 +37,8 @@
 				<string>enableModernButtons</string>
 				<key>label</key>
 				<string>Enable Modern Buttons</string>
+				<key>id</key>
+				<string>ModernButtonsSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -47,10 +51,14 @@
 				<string>enableArtworkBasedColors</string>
 				<key>label</key>
 				<string>Enable Artwork Based Colors</string>
+				<key>id</key>
+				<string>ArtworkBasedColorsSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell1</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -63,10 +71,14 @@
 				<string>enableHaptics</string>
 				<key>label</key>
 				<string>Enable Haptics</string>
+				<key>id</key>
+				<string>HapticsSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell2</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -92,7 +104,55 @@
 					<string>Strong</string>
 				</array>
 				<key>id</key>
-				<string>SegmentCell</string>
+				<string>HapticsOptionsCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>saveCanvas</string>
+				<key>label</key>
+				<string>Save Canvas</string>
+				<key>id</key>
+				<string>SaveCanvasSwitch</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell3</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSegmentCell</string>
+				<key>height</key>
+				<real>50</real>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>default</key>
+				<string>0</string>
+				<key>key</key>
+				<string>saveCanvasDestination</string>
+				<key>validValues</key>
+				<array>
+					<string>0</string>
+					<string>1</string>
+				</array>
+				<key>validTitles</key>
+				<array>
+					<string>Filza</string>
+					<string>Gallery</string>
+				</array>
+				<key>id</key>
+				<string>CanvasOptionsCell</string>
 			</dict>
 			<dict>
 				<key>cell</key>
