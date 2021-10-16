@@ -1648,6 +1648,160 @@
 
 
 
+%hook SPTCanvasContentLayerViewController
+
+
+- (void)viewDidLoad { // add gesture to save canvas
+
+	%orig;
+
+	if(!saveCanvas) return;
+
+	refToSelf = self;
+
+	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+	doubleTap.numberOfTapsRequired = 2;
+	[self.view addGestureRecognizer:doubleTap];
+
+}
+
+
+void saveToFilzaAlertController() {
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to view it in Filza?" preferredStyle:UIAlertControllerStyleAlert];
+
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+
+		LSApplicationProxy *applicationProxy = [%c(LSApplicationProxy) applicationProxyForIdentifier:@"com.spotify.client"];
+
+		NSString *pathInFilza = [@"filza://view" stringByAppendingString:applicationProxy.dataContainerURL.path];
+		NSString *completePath = [pathInFilza stringByAppendingString:@"/Documents/Canvas/"];
+
+		UIApplication *app = [UIApplication sharedApplication];
+
+		NSURL *canvasURL = [NSURL URLWithString:[completePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];			
+
+		[app _openURL:canvasURL];
+
+	}];
+
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
+
+	[alertController addAction:confirmAction];
+	[alertController addAction:cancelAction];
+
+	[refToSelf presentViewController:alertController animated:YES completion:nil];
+
+}
+
+
+void saveToGalleryAlertController() {
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to open gallery?" preferredStyle:UIAlertControllerStyleAlert];
+
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.005 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+
+			UIApplication *application = [UIApplication sharedApplication];
+			NSURL *theURL = [NSURL URLWithString:@"photos-redirect://"];
+			[application _openURL:theURL];
+
+		});
+
+	}];
+
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
+
+	[alertController addAction:confirmAction];
+	[alertController addAction:cancelAction];
+
+	[refToSelf presentViewController:alertController animated:YES completion:nil];
+
+}
+
+
+void getCanvas() {
+
+	NSFileManager *fileM = [NSFileManager defaultManager];
+
+	NSString *documentsPath = [[fileM URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject].URLByDeletingLastPathComponent.path;
+	NSString *completePath = [documentsPath stringByAppendingPathComponent:@"/Library/Caches/com.spotify.service.network/"];	
+	NSString *newPath = [documentsPath stringByAppendingPathComponent:@"/Documents/Canvas/"];
+	NSString *canvasDirectory = [documentsPath stringByAppendingPathComponent:@"/Documents/Canvas/"];
+
+	NSError *error;
+
+	NSDirectoryEnumerator *directoryEnumerator = [fileM enumeratorAtPath:completePath];
+
+	NSDate *lastDate = [NSDate dateWithTimeIntervalSinceNow:-300]; // check for the canvas cached within the last 5 minutes
+
+	for(NSString *path in directoryEnumerator) {
+
+		NSDictionary *attributes = [directoryEnumerator fileAttributes];
+		NSDate *lastModificationDate = [attributes objectForKey:NSFileModificationDate];
+
+		if([lastDate earlierDate:lastModificationDate] == lastDate) {
+
+			// NSLog(@"PSS:%@ was modified within the last 5 minutes", path);
+
+			BOOL isDir;
+
+			if(![fileM fileExistsAtPath:canvasDirectory isDirectory:&isDir])
+
+				[fileM createDirectoryAtPath:canvasDirectory withIntermediateDirectories:NO attributes:nil error:&error];
+
+			switch(saveCanvasDestination) {
+
+				case 0:
+
+					[fileM copyItemAtPath:[completePath stringByAppendingPathComponent:path] toPath:[newPath stringByAppendingPathComponent:path] error:&error];
+
+					if(!error) saveToFilzaAlertController();
+
+					else {
+
+						SPTPopupDialog *notSoProudPopup = [%c(SPTPopupDialog) popupWithTitle:@"PerfectSpotify" message:@"Oops, looks like there was an errow downloading this canvas, most likely because you already downloaded it. Otherwise try retrying." dismissButtonTitle:@"Got it"];
+						[[%c(SPTPopupManager) sharedManager].presentationQueue addObject:notSoProudPopup];
+						[[%c(SPTPopupManager) sharedManager] presentNextQueuedPopup];
+
+						NSLog(@"PS:Your dumb af code caused this error %@", error);
+
+					}
+
+					break;
+
+				case 1:
+
+					UISaveVideoAtPathToSavedPhotosAlbum([completePath stringByAppendingPathComponent:path], refToSelf, nil, nil);
+
+					saveToGalleryAlertController();
+
+					break;
+
+			}
+
+		}
+
+	}
+
+}
+
+
+%new
+
+- (void)doubleTap:(UITapGestureRecognizer *)gesture {
+
+	getCanvas();
+
+}
+
+
+%end
+
+
+
+
 %hook SPTNowPlayingInformationUnitViewController
 
 
@@ -1728,156 +1882,6 @@
 		if(informationUnitViewController.heartButtonViewController && informationUnitViewController.heartButtonViewController.view.window == informationUnitViewController.view.window && informationUnitViewController.heartButtonViewController.view.window) [informationUnitViewController.heartButtonViewController.view.centerYAnchor constraintEqualToAnchor:informationUnitViewController.view.bottomAnchor].active = true;
 
 	}
-
-}
-
-
-- (void)viewDidLoad { // add gesture to save canvas
-
-	%orig;
-
-	if(!saveCanvas) return;
-
-	refToSelf = self;
-
-	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
-	doubleTap.numberOfTapsRequired = 2;
-	[self.view addGestureRecognizer:doubleTap];
-
-}
-
-
-void saveToFilzaAlertController() {
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to view it in Filza?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-
-		LSApplicationProxy *applicationProxy = [%c(LSApplicationProxy) applicationProxyForIdentifier:@"com.spotify.client"];
-
-		NSString *pathInFilza = [@"filza://view" stringByAppendingString:applicationProxy.dataContainerURL.path];
-		NSString *completePath = [pathInFilza stringByAppendingString:@"/Documents/Canvas/"];
-
-		UIApplication *app = [UIApplication sharedApplication];
-
-		NSURL *canvasURL = [NSURL URLWithString:[completePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];			
-
-		[app _openURL:canvasURL];
-
-	}];
-
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
-
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
-
-	[refToSelf presentViewController:alertController animated:YES completion:nil];
-
-}
-
-
-void saveToGalleryAlertController() {
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to open gallery?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.005 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-
-			UIApplication *application = [UIApplication sharedApplication];
-			NSURL *theURL = [NSURL URLWithString:@"photos-redirect://"];
-			[application _openURL:theURL];
-
-		});
-
-	}];
-
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
-
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
-
-	[refToSelf presentViewController:alertController animated:YES completion:nil];
-
-}
-
-
-%new
-
-- (void)getCanvas {
-
-	NSString *bundlePath = @"/private/var/mobile/Containers/Data/Application/3C65611F-B111-4282-9BB8-DB4EC55E7F6B/Library/Caches/com.spotify.service.network/";
-	NSString *newPath = @"/private/var/mobile/Containers/Data/Application/3C65611F-B111-4282-9BB8-DB4EC55E7F6B/Documents/Canvas/";
-	NSString *canvasDirectory = @"/private/var/mobile/Containers/Data/Application/3C65611F-B111-4282-9BB8-DB4EC55E7F6B/Documents/Canvas/";
-	
-	NSFileManager *fileM = [NSFileManager defaultManager];
-
-	NSError *error;
-
-	NSDirectoryEnumerator *directoryEnumerator = [fileM enumeratorAtPath:bundlePath];
-
-	NSDate *lastDate = [NSDate dateWithTimeIntervalSinceNow:-300]; // check for the canvas cached within the last 5 minutes
-
-	for(NSString *path in directoryEnumerator) {
-
-		NSDictionary *attributes = [directoryEnumerator fileAttributes];
-		NSDate *lastModificationDate = [attributes objectForKey:NSFileModificationDate];
-
-		if([lastDate earlierDate:lastModificationDate] == lastDate) {
-
-			// NSLog(@"PSS:%@ was modified within the last 5 minutes", path);
-
-			BOOL isDir;
-
-			if(![fileM fileExistsAtPath:canvasDirectory isDirectory:&isDir])
-
-				[fileM createDirectoryAtPath:canvasDirectory withIntermediateDirectories:NO attributes:nil error:&error];
-
-			switch(saveCanvasDestination) {
-
-				case 0:
-
-					[fileM copyItemAtPath:[bundlePath stringByAppendingString:path] toPath:[newPath stringByAppendingString:path] error:&error];
-
-					NSLog(@"PS:%@", [bundlePath stringByAppendingString:path]);
-					NSLog(@"PS:%@", [newPath stringByAppendingString:path]);
-
-					if(!error) saveToFilzaAlertController();
-
-					else {
-
-						SPTPopupDialog *notSoProudPopup = [%c(SPTPopupDialog) popupWithTitle:@"PerfectSpotify" message:@"Oops, looks like there was an errow downloading this canvas, most likely because you already downloaded it. Otherwise try retrying." dismissButtonTitle:@"Got it"];
-						[[%c(SPTPopupManager) sharedManager].presentationQueue addObject:notSoProudPopup];
-						[[%c(SPTPopupManager) sharedManager] presentNextQueuedPopup];
-
-						NSLog(@"PS:Your dumb af code caused this error %@", error);
-
-					}
-
-					break;
-
-				case 1:
-
-					UISaveVideoAtPathToSavedPhotosAlbum([bundlePath stringByAppendingString:path.lastPathComponent], refToSelf, nil, nil);
-
-					saveToGalleryAlertController();
-
-					break;
-
-			}
-
-		}
-
-	}
-
-}
-
-
-%new
-
-- (void)doubleTap:(UITapGestureRecognizer *)gesture {
-
-	[self getCanvas];
 
 }
 

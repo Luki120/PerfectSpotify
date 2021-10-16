@@ -302,6 +302,11 @@ CAGradientLayer *gradient;
 // Canvas
 
 
+@interface SPTCanvasContentLayerViewController : UIViewController
+- (void)doubleTap:(UITapGestureRecognizer *)gesture;
+@end
+
+
 @interface SPTPopupDialog : NSObject
 + (instancetype)popupWithTitle:(NSString *)arg1 message:(NSString *)arg2 dismissButtonTitle:(NSString *)arg3;
 @end
@@ -348,8 +353,6 @@ CAGradientLayer *gradient;
 
 
 @interface SPTNowPlayingViewController : UIViewController
-- (void)doubleTap:(UITapGestureRecognizer *)gesture; // Canvas
-- (void)getCanvas;
 @end
 
 
@@ -368,4 +371,4 @@ CAGradientLayer *gradient;
 
 id playlistController = nil;
 SPTNowPlayingHeadUnitView *headUnitView = nil;
-SPTNowPlayingViewController *refToSelf = nil;
+SPTCanvasContentLayerViewController *refToSelf = nil;
