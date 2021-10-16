@@ -113,11 +113,11 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"1.9.1~EOL" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"]];
+	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.0~EOL" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"]];
 
 	[self.changelogController addBulletedListItemWithTitle:@"Code" description:@"Major refactoring. Got rid of Cephei dependency." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
 
-	[self.changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• EOL UPDATE.\n• Fixed OLED.\n• Fixed crashes.\n• Preferences revamp.\n• Fixed Hide Like Button." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+	[self.changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• EOL UPDATE. \n \n• New Features: \n \n• Added Spotify UI (Beta). \n• Added download canvas option. \n• Show total songs count in playlists. \n \n• Fixes & improvements: \n \n• Fixed OLED.\n• Fixed crashes.\n• Preferences revamp.\n• Fixed Hide Like Button. \n• Fixed Hide Share Button. \n• Fixed Hide Repeat Button. \n• Fixed Hide Shuffle Button." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
