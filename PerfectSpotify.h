@@ -349,7 +349,6 @@ CAGradientLayer *gradient;
 
 @interface SPTNowPlayingViewController : UIViewController
 - (void)doubleTap:(UITapGestureRecognizer *)gesture; // Canvas
-- (void)saveToFilzaAlertController;
 - (void)getCanvas;
 @end
 

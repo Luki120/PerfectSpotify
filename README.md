@@ -69,6 +69,8 @@
 - Enable Modern Buttons
 - Enable Artwork Based Colors
 
+- Save Canvas
+
 ## Best compatibility
 
 - 8.6.14
