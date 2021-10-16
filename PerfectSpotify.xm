@@ -1736,39 +1736,13 @@
 
 	%orig;
 
-//	if(!saveCanvas) return;
+	if(!saveCanvas) return;
 
 	refToSelf = self;
 
 	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
 	doubleTap.numberOfTapsRequired = 2;
 	[self.view addGestureRecognizer:doubleTap];
-
-}
-
-
-void saveToGalleryAlertController() {
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to open gallery?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.005 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-
-			UIApplication *application = [UIApplication sharedApplication];
-			NSURL *theURL = [NSURL URLWithString:@"photos-redirect://"];
-			[application _openURL:theURL];
-
-		});
-
-	}];
-
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
-
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
-
-	[refToSelf presentViewController:alertController animated:YES completion:nil];
 
 }
 
@@ -1789,6 +1763,32 @@ void saveToFilzaAlertController() {
 		NSURL *canvasURL = [NSURL URLWithString:[completePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];			
 
 		[app _openURL:canvasURL];
+
+	}];
+
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
+
+	[alertController addAction:confirmAction];
+	[alertController addAction:cancelAction];
+
+	[refToSelf presentViewController:alertController animated:YES completion:nil];
+
+}
+
+
+void saveToGalleryAlertController() {
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to open gallery?" preferredStyle:UIAlertControllerStyleAlert];
+
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.005 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+
+			UIApplication *application = [UIApplication sharedApplication];
+			NSURL *theURL = [NSURL URLWithString:@"photos-redirect://"];
+			[application _openURL:theURL];
+
+		});
 
 	}];
 
@@ -1838,6 +1838,7 @@ void saveToFilzaAlertController() {
 				case 0:
 
 					[fileM copyItemAtPath:[bundlePath stringByAppendingString:path] toPath:[newPath stringByAppendingString:path] error:&error];
+
 					NSLog(@"PS:%@", [bundlePath stringByAppendingString:path]);
 					NSLog(@"PS:%@", [newPath stringByAppendingString:path]);
 
