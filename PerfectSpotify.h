@@ -32,6 +32,8 @@ static BOOL hideCancelButton;
 static BOOL hidePlayWhatYouLoveText;
 static BOOL hideClearRecentSearchesButton;
 
+static BOOL showSongCount;
+static BOOL hideEnhanceButton;
 static BOOL hideAddSongsButton;
 static BOOL hideQueuePopUp;
 static BOOL noPopUp;
@@ -64,8 +66,10 @@ static BOOL hideDevicesButton;
 static BOOL hideShareButton;
 static BOOL hideQueueButton;
 
-static BOOL centerText;
-static BOOL textToTheTop;
+static BOOL hideSpeedButton;
+static BOOL hideBackButton;
+static BOOL hideForwardButton;
+static BOOL hideMoonButton;
 
 static BOOL enableSpotifyUI;
 static BOOL enableHaptics;
@@ -74,13 +78,18 @@ static BOOL enableArtworkBasedColors;
 
 static int hapticsStrength;
 
-static BOOL hideSpeedButton;
-static BOOL hideBackButton;
-static BOOL hideForwardButton;
-static BOOL hideMoonButton;
+static BOOL saveCanvas;
+
+static int saveCanvasDestination;
+
+static BOOL centerText;
+static BOOL textToTheTop;
 
 
 static NSString *prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
+
+
+#define Class(string) NSClassFromString(string)
 
 
 static void loadPrefs() {
@@ -106,6 +115,8 @@ static void loadPrefs() {
 	hidePlayWhatYouLoveText = prefs[@"hidePlayWhatYouLoveText"] ? [prefs[@"hidePlayWhatYouLoveText"] boolValue] : NO;
 	hideClearRecentSearchesButton = prefs[@"hideClearRecentSearchesButton"] ? [prefs[@"hideClearRecentSearchesButton"] boolValue] : NO;
 
+	showSongCount = prefs[@"showSongCount"] ? [prefs[@"showSongCount"] boolValue] : NO;
+	hideEnhanceButton = prefs[@"hideEnhanceButton"] ? [prefs[@"hideEnhanceButton"] boolValue] : NO;
 	hideAddSongsButton = prefs[@"hideAddSongsButton"] ? [prefs[@"hideAddSongsButton"] boolValue] : NO;
 	hideQueuePopUp = prefs[@"hideQueuePopUp"] ? [prefs[@"hideQueuePopUp"] boolValue] : NO;
 	noPopUp = prefs[@"noPopUp"] ? [prefs[@"noPopUp"] boolValue] : NO;
@@ -136,14 +147,17 @@ static void loadPrefs() {
 	hideShareButton = prefs[@"hideShareButton"] ? [prefs[@"hideShareButton"] boolValue] : NO;
 	hideQueueButton = prefs[@"hideQueueButton"] ? [prefs[@"hideQueueButton"] boolValue] : NO;
 
-	centerText = prefs[@"centerText"] ? [prefs[@"centerText"] boolValue] : NO;
-	textToTheTop = prefs[@"textToTheTop"] ? [prefs[@"textToTheTop"] boolValue] : NO;
-
 	enableSpotifyUI = prefs[@"enableSpotifyUI"] ? [prefs[@"enableSpotifyUI"] boolValue] : NO;
 	enableHaptics = prefs[@"enableHaptics"] ? [prefs[@"enableHaptics"] boolValue] : NO;
 	enableModernButtons = prefs[@"enableModernButtons"] ? [prefs[@"enableModernButtons"] boolValue] : NO;
 	enableArtworkBasedColors = prefs[@"enableArtworkBasedColors"] ? [prefs[@"enableArtworkBasedColors"] boolValue] : NO;
 	hapticsStrength = prefs[@"hapticsStrength"] ? [prefs[@"hapticsStrength"] integerValue] : 2;
+
+	saveCanvas = prefs[@"saveCanvas"] ? [prefs[@"saveCanvas"] boolValue] : NO;
+	saveCanvasDestination = prefs[@"saveCanvasDestination"] ? [prefs[@"saveCanvasDestination"] integerValue] : 0;
+
+	centerText = prefs[@"centerText"] ? [prefs[@"centerText"] boolValue] : NO;
+	textToTheTop = prefs[@"textToTheTop"] ? [prefs[@"textToTheTop"] boolValue] : NO;
 
 	hideSpeedButton = prefs[@"hideSpeedButton"] ? [prefs[@"hideSpeedButton"] boolValue] : NO;
 	hideBackButton = prefs[@"hideBackButton"] ? [prefs[@"hideBackButton"] boolValue] : NO;
@@ -153,56 +167,23 @@ static void loadPrefs() {
 }
 
 
-// Text to the top
+// Colors
 
-
-@interface SPTNowPlayingInformationUnitViewController : UIViewController
-@property UIView *titleLabel;
-@property UIView *subtitleLabel;
-@property UIViewController *heartButtonViewController;
-@end
-
-
-@interface SPTNowPlayingCoverArtCell : UICollectionViewCell
-@property (getter=_collectionView) UICollectionView *collectionView;
-@property UIImageView *imageView;
-@end
-
-
-@interface SPTNowPlayingContentLayerViewController : UIViewController
-@property UICollectionView *collectionView;
-@end
-
-
-@interface SPTNowPlayingViewController : UIViewController
-@end
-
-
-// libKitten stuff
 
 NSData *artworkData;
-UIImage *currentArtwork;
 CAGradientLayer *gradient;
+
+
+@interface SPTNowPlayingBackgroundViewController : UIViewController
+- (void)setColors; // libKitten
+@end
 
 
 // Miscellaneous
 
 
-@interface SPTHomeGradientBackgroundView : UIView
-@end
-
-
-@interface HUGSCustomViewControl : UIView
-@property UIView *contentView;
-@end
-
-
 @interface GLUEGradientView : UIView
-@property (nonatomic, assign, readwrite) CGFloat alpha;
-@end
-
-
-@interface SPTBarGradientView : UIView
+@property (assign, nonatomic, readwrite) CGFloat alpha;
 @end
 
 
@@ -210,43 +191,16 @@ CAGradientLayer *gradient;
 @end
 
 
-@interface SPTSearch2ViewController : UIViewController
+@interface SPTHomeGradientBackgroundView : UIView
 @end
 
 
-@interface GLUEEmptyStateView : UIView
+@interface HUGSCustomViewControl : UIControl
+@property UIView *contentView;
 @end
 
 
-@interface _UIVisualEffectSubview : UIView
-@end
-
-
-@interface SPTSortingFilteringFilterBarView : UIView
-@end
-
-
-@interface UITabBarButtonLabel: UIView
-@end
-
-
-@interface SPTNowPlayingFreeTierFeedbackButton : UIButton
-@end
-
-
-@interface SPTNowPlayingShareButtonViewController : UIViewController
-@end
-
-
-@interface SPTNowPlayingBarPlayButton : UIButton
-@end
-
-
-@interface SPTSnackbarView : UIView
-@end
-
-
-@interface SPTProgressView : UIView
+@interface SPTBarGradientView : UIView
 @end
 
 
@@ -255,42 +209,44 @@ CAGradientLayer *gradient;
 @end
 
 
-UIViewController *ancestor;
-
-
-// Tint Color
-
-
-@interface GLUELabel : UILabel
-@property (nonatomic, strong, readwrite) UIColor *textColor;
+@interface GLUEEmptyStateView : UIView
 @end
 
 
-@interface SPTIconConfiguration : UIView
+@interface SPTSearch2ViewController : UIViewController
 @end
 
 
-@interface SPTNowPlayingBackgroundViewController : UIViewController
-- (void)setColors; // libKitten
+@interface _UIVisualEffectSubview : UIView
+@end
+
+
+@interface SPTNowPlayingBarPlayButton : UIButton
+@end
+
+
+@interface SPTEncoreLabel : UILabel
+@end
+
+
+@interface SPTNowPlayingFreeTierFeedbackButton : UIButton
 @end
 
 
 // Now Playing UI
 
 
-@interface SPTGaiaDevicesAvailableViewImplementation : UIView
-@end
-
-
 @interface SPTNowPlayingTitleButton : UIButton
 @end
 
 
-@interface SPTContextMenuAccessoryButton : UIButton
+@interface SPTNowPlayingMarqueeLabel : UIView
+@property UIView *topLabel, *bottomLabel;
+@property UIColor *textColor;
 @end
 
 
-@interface SPTNowPlayingQueueButton : UIButton
+@interface SPTContextMenuAccessoryButton : UIButton
 @end
 
 
@@ -302,12 +258,6 @@ UIViewController *ancestor;
 @end
 
 
-@interface SPTNowPlayingMarqueeLabel : UIView
-@property UIView *topLabel, *bottomLabel;
-@property UIColor *textColor;
-@end
-
-
 @interface SPTNowPlayingPreviousTrackButton : UIButton
 @end
 
@@ -316,22 +266,18 @@ UIViewController *ancestor;
 @end
 
 
-@interface _TtC12EncoreMobileP33_B5AC1D940E67B9CC1AA7D284C3953D9112EncoreButton : UIView
-@property UIImageView *imageView;
-- (id)_viewControllerForAncestor;
+@interface SPTGaiaDevicesAvailableViewImplementation : UIView
 @end
 
 
-@interface _UISlideriOSVisualElement : UIView
+@interface SPTNowPlayingQueueButton : UIButton
 @end
+
+
+// ++ Features
 
 
 // Spotify UI
-
-
-@interface SPTPlayerState : NSObject
-@property (assign, getter=isPaused, nonatomic, readwrite) BOOL paused;
-@end
 
 
 @interface SPTNowPlayingHeadUnitView : UIView
@@ -348,4 +294,79 @@ UIViewController *ancestor;
 @end
 
 
+@interface SPTPlayerState : NSObject
+@property (assign, getter=isPaused, nonatomic, readwrite) BOOL paused;
+@end
+
+
+// Canvas
+
+
+@interface SPTPopupDialog : NSObject
++ (instancetype)popupWithTitle:(NSString *)arg1 message:(NSString *)arg2 dismissButtonTitle:(NSString *)arg3;
+@end
+
+
+@interface SPTPopupManager : NSObject
+@property (assign, nonatomic, readwrite) NSMutableArray *presentationQueue;
++ (SPTPopupManager *)sharedManager;
+- (void)presentNextQueuedPopup;
+@end
+
+
+@interface _LSQueryResult : NSObject
+@end
+
+
+@interface LSResourceProxy : _LSQueryResult
+@end
+
+
+@interface LSBundleProxy : LSResourceProxy
+@property (nonatomic, readonly) NSURL *dataContainerURL;
+@end
+
+
+@interface LSApplicationProxy : LSBundleProxy
++ (id)applicationProxyForIdentifier:(id)arg1;
+@end
+
+
+@interface UIApplication ()
+- (BOOL)_openURL:(id)arg1;
+@end
+
+
+// Center artist and song title & align to the top
+
+
+@interface SPTNowPlayingInformationUnitViewController : UIViewController
+@property UIView *titleLabel;
+@property UIView *subtitleLabel;
+@property UIViewController *heartButtonViewController;
+@end
+
+
+@interface SPTNowPlayingViewController : UIViewController
+- (void)doubleTap:(UITapGestureRecognizer *)gesture; // Canvas
+- (void)saveToFilzaAlertController;
+- (void)getCanvas;
+@end
+
+
+@interface SPTNowPlayingContentLayerViewController : UIViewController
+@property UICollectionView *collectionView;
+@end
+
+
+@interface SPTNowPlayingCoverArtCell : UICollectionViewCell
+@property (getter=_collectionView) UICollectionView *collectionView;
+@property UIImageView *imageView;
+@end
+
+
+// For instances
+
+id playlistController = nil;
 SPTNowPlayingHeadUnitView *headUnitView = nil;
+SPTNowPlayingViewController *refToSelf = nil;

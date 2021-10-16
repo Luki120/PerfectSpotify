@@ -114,6 +114,30 @@
 				<key>defaults</key>
 				<string>me.luki.perfectspotifyprefs</string>
 				<key>key</key>
+				<string>showSongCount</string>
+				<key>label</key>
+				<string>Show Songs Count</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>hideEnhanceButton</string>
+				<key>label</key>
+				<string>Hide Enhance Button</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
 				<string>hideAddSongsButton</string>
 				<key>label</key>
 				<string>Hide Add Songs Button</string>
