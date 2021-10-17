@@ -1657,7 +1657,7 @@
 
 	if(!saveCanvas) return;
 
-	refToSelf = self;
+	canvasContentLayerVC = self;
 
 	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
 	doubleTap.numberOfTapsRequired = 2;
@@ -1690,7 +1690,7 @@ void saveToFilzaAlertController() {
 	[alertController addAction:confirmAction];
 	[alertController addAction:cancelAction];
 
-	[refToSelf presentViewController:alertController animated:YES completion:nil];
+	[canvasContentLayerVC presentViewController:alertController animated:YES completion:nil];
 
 }
 
@@ -1716,7 +1716,7 @@ void saveToGalleryAlertController() {
 	[alertController addAction:confirmAction];
 	[alertController addAction:cancelAction];
 
-	[refToSelf presentViewController:alertController animated:YES completion:nil];
+	[canvasContentLayerVC presentViewController:alertController animated:YES completion:nil];
 
 }
 
@@ -1745,15 +1745,15 @@ void getCanvas() {
 
 			// NSLog(@"PSS:%@ was modified within the last 5 minutes", path);
 
-			BOOL isDir;
-
-			if(![fileM fileExistsAtPath:canvasDirectory isDirectory:&isDir])
-
-				[fileM createDirectoryAtPath:canvasDirectory withIntermediateDirectories:NO attributes:nil error:&error];
-
 			switch(saveCanvasDestination) {
 
 				case 0:
+
+					BOOL isDir;
+
+					if(![fileM fileExistsAtPath:canvasDirectory isDirectory:&isDir])
+
+						[fileM createDirectoryAtPath:canvasDirectory withIntermediateDirectories:NO attributes:nil error:&error];
 
 					[fileM copyItemAtPath:[completePath stringByAppendingPathComponent:path] toPath:[newPath stringByAppendingPathComponent:path] error:&error];
 
@@ -1773,7 +1773,7 @@ void getCanvas() {
 
 				case 1:
 
-					UISaveVideoAtPathToSavedPhotosAlbum([completePath stringByAppendingPathComponent:path], refToSelf, nil, nil);
+					UISaveVideoAtPathToSavedPhotosAlbum([completePath stringByAppendingPathComponent:path], canvasContentLayerVC, nil, nil);
 
 					saveToGalleryAlertController();
 
