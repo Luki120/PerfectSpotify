@@ -371,4 +371,4 @@ CAGradientLayer *gradient;
 
 id playlistController = nil;
 SPTNowPlayingHeadUnitView *headUnitView = nil;
-SPTCanvasContentLayerViewController *refToSelf = nil;
+SPTCanvasContentLayerViewController *canvasContentLayerVC = nil;
