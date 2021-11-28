@@ -8,7 +8,6 @@ TWEAK_NAME = PerfectSpotify
 PerfectSpotify_FILES = PerfectSpotify.xm
 PerfectSpotify_CFLAGS = -fobjc-arc
 PerfectSpotify_LIBRARIES += gcuniversal Kitten
-PerfectSpotify_FRAMEWORKS = UIKit
 PerfectSpotify_PRIVATE_FRAMEWORKS = MediaRemote
 
 SUBPROJECTS += PSpotifyPrefs
