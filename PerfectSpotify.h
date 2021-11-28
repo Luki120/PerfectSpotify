@@ -1,27 +1,11 @@
 @import UIKit;
 #import "MediaRemote.h"
 #import <Kitten/libKitten.h>
-#import <MediaRemote/MediaRemote.h>
 #import <AudioToolbox/AudioServices.h>
 #import <GcUniversal/GcColorPickerUtils.h>
 
 
-// Colors
-
-
-static BOOL enableTextColor;
-static BOOL enableTintColor;
-static BOOL gradientColors;
-static BOOL enableBackgroundUIColor;
-
-
-NSString *tintColor = @"ffffff";
-NSString *tintTextColor = @"ffffff";
-NSString *backgroundUIColor = @"ffffff";
-
-
 // Miscellaneous
-
 
 static BOOL oledSpotify;
 static BOOL hideTabBarLabels;
@@ -48,6 +32,10 @@ static BOOL hideRemoveButton;
 
 // Now Playing UI
 
+static BOOL enableKleiColors;
+static BOOL enableBackgroundUIColor;
+
+NSString *backgroundUIColor = @"ffffff";
 
 static BOOL hideCloseButton;
 static BOOL hidePlaylistNameText;
@@ -73,7 +61,6 @@ static BOOL hideMoonButton;
 
 static BOOL enableSpotifyUI;
 static BOOL enableHaptics;
-static BOOL enableModernButtons;
 static BOOL enableArtworkBasedColors;
 
 static int hapticsStrength;
@@ -86,23 +73,30 @@ static BOOL centerText;
 static BOOL textToTheTop;
 
 
-static NSString *prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
+// SpringBoard
 
+static BOOL addPSpotifyShortcut;
+
+static BOOL removeEditHSShortcut;
+static BOOL removeShareAppShortcut;
+static BOOL removeRemoveAppShortcut;
+
+static BOOL removeSpotifySearchShortcut;
+static BOOL removeSpotifyRecentlyPlayedShortcut;
+
+
+static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
 
 #define Class(string) NSClassFromString(string)
+#define isCurrentApp(string) [[[NSBundle mainBundle] bundleIdentifier] isEqual : string]
+#define kOrionExists [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/OrionSettings.dylib"]
+#define kShuffleExists [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/shuffle.dylib"]
 
 
 static void loadPrefs() {
 
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:prefsKeys];
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
-
-	// Colors
-
-	enableTextColor = prefs[@"enableTextColor"] ? [prefs[@"enableTextColor"] boolValue] : NO;
-	enableTintColor = prefs[@"enableTintColor"] ? [prefs[@"enableTintColor"] boolValue] : NO;
-	gradientColors = prefs[@"gradientColors"] ? [prefs[@"gradientColors"] boolValue] : NO;
-	enableBackgroundUIColor = prefs[@"enableBackgroundUIColor"] ? [prefs[@"enableBackgroundUIColor"] boolValue] : NO;
 
 	// Miscellaneous
 
@@ -130,6 +124,9 @@ static void loadPrefs() {
 
 	// Now Playing UI
 
+	enableKleiColors = prefs[@"enableKleiColors"] ? [prefs[@"enableKleiColors"] boolValue] : NO;
+	enableBackgroundUIColor = prefs[@"enableBackgroundUIColor"] ? [prefs[@"enableBackgroundUIColor"] boolValue] : NO;
+
 	hideCloseButton = prefs[@"hideCloseButton"] ? [prefs[@"hideCloseButton"] boolValue] : NO;
 	hidePlaylistNameText = prefs[@"hidePlaylistNameText"] ? [prefs[@"hidePlaylistNameText"] boolValue] : NO;
 	hideContextMenuButton = prefs[@"hideContextMenuButton"] ? [prefs[@"hideContextMenuButton"] boolValue] : NO;
@@ -149,7 +146,6 @@ static void loadPrefs() {
 
 	enableSpotifyUI = prefs[@"enableSpotifyUI"] ? [prefs[@"enableSpotifyUI"] boolValue] : NO;
 	enableHaptics = prefs[@"enableHaptics"] ? [prefs[@"enableHaptics"] boolValue] : NO;
-	enableModernButtons = prefs[@"enableModernButtons"] ? [prefs[@"enableModernButtons"] boolValue] : NO;
 	enableArtworkBasedColors = prefs[@"enableArtworkBasedColors"] ? [prefs[@"enableArtworkBasedColors"] boolValue] : NO;
 	hapticsStrength = prefs[@"hapticsStrength"] ? [prefs[@"hapticsStrength"] integerValue] : 2;
 
@@ -164,13 +160,23 @@ static void loadPrefs() {
 	hideForwardButton = prefs[@"hideForwardButton"] ? [prefs[@"hideForwardButton"] boolValue] : NO;
 	hideMoonButton = prefs[@"hideMoonButton"] ? [prefs[@"hideMoonButton"] boolValue] : NO;
 
+	// SpringBoard
+
+	addPSpotifyShortcut = prefs[@"addPSpotifyShortcut"] ? [prefs[@"addPSpotifyShortcut"] boolValue] : NO;
+
+	removeEditHSShortcut = prefs[@"removeEditHSShortcut"] ? [prefs[@"removeEditHSShortcut"] boolValue] : NO;
+	removeShareAppShortcut = prefs[@"removeShareAppShortcut"] ? [prefs[@"removeShareAppShortcut"] boolValue] : NO;
+	removeRemoveAppShortcut = prefs[@"removeRemoveAppShortcut"] ? [prefs[@"removeRemoveAppShortcut"] boolValue] : NO;
+
+	removeSpotifySearchShortcut = prefs[@"removeSpotifySearchShortcut"] ? [prefs[@"removeSpotifySearchShortcut"] boolValue] : NO;
+	removeSpotifyRecentlyPlayedShortcut = prefs[@"removeSpotifyRecentlyPlayedShortcut"] ? [prefs[@"removeSpotifyRecentlyPlayedShortcut"] boolValue] : NO;
+
 }
 
 
-// Colors
+// Global
 
-
-NSData *artworkData;
+UIColor *cachedColors;
 CAGradientLayer *gradient;
 
 
@@ -180,7 +186,6 @@ CAGradientLayer *gradient;
 
 
 // Miscellaneous
-
 
 @interface GLUEGradientView : UIView
 @property (assign, nonatomic, readwrite) CGFloat alpha;
@@ -217,7 +222,7 @@ CAGradientLayer *gradient;
 @end
 
 
-@interface _UIVisualEffectSubview : UIView
+@interface SPTUIBlurView : UIView
 @end
 
 
@@ -234,7 +239,6 @@ CAGradientLayer *gradient;
 
 
 // Now Playing UI
-
 
 @interface SPTNowPlayingTitleButton : UIButton
 @end
@@ -266,31 +270,25 @@ CAGradientLayer *gradient;
 @end
 
 
-@interface SPTGaiaDevicesAvailableViewImplementation : UIView
-@end
-
-
 @interface SPTNowPlayingQueueButton : UIButton
 @end
 
 
 // ++ Features
 
-
 // Spotify UI
-
 
 @interface SPTNowPlayingHeadUnitView : UIView
 @property (nonatomic, strong) UIButton *rewindButton;
 @property (nonatomic, strong) UIButton *skipButton;
 @property (nonatomic, strong) UIButton *playPauseButton;
+@property (nonatomic, strong) UIStackView *buttonsStackView;
 - (void)rewind;
 - (void)playPause;
 - (void)skip;
 - (void)triggerHaptics;
 - (void)setupSpotifyUI;
 - (void)setupSpotifyUIConstraints;
-- (void)setupSpotifyUIModernButtonsConstraints;
 @end
 
 
@@ -301,9 +299,8 @@ CAGradientLayer *gradient;
 
 // Canvas
 
-
 @interface SPTCanvasContentLayerViewController : UIViewController
-- (void)doubleTap:(UITapGestureRecognizer *)gesture;
+- (void)didDoubleTapCanvas:(UITapGestureRecognizer *)gesture;
 @end
 
 
@@ -319,31 +316,12 @@ CAGradientLayer *gradient;
 @end
 
 
-@interface _LSQueryResult : NSObject
-@end
-
-
-@interface LSResourceProxy : _LSQueryResult
-@end
-
-
-@interface LSBundleProxy : LSResourceProxy
-@property (nonatomic, readonly) NSURL *dataContainerURL;
-@end
-
-
-@interface LSApplicationProxy : LSBundleProxy
-+ (id)applicationProxyForIdentifier:(id)arg1;
-@end
-
-
 @interface UIApplication ()
 - (BOOL)_openURL:(id)arg1;
 @end
 
 
 // Center artist and song title & align to the top
-
 
 @interface SPTNowPlayingInformationUnitViewController : UIViewController
 @property UIView *titleLabel;
@@ -364,6 +342,43 @@ CAGradientLayer *gradient;
 @interface SPTNowPlayingCoverArtCell : UICollectionViewCell
 @property (getter=_collectionView) UICollectionView *collectionView;
 @property UIImageView *imageView;
+@end
+
+
+// 3DTouch shortcut item
+
+@interface SBSApplicationShortcutIcon : NSObject
+@end
+
+
+@interface SBSApplicationShortcutCustomImageIcon : SBSApplicationShortcutIcon
+- (id)initWithImageData:(id)arg1 dataType:(long long)arg2 isTemplate:(BOOL)arg3;
+@end
+
+
+@interface SBSApplicationShortcutItem : NSObject
+@property (copy, nonatomic) NSString *type;
+@property (copy, nonatomic) NSString *localizedTitle;
+@property (copy, nonatomic) SBSApplicationShortcutIcon *icon;
+@end
+
+
+@interface SBIcon : NSObject
+@property (copy, nonatomic, readonly) NSString *displayName;
+- (id)applicationBundleID;
+- (BOOL)isApplicationIcon;
+@end
+
+
+@interface SBIconView : NSObject
+@property (nonatomic, strong) SBIcon *icon;
+- (NSString *)applicationBundleIdentifier;
+- (NSString *)applicationBundleIdentifierForShortcuts;
+@end
+
+
+@interface UIApplication ()
+- (BOOL)_openURL:(id)arg1;
 @end
 
 
