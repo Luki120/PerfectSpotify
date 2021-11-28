@@ -1,7 +1,17 @@
-#include "PSRootVC.h"
+#import "PSRootVC.h"
 
 
-@implementation PSRootVC
+@implementation PSRootVC {
+	
+	UITableView *_table;
+	UIImageView *iconView;
+	UIButton *killButton;
+	UIButton *changelogButton;
+	UIView *headerView;
+	UIImageView *headerImageView;
+	OBWelcomeController *changelogController;
+
+}
 
 
 - (NSArray *)specifiers {
@@ -13,98 +23,110 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:prefsKeys atomically:YES];
-
-}
-
-
-- (instancetype)init {
+- (id)init {
 
 	self = [super init];
 
-	UIImage *icon = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSIcon@2x.png"];;
-	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSBanner.png"];
-
-	if(self) {
-
-		self.changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-		self.changelogButton.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0];
-		[self.changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-		[self.changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
-
-		UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.changelogButton];
-
-		self.killButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.killButton.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0];
-		[self.killButton setImage : [UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
-		[self.killButton addTarget : self action:@selector(killSpotify) forControlEvents:UIControlEventTouchUpInside];
-
-		UIBarButtonItem *killButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.killButton];
-
-		NSArray *rightButtons;
-		rightButtons = @[killButtonItem, changelogButtonItem];
-		self.navigationItem.rightBarButtonItems = rightButtons;
-
-		self.navigationItem.titleView = [UIView new];
-		self.iconView = [UIImageView new];
-		self.iconView.image = icon;
-		self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-		self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
-		[self.navigationItem.titleView addSubview:self.iconView];
-
-		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
-		self.headerImageView = [UIImageView new];
-		self.headerImageView.image = banner;
-		self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
-		self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-		[self.headerView addSubview:self.headerImageView];
-
-		[self.iconView.topAnchor constraintEqualToAnchor : self.navigationItem.titleView.topAnchor].active = YES;
-		[self.iconView.leadingAnchor constraintEqualToAnchor : self.navigationItem.titleView.leadingAnchor].active = YES;
-		[self.iconView.trailingAnchor constraintEqualToAnchor : self.navigationItem.titleView.trailingAnchor].active = YES;
-		[self.iconView.bottomAnchor constraintEqualToAnchor : self.navigationItem.titleView.bottomAnchor].active = YES;
-		[self.headerImageView.topAnchor constraintEqualToAnchor : self.headerView.topAnchor].active = YES;
-		[self.headerImageView.leadingAnchor constraintEqualToAnchor : self.headerView.leadingAnchor].active = YES;
-		[self.headerImageView.trailingAnchor constraintEqualToAnchor :self.headerView.trailingAnchor].active = YES;
-		[self.headerImageView.bottomAnchor constraintEqualToAnchor :self.headerView.bottomAnchor].active = YES;
-
-	}
+	if(self) [self setupUI];
 
 	return self;
 
 }
 
 
-- (void)viewDidLoad {
+- (void)setupUI {
 
-	[super viewDidLoad];
+	UIImage *icon = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSIcon@2x.png"];;
+	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSBanner.png"];
 
-	_table.tableHeaderView = self.headerView;
+	changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+	changelogButton.tintColor = tint;
+	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
+	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
+
+	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
+
+	killButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	killButton.tintColor = tint;
+	[killButton setImage : [UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
+	[killButton addTarget : self action:@selector(killSpotify) forControlEvents:UIControlEventTouchUpInside];
+
+	UIBarButtonItem *killButtonItem = [[UIBarButtonItem alloc] initWithCustomView:killButton];
+
+	NSArray *rightButtons;
+	rightButtons = @[killButtonItem, changelogButtonItem];
+	self.navigationItem.rightBarButtonItems = rightButtons;
+
+	self.navigationItem.titleView = [UIView new];
+	iconView = [UIImageView new];
+	iconView.image = icon;
+	iconView.contentMode = UIViewContentModeScaleAspectFit;
+	iconView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.navigationItem.titleView addSubview:iconView];
+
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
+	headerImageView = [UIImageView new];
+	headerImageView.image = banner;
+	headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+	headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+	[headerView addSubview:headerImageView];
+
+	_table.tableHeaderView = headerView;
 	_table.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+	[self layoutUI];
 
 }
 
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)layoutUI {
 
-	[super viewWillAppear:animated];
+	[iconView.topAnchor constraintEqualToAnchor : self.navigationItem.titleView.topAnchor].active = YES;
+	[iconView.bottomAnchor constraintEqualToAnchor : self.navigationItem.titleView.bottomAnchor].active = YES;
+	[iconView.leadingAnchor constraintEqualToAnchor : self.navigationItem.titleView.leadingAnchor].active = YES;
+	[iconView.trailingAnchor constraintEqualToAnchor : self.navigationItem.titleView.trailingAnchor].active = YES;
 
-	CGRect frame = self.table.bounds;
-	frame.origin.y = -frame.size.height;
+	[headerImageView.topAnchor constraintEqualToAnchor : headerView.topAnchor].active = YES;
+	[headerImageView.bottomAnchor constraintEqualToAnchor : headerView.bottomAnchor].active = YES;
+	[headerImageView.leadingAnchor constraintEqualToAnchor : headerView.leadingAnchor].active = YES;
+	[headerImageView.trailingAnchor constraintEqualToAnchor : headerView.trailingAnchor].active = YES;
+
+}
+
+
+- (void)killSpotify {
+
+	AudioServicesPlaySystemSound(1521);
+
+	pid_t pid;
+	const char* args[] = {"killall", "Spotify", NULL};
+	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Spotify was succesfully destroyed and shattered into pieces, shall we rebuild it by launching it again?" preferredStyle:UIAlertControllerStyleAlert];
+
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+
+		[self launchSpotify];
+
+	}];
+
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Maybe later" style:UIAlertActionStyleCancel handler:nil];
+
+	[alertController addAction:confirmAction];
+	[alertController addAction:cancelAction];
+
+	[self presentViewController:alertController animated:YES completion:nil];
+
+}
+
+
+- (void)launchSpotify {
+
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+
+		[UIApplication.sharedApplication launchApplicationWithIdentifier:@"com.spotify.client" suspended:0];
+
+	});
 
 }
 
@@ -113,48 +135,42 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.0~EOL" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"]];
+	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"];
+	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	[self.changelogController addBulletedListItemWithTitle:@"Code" description:@"Major refactoring. Got rid of Cephei dependency." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.1~EOL" icon:tweakIconImage];
 
-	[self.changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• EOL UPDATE. \n \n• New Features: \n \n• Added Spotify UI (Beta). \n• Added download canvas option. \n• Show total songs count in playlists. \n \n• Fixes & improvements: \n \n• Fixed OLED.\n• Fixed crashes.\n• Preferences revamp.\n• Fixed Hide Like Button. \n• Fixed Hide Share Button. \n• Fixed Hide Repeat Button. \n• Fixed Hide Shuffle Button." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• Fixed Hide Devices Button." image:checkmarkImage];
+
+	[changelogController addBulletedListItemWithTitle:nil description:@"• Removed Enable Modern Buttons." image:nil];
+
+	[changelogController addBulletedListItemWithTitle:nil description:@"• Fixed compatibility with MusicBackground." image:nil];
+
+	[changelogController addBulletedListItemWithTitle:nil description:@"• Artwork based colors are now cached to improve performance." image:nil];
+
+	[changelogController addBulletedListItemWithTitle:nil description:@"• Removed some color options Spotify broke a while ago which I currently have no intentions of fixing them." image:nil];
+
+	[changelogController addBulletedListItemWithTitle:nil description:@"• Added a 3DTouch shortcut item to Spotify's context menu actions to launch PerfectSpotify settings & options to remove Spotify's and the stock shortcuts." image:nil];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
 	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];	
-	backdropView.layer.masksToBounds = YES;
 	backdropView.clipsToBounds = YES;
+	backdropView.layer.masksToBounds = YES;
 	backdropView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
+	[changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
 
-	[backdropView.bottomAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.bottomAnchor].active = YES;
-	[backdropView.leadingAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.leadingAnchor].active = YES;
-	[backdropView.trailingAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.trailingAnchor].active = YES;
-	[backdropView.topAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.topAnchor].active = YES;
+	[backdropView.topAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.topAnchor].active = YES;
+	[backdropView.bottomAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.bottomAnchor].active = YES;
+	[backdropView.leadingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.leadingAnchor].active = YES;
+	[backdropView.trailingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.trailingAnchor].active = YES;
 
-	self.changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
-	self.changelogController.view.tintColor = [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0];
-	self.changelogController.modalInPresentation = NO;
-	self.changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
-	[self presentViewController:self.changelogController animated:YES completion:nil];
+	changelogController.view.tintColor = tint;
+	changelogController.modalInPresentation = NO;
+	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
+	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
 
-}
-
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
-	CGFloat offsetY = scrollView.contentOffset.y;
-
-	if(offsetY > 0) offsetY = 0;
-	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 150 - offsetY);
-
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	tableView.tableHeaderView = self.headerView;
-	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+	[self presentViewController:changelogController animated:YES completion:nil];
 
 }
 
@@ -163,7 +179,7 @@
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Do You Really Want To Reset Your Preferences?" preferredStyle:UIAlertControllerStyleAlert];
 
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
 		[self resetPreferences];
 
@@ -197,7 +213,7 @@
 	blurView.frame = self.view.bounds;
 	[self.view addSubview:blurView];
 
-	[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+	[UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 
 		blurView.alpha = 1;
 
@@ -219,39 +235,12 @@
 }
 
 
-- (void)killSpotify {
+// Table view data source
 
-	AudioServicesPlaySystemSound(1521);
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	pid_t pid;
-	const char* args[] = {"killall", "Spotify", NULL};
-	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
-
-	UIAlertController *decisiveAlert = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Spotify was succesfully destroyed and shattered into pieces, shall we rebuild it by launching it again?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-
-		[self launchSpotify];
-
-	}];
-
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Maybe later" style:UIAlertActionStyleCancel handler:nil];
-
-	[decisiveAlert addAction:confirmAction];
-	[decisiveAlert addAction:cancelAction];
-
-	[self presentViewController:decisiveAlert animated:YES completion:nil];
-
-}
-
-
-- (void)launchSpotify {
-
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-
-		[UIApplication.sharedApplication launchApplicationWithIdentifier:@"com.spotify.client" suspended:0];
-
-	});
+	tableView.tableHeaderView = headerView;
+	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
 }
 
