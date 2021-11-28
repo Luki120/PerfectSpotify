@@ -1,17 +1,10 @@
 # PerfectSpotify
 
-![download](https://twickd.com/images/aef7c7f87d06098acf2567451270131ec8675b94.jpeg)
+![download](https://twickd.com/images/cf59460372b0f5db74143d603be9a92071f23ce3.jpeg)
 
 ## An awesome enhancement to your Spotify application
 
 ## This project is EOL, the chances of it being updated are slim.
-
-## Colors
-
-- Text Color
-- Tint Color
-- Klei Colors (Gradients)
-- Now Playing UI Background Color
 
 ## Miscellaneous
 
@@ -36,6 +29,9 @@
 - Hide Remove Button (Daily Mix)
 
 ## Now Playing UI
+
+- Klei Colors (Gradients)
+- Now Playing UI Background Color
 
 - Hide Close Button
 - Hide Playlist Name
@@ -70,26 +66,6 @@
 - Enable Artwork Based Colors
 
 - Save Canvas
-
-## Best compatibility
-
-- 8.6.14
-- 8.6.12
-- 8.6.10
-- 8.6.8
-- 8.6.6
-- 8.6.4
-- 8.6.2
-- 8.6.0
-- 8.5.96
-- 8.5.94
-- 8.5.93
-- 8.5.86
-- 8.5.85
-- 8.5.84
-- 8.5.83
-- 8.5.82
-- 8.5.81 and probably lowers too.
 
 ## Socials
 
