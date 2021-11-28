@@ -14,16 +14,6 @@
 				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>detail</key>
-				<string>SpringBoardVC</string>
-				<key>isController</key>
-				<true/>
-				<key>label</key>
-				<string>SpringBoard (HS)</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSLinkCell</string>
-				<key>detail</key>
 				<string>MiscVC</string>
 				<key>isController</key>
 				<true/>
@@ -39,6 +29,16 @@
 				<true/>
 				<key>label</key>
 				<string>Now Playing UI</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>detail</key>
+				<string>SpringBoardVC</string>
+				<key>isController</key>
+				<true/>
+				<key>label</key>
+				<string>SpringBoard (HS)</string>
 			</dict>
 			<dict>
 				<key>cell</key>
