@@ -62,7 +62,6 @@
 
 - Enable Spotify UI
 - Enable Haptics
-- Enable Modern Buttons
 - Enable Artwork Based Colors
 
 - Save Canvas
