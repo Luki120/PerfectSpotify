@@ -2,19 +2,14 @@
 #import <Preferences/PSListController.h>
 
 
-static NSString *prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
+static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
 
 
-@interface ColorsVC : PSListController
+@interface SpringBoardVC : PSListController
 @end
 
 
 @interface MiscVC : PSListController
-@end
-
-
-@interface PSListController (Private)
-- (BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end
 
 
@@ -24,4 +19,9 @@ static NSString *prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectsp
 
 @interface ExtraFeaturesVC : PSListController
 @property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
+@end
+
+
+@interface PSListController (Private)
+- (BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end

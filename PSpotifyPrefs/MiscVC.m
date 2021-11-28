@@ -1,19 +1,4 @@
-#include "MiscVC.h"
-
-
-@implementation ColorsVC
-
-
-- (NSArray *)specifiers {
-
-	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Colors" target:self];
-
-	return _specifiers;
-
-}
-
-
-@end
+#import "MiscVC.h"
 
 
 @implementation MiscVC
@@ -24,6 +9,37 @@
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Miscellaneous" target:self];
 
 	return _specifiers;
+
+}
+
+
+- (id)readPreferenceValue:(PSSpecifier*)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+
+}
+
+
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:prefsKeys atomically:YES];
+
+	if([[self readPreferenceValue:[self specifierForID:@"LyricsSwitch"]] boolValue]) {
+
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"No, this switch doesn't enable lyrics if they aren't available in your country. What this does is to 'unlock' lyrics for new released songs which for some reason still don't have them, do you understand? You better, I don't want to get DM's about this ok? Lol jk, but yeah." preferredStyle:UIAlertControllerStyleAlert];
+
+		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler:nil];
+
+		[alertController addAction:confirmAction];
+
+		[self presentViewController:alertController animated:YES completion:nil];
+
+	}
 
 }
 
@@ -46,6 +62,42 @@
 @end
 
 
+@implementation SpringBoardVC
+
+
+- (NSArray *)specifiers {
+
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"SpringBoard" target:self];
+
+	return _specifiers;
+
+}
+
+
+- (id)readPreferenceValue:(PSSpecifier*)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+
+}
+
+
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:prefsKeys atomically:YES];
+
+	[NSNotificationCenter.defaultCenter postNotificationName:@"updateShortcutItems" object:nil];
+
+}
+
+
+@end
+
+
 @implementation ExtraFeaturesVC
 
 
@@ -55,7 +107,7 @@
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"++ Features" target:self];
 
-		NSArray *chosenIDs = @[@"ModernButtonsSwitch", @"ArtworkBasedColorsSwitch", @"GroupCell1", @"HapticsSwitch", @"GroupCell2", @"HapticsOptionsCell", @"GroupCell3", @"CanvasOptionsCell"];
+		NSArray *chosenIDs = @[@"ArtworkBasedColorsSwitch", @"GroupCell1", @"HapticsSwitch", @"GroupCell2", @"HapticsOptionsCell", @"GroupCell3", @"CanvasOptionsCell"];
 		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
 
 		for(PSSpecifier *specifier in _specifiers)
@@ -78,12 +130,12 @@
 
 	if(![[self readPreferenceValue:[self specifierForID:@"SpotifyUISwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"ModernButtonsSwitch"], self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] animated:NO];
+		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] animated:NO];
 
 
-	else if(![self containsSpecifier:self.savedSpecifiers[@"ModernButtonsSwitch"]])
+	else if(![self containsSpecifier:self.savedSpecifiers[@"ArtworkBasedColorsSwitch"]])
 
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"ModernButtonsSwitch"], self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] afterSpecifierID:@"SpotifyUISwitch" animated:NO];
+		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] afterSpecifierID:@"SpotifyUISwitch" animated:NO];
 
 
 	if(![[self readPreferenceValue:[self specifierForID:@"SaveCanvasSwitch"]] boolValue]) {
@@ -131,15 +183,14 @@
 
 	if([key isEqualToString:@"enableSpotifyUI"]) {
 
-	if(![[self readPreferenceValue:[self specifierForID:@"SpotifyUISwitch"]] boolValue])
+		if(![[self readPreferenceValue:[self specifierForID:@"SpotifyUISwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"ModernButtonsSwitch"], self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] animated:YES];
+			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] animated:YES];
 
+		else if(![self containsSpecifier:self.savedSpecifiers[@"ArtworkBasedColorsSwitch"]])
 
-	else if(![self containsSpecifier:self.savedSpecifiers[@"ModernButtonsSwitch"]])
-
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"ModernButtonsSwitch"], self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] afterSpecifierID:@"SpotifyUISwitch" animated:YES];
-	
+			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] afterSpecifierID:@"SpotifyUISwitch" animated:YES];
+		
 	}
 
 

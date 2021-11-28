@@ -14,11 +14,11 @@
 				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>detail</key>
-				<string>ColorsVC</string>
+				<string>SpringBoardVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
-				<string>Colors</string>
+				<string>SpringBoard (HS)</string>
 			</dict>
 			<dict>
 				<key>cell</key>
