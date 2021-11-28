@@ -10,7 +10,7 @@
 				<key>label</key>
 				<string>++ Features</string>
 				<key>footerText</key>
-				<string>This options may cause crashes or the button images may fail to load.</string>
+				<string>These options may cause the button images fail to load.</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -25,20 +25,6 @@
 				<string>Enable Spotify UI (Beta)</string>
 				<key>id</key>
 				<string>SpotifyUISwitch</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false />
-				<key>defaults</key>
-				<string>me.luki.perfectspotifyprefs</string>
-				<key>key</key>
-				<string>enableModernButtons</string>
-				<key>label</key>
-				<string>Enable Modern Buttons</string>
-				<key>id</key>
-				<string>ModernButtonsSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
