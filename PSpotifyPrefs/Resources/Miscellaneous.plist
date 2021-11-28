@@ -219,6 +219,8 @@
 				<string>enableLyricsForAllTracks</string>
 				<key>label</key>
 				<string>Lyrics For All Tracks</string>
+				<key>id</key>
+				<string>LyricsSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
