@@ -78,15 +78,17 @@
 
 				if(artworkData.length == 0x282e && artwork.size.width == 0x258) {
 
-					if(!cachedColors) cachedColors = [libKitten secondaryColor:artwork];
+					if(!cachedPrimaryColors) cachedPrimaryColors = [libKitten primaryColor:artwork];
+					if(!cachedSecondaryColors) cachedSecondaryColors = [libKitten secondaryColor:artwork];
+					if(!cachedBackgroundColors) cachedBackgroundColors = [libKitten backgroundColor:artwork];
 
 					dont = YES;
 
 				}
 
-				UIColor *primaryColor = dont ? cachedColors : [libKitten primaryColor:artwork];
-				UIColor *secondaryColor = dont ? cachedColors : [libKitten secondaryColor:artwork];
-				UIColor *backgroundColor = dont ? cachedColors : [libKitten backgroundColor:artwork];
+				UIColor *primaryColor = dont ? cachedPrimaryColors : [libKitten primaryColor:artwork];
+				UIColor *secondaryColor = dont ? cachedSecondaryColors : [libKitten secondaryColor:artwork];
+				UIColor *backgroundColor = dont ? cachedBackgroundColors : [libKitten backgroundColor:artwork];
 
 				gradient.colors = [NSArray arrayWithObjects:(id)backgroundColor.CGColor, (id)primaryColor.CGColor, nil];
 
@@ -102,7 +104,9 @@
 
 		} else {
 
-			cachedColors = nil;
+			cachedPrimaryColors = nil;
+			cachedSecondaryColors = nil;
+			cachedBackgroundColors = nil;
 
 			gradient.colors = [NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil];
 			headUnitView.rewindButton.tintColor = UIColor.whiteColor;
@@ -140,16 +144,8 @@
 
 	}
 
+	[NSNotificationCenter.defaultCenter removeObserver:self name:@"kleiUpdateColors" object:nil];
 	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil]; // add notification observer to dynamically change artwork
-
-}
-
-
-- (void)dealloc {
-
-	%orig;
-
-	[NSNotificationCenter.defaultCenter removeObserver:self];
 
 }
 

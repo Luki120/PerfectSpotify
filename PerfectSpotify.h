@@ -176,8 +176,10 @@ static void loadPrefs() {
 
 // Global
 
-UIColor *cachedColors;
 CAGradientLayer *gradient;
+UIColor *cachedPrimaryColors;
+UIColor *cachedSecondaryColors;
+UIColor *cachedBackgroundColors;
 
 
 @interface SPTNowPlayingBackgroundViewController : UIViewController
