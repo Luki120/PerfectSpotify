@@ -45,12 +45,12 @@
 				<string>PSGroupCell</string>
 			</dict>
 			<dict>
-				<key>action</key>
-				<string>resetAlert</string>
 				<key>cell</key>
 				<string>PSButtonCell</string>
 				<key>cellClass</key>
 				<string>PSpotifyTableCell</string>
+				<key>action</key>
+				<string>resetPreferences</string>
 				<key>label</key>
 				<string>Reset Preferences</string>
 			</dict>

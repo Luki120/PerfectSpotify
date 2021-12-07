@@ -40,14 +40,14 @@
 	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSBanner.png"];
 
 	changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-	changelogButton.tintColor = tint;
+	changelogButton.tintColor = PSpotifyTintColor;
 	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
+	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
 
 	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
 
 	killButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	killButton.tintColor = tint;
+	killButton.tintColor = PSpotifyTintColor;
 	[killButton setImage : [UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
 	[killButton addTarget : self action:@selector(killSpotify) forControlEvents:UIControlEventTouchUpInside];
 
@@ -131,7 +131,7 @@
 }
 
 
-- (void)showWtfChangedInThisVersion:(id)sender {
+- (void)showWtfChangedInThisVersion {
 
 	AudioServicesPlaySystemSound(1521);
 
@@ -165,7 +165,7 @@
 	[backdropView.leadingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.leadingAnchor].active = YES;
 	[backdropView.trailingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.trailingAnchor].active = YES;
 
-	changelogController.view.tintColor = tint;
+	changelogController.view.tintColor = PSpotifyTintColor;
 	changelogController.modalInPresentation = NO;
 	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
 	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
@@ -175,13 +175,17 @@
 }
 
 
-- (void)resetAlert {
+- (void)resetPreferences {
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Do You Really Want To Reset Your Preferences?" preferredStyle:UIAlertControllerStyleAlert];
 
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
-		[self resetPreferences];
+		NSFileManager *fileM = [NSFileManager defaultManager];
+
+		BOOL success = [fileM removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist" error:nil];
+
+		if(success) [self crossDissolveBlur];
 
 	}];
 
@@ -194,18 +198,8 @@
 
 }
 
-- (void)resetPreferences {
 
-	NSFileManager *fileM = [NSFileManager defaultManager];
-
-	BOOL success = [fileM removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist" error:nil];
-
-	if(success) [self blurEffect];
-
-}
-
-
-- (void)blurEffect {
+- (void)crossDissolveBlur {
 
 	UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
 	UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
@@ -219,14 +213,14 @@
 
 	} completion:^(BOOL finished) {
 
-		[self respring];
+		[self launchRespring];
 
 	}];
 
 }
 
 
-- (void)respring {
+- (void)launchRespring {
 
 	pid_t pid;
 	const char* args[] = {"killall", "backboardd", NULL};
@@ -275,35 +269,35 @@
 }
 
 
-- (void)lyrics {
+- (void)launchLyricsLink {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://techcrunch.com/2020/06/29/in-a-significant-expansion-spotify-to-launch-real-time-lyrics-in-26-markets/"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)paypal {
+- (void)launchPayPal {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)github {
+- (void)launchGitHub {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://github.com/Luki120/PerfectSpotify"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)amelija {
+- (void)launchAmelija {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/me.luki.amelija"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)april {
+- (void)launchApril {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
 
@@ -316,26 +310,11 @@
 @implementation PSpotifyTableCell
 
 
-- (void)tintColorDidChange {
+- (void)setTitle:(NSString *)t {
 
-	[super tintColorDidChange];
+	[super setTitle:t];
 
-	self.textLabel.textColor = tint;
-	self.textLabel.highlightedTextColor = tint;
-
-}
-
-
-- (void)refreshCellContentsWithSpecifier:(PSSpecifier *)specifier {
-
-	[super refreshCellContentsWithSpecifier:specifier];
-
-	if([self respondsToSelector:@selector(tintColor)]) {
-
-		self.textLabel.textColor = tint;
-		self.textLabel.highlightedTextColor = tint;
-
-	}
+	self.titleLabel.textColor = PSpotifyTintColor;
 
 }
 

@@ -15,12 +15,8 @@
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
 			<key>action</key>
-			<string>github</string>
+			<string>launchGitHub</string>
 			<key>label</key>
 			<string>Source Code 🔥</string>
 		</dict>
@@ -29,12 +25,8 @@
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
 			<key>action</key>
-			<string>paypal</string>
+			<string>launchPayPal</string>
 			<key>label</key>
 			<string>Donate To Luki 🥰</string>
 		</dict>
@@ -43,12 +35,8 @@
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
 			<key>action</key>
-			<string>lyrics</string>
+			<string>launchLyricsLink</string>
 			<key>label</key>
 			<string>Can I Use Native Lyrics?</string>
 		</dict>
@@ -63,12 +51,8 @@
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
 			<key>action</key>
-			<string>amelija</string>
+			<string>launchAmelija</string>
 			<key>label</key>
 			<string>Amēlija</string>
 			<key>icon</key>
@@ -79,12 +63,8 @@
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.perfect.spotify</string>
 			<key>action</key>
-			<string>april</string>
+			<string>launchApril</string>
 			<key>label</key>
 			<string>April</string>
 			<key>icon</key>
