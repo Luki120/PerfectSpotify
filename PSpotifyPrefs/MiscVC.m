@@ -6,14 +6,14 @@
 
 - (NSArray *)specifiers {
 
-	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Miscellaneous" target:self];
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"PSMisc" target:self];
 
 	return _specifiers;
 
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
@@ -22,7 +22,7 @@
 }
 
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
@@ -74,7 +74,7 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
@@ -83,7 +83,7 @@
 }
 
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
@@ -107,7 +107,18 @@
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"++ Features" target:self];
 
-		NSArray *chosenIDs = @[@"ArtworkBasedColorsSwitch", @"GroupCell1", @"HapticsSwitch", @"GroupCell2", @"HapticsOptionsCell", @"GroupCell3", @"CanvasOptionsCell"];
+		NSArray *chosenIDs = @[
+
+			@"ArtworkBasedColorsSwitch",
+			@"GroupCell1",
+			@"HapticsSwitch",
+			@"GroupCell2",
+			@"HapticsOptionsCell",
+			@"GroupCell3",
+			@"CanvasOptionsCell"
+
+		];
+
 		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
 
 		for(PSSpecifier *specifier in _specifiers)
@@ -122,6 +133,13 @@
 
 }
 
+
+- (void)viewDidLoad {
+
+	[super viewDidLoad];
+	[self reloadSpecifiers];
+
+}
 
 
 - (void)reloadSpecifiers {
@@ -154,15 +172,8 @@
 
 }
 
-- (void)viewDidLoad {
 
-	[super viewDidLoad];
-	[self reloadSpecifiers];
-
-}
-
-
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
@@ -171,7 +182,7 @@
 }
 
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
@@ -179,7 +190,6 @@
 	[settings writeToFile:prefsKeys atomically:YES];
 
 	NSString *key = [specifier propertyForKey:@"key"];
-
 
 	if([key isEqualToString:@"enableSpotifyUI"]) {
 
@@ -192,7 +202,6 @@
 			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"ArtworkBasedColorsSwitch"], self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"HapticsSwitch"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"HapticsOptionsCell"]] afterSpecifierID:@"SpotifyUISwitch" animated:YES];
 		
 	}
-
 
 	if([key isEqualToString:@"saveCanvas"]) {
 
