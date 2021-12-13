@@ -26,7 +26,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Inspiration to dig into tweak development, help With OLED dark mode, credits for the Klei colors and preference panel idea</string>
+				<string>Inspiration to get into tweak development, help with OLED dark mode, credits for the Klei colors and preference panel idea</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -44,7 +44,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Overall Help With The Tweak</string>
+				<string>Overall Help</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -74,7 +74,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Help with implementing the align the text to the top option</string>
+				<string>Help with implementing the align song labels to the top option</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -152,7 +152,7 @@
 				<key>account</key>
 				<string>Kutarin_</string>
 				<key>URL</key>
-				<string>https://pbs.twimg.com/profile_images/1402096100006264832/TRwQ2Gv__400x400.jpg</string>
+				<string>https://avatars.githubusercontent.com/u/5411646?v=4</string>
 			</dict>
 			<dict>
 				<key>cell</key>

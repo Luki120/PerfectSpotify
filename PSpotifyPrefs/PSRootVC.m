@@ -183,7 +183,7 @@
 
 		NSFileManager *fileM = [NSFileManager defaultManager];
 
-		BOOL success = [fileM removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist" error:nil];
+		BOOL success = [fileM removeItemAtPath:@"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist" error:nil];
 
 		if(success) [self crossDissolveBlur];
 
