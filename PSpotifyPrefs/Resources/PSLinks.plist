@@ -16,9 +16,9 @@
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
 			<key>action</key>
-			<string>launchGitHub</string>
+			<string>launchLyricsLink</string>
 			<key>label</key>
-			<string>Source Code 🔥</string>
+			<string>Can I Use Native Lyrics?</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -36,9 +36,9 @@
 			<key>cellClass</key>
 			<string>PSpotifyTableCell</string>
 			<key>action</key>
-			<string>launchLyricsLink</string>
+			<string>launchGitHub</string>
 			<key>label</key>
-			<string>Can I Use Native Lyrics?</string>
+			<string>Source Code 🔥</string>
 		</dict>
 		<dict>
 			<key>cell</key>
