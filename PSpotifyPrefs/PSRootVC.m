@@ -2,8 +2,7 @@
 
 
 @implementation PSRootVC {
-	
-	UITableView *_table;
+
 	UIImageView *iconView;
 	UIButton *killButton;
 	UIButton *changelogButton;
@@ -71,9 +70,6 @@
 	headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
 	[headerView addSubview:headerImageView];
 
-	_table.tableHeaderView = headerView;
-	_table.separatorStyle = UITableViewCellSeparatorStyleNone;
-
 	[self layoutUI];
 
 }
@@ -138,19 +134,9 @@
 	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"];
 	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.1~EOL" icon:tweakIconImage];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.2~EOL" icon: tweakIconImage];
 
-	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• Fixed Hide Devices Button." image:checkmarkImage];
-
-	[changelogController addBulletedListItemWithTitle:nil description:@"• Removed Enable Modern Buttons." image:nil];
-
-	[changelogController addBulletedListItemWithTitle:nil description:@"• Fixed compatibility with MusicBackground." image:nil];
-
-	[changelogController addBulletedListItemWithTitle:nil description:@"• Artwork based colors are now cached to improve performance." image:nil];
-
-	[changelogController addBulletedListItemWithTitle:nil description:@"• Removed some color options Spotify broke a while ago which I currently have no intentions of fixing them." image:nil];
-
-	[changelogController addBulletedListItemWithTitle:nil description:@"• Added a 3DTouch shortcut item to Spotify's context menu actions to launch PerfectSpotify settings & options to remove Spotify's and the stock shortcuts." image:nil];
+	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• Fixed Enable Custom BG Color option." image: checkmarkImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -211,11 +197,7 @@
 
 		blurView.alpha = 1;
 
-	} completion:^(BOOL finished) {
-
-		[self launchRespring];
-
-	}];
+	} completion:^(BOOL finished) { [self launchRespring]; }];
 
 }
 
