@@ -158,7 +158,7 @@
 
 - (id)color { // OLED view to now playing UI or custom colors
 
-	if(enableBackgroundUIColor) return [GcColorPickerUtils colorWithHex:backgroundUIColor];
+	if(enableNowPlayingUIBGColor) return [GcColorPickerUtils colorWithHex: nowPlayingUIBGColor];
 
 	else return %orig;
 

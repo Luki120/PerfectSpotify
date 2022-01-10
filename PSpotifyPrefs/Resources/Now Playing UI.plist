@@ -54,11 +54,11 @@
 				<key>defaults</key>
 				<string>me.luki.perfectspotifyprefs</string>
 				<key>key</key>
-				<string>backgroundUIColor</string>
+				<string>nowPlayingUIBGColor</string>
 				<key>supportsAlpha</key>
 				<true/>
 				<key>fallback</key>
-				<string>ffffff</string>
+				<string>000000</string>
 			</dict>
 			<dict>
 				<key>cell</key>

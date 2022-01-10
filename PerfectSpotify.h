@@ -125,7 +125,9 @@ static void loadPrefs() {
 	// Now Playing UI
 
 	enableKleiColors = prefs[@"enableKleiColors"] ? [prefs[@"enableKleiColors"] boolValue] : NO;
-	enableBackgroundUIColor = prefs[@"enableBackgroundUIColor"] ? [prefs[@"enableBackgroundUIColor"] boolValue] : NO;
+	enableNowPlayingUIBGColor = prefs[@"enableNowPlayingUIBGColor"] ? [prefs[@"enableNowPlayingUIBGColor"] boolValue] : NO;
+
+	nowPlayingUIBGColor = prefs[@"nowPlayingUIBGColor"] ?: [prefs[@"nowPlayingUIBGColor"] stringValue];
 
 	hideCloseButton = prefs[@"hideCloseButton"] ? [prefs[@"hideCloseButton"] boolValue] : NO;
 	hidePlaylistNameText = prefs[@"hidePlaylistNameText"] ? [prefs[@"hidePlaylistNameText"] boolValue] : NO;
