@@ -36,7 +36,7 @@
 				<key>defaults</key>
 				<string>me.luki.perfectspotifyprefs</string>
 				<key>key</key>
-				<string>enableBackgroundUIColor</string>
+				<string>enableNowPlayingUIBGColor</string>
 				<key>label</key>
 				<string>Enable Custom BG Color</string>
 			</dict>
