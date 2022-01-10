@@ -33,9 +33,9 @@ static BOOL hideRemoveButton;
 // Now Playing UI
 
 static BOOL enableKleiColors;
-static BOOL enableBackgroundUIColor;
+static BOOL enableNowPlayingUIBGColor;
 
-NSString *backgroundUIColor = @"ffffff";
+NSString *nowPlayingUIBGColor;
 
 static BOOL hideCloseButton;
 static BOOL hidePlaylistNameText;
