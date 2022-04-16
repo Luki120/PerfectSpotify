@@ -1,6 +1,6 @@
 BUNDLE_NAME = PSpotifyPrefs
 
-PSpotifyPrefs_FILES = MiscVC.m PSRootVC.m
+PSpotifyPrefs_FILES = PSRootVC.m MiscVC.m
 PSpotifyPrefs_CFLAGS = -fobjc-arc
 PSpotifyPrefs_LIBRARIES = gcuniversal
 PSpotifyPrefs_FRAMEWORKS = UIKit
