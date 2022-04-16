@@ -48,18 +48,6 @@
 			</dict>
 			<dict>
 				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false />
-				<key>defaults</key>
-				<string>me.luki.perfectspotifyprefs</string>
-				<key>key</key>
-				<string>hideTabBarPlayButton</string>
-				<key>label</key>
-				<string>Hide Tab Bar Play Button</string>
-			</dict>
-			<dict>
-				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
 				<string>Search Page</string>
@@ -233,18 +221,6 @@
 				<string>disableGeniusLyrics</string>
 				<key>label</key>
 				<string>Disable Genius Lyrics</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false />
-				<key>defaults</key>
-				<string>me.luki.perfectspotifyprefs</string>
-				<key>key</key>
-				<string>hideRemoveButton</string>
-				<key>label</key>
-				<string>Hide Remove Button (Daily Mix)</string>
 			</dict>
 		</array>
 		<key>title</key>

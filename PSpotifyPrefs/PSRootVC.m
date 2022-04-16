@@ -16,7 +16,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
-
 	return _specifiers;
 
 }
@@ -25,9 +24,7 @@
 - (id)init {
 
 	self = [super init];
-
 	if(self) [self setupUI];
-
 	return self;
 
 }
@@ -39,16 +36,16 @@
 	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSBanner.png"];
 
 	changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-	changelogButton.tintColor = PSpotifyTintColor;
-	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
+	changelogButton.tintColor = kPSpotifyTintColor;
+	[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
+	[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
 
 	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
 
 	killButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	killButton.tintColor = PSpotifyTintColor;
-	[killButton setImage : [UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
-	[killButton addTarget : self action:@selector(killSpotify) forControlEvents:UIControlEventTouchUpInside];
+	killButton.tintColor = kPSpotifyTintColor;
+	[killButton setImage:[UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
+	[killButton addTarget:self action:@selector(killSpotify) forControlEvents:UIControlEventTouchUpInside];
 
 	UIBarButtonItem *killButtonItem = [[UIBarButtonItem alloc] initWithCustomView:killButton];
 
@@ -77,15 +74,15 @@
 
 - (void)layoutUI {
 
-	[iconView.topAnchor constraintEqualToAnchor : self.navigationItem.titleView.topAnchor].active = YES;
-	[iconView.bottomAnchor constraintEqualToAnchor : self.navigationItem.titleView.bottomAnchor].active = YES;
-	[iconView.leadingAnchor constraintEqualToAnchor : self.navigationItem.titleView.leadingAnchor].active = YES;
-	[iconView.trailingAnchor constraintEqualToAnchor : self.navigationItem.titleView.trailingAnchor].active = YES;
+	[iconView.topAnchor constraintEqualToAnchor: self.navigationItem.titleView.topAnchor].active = YES;
+	[iconView.bottomAnchor constraintEqualToAnchor: self.navigationItem.titleView.bottomAnchor].active = YES;
+	[iconView.leadingAnchor constraintEqualToAnchor: self.navigationItem.titleView.leadingAnchor].active = YES;
+	[iconView.trailingAnchor constraintEqualToAnchor: self.navigationItem.titleView.trailingAnchor].active = YES;
 
-	[headerImageView.topAnchor constraintEqualToAnchor : headerView.topAnchor].active = YES;
-	[headerImageView.bottomAnchor constraintEqualToAnchor : headerView.bottomAnchor].active = YES;
-	[headerImageView.leadingAnchor constraintEqualToAnchor : headerView.leadingAnchor].active = YES;
-	[headerImageView.trailingAnchor constraintEqualToAnchor : headerView.trailingAnchor].active = YES;
+	[headerImageView.topAnchor constraintEqualToAnchor: headerView.topAnchor].active = YES;
+	[headerImageView.bottomAnchor constraintEqualToAnchor: headerView.bottomAnchor].active = YES;
+	[headerImageView.leadingAnchor constraintEqualToAnchor: headerView.leadingAnchor].active = YES;
+	[headerImageView.trailingAnchor constraintEqualToAnchor: headerView.trailingAnchor].active = YES;
 
 }
 
@@ -146,12 +143,12 @@
 	backdropView.translatesAutoresizingMaskIntoConstraints = NO;
 	[changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
 
-	[backdropView.topAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.topAnchor].active = YES;
-	[backdropView.bottomAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.bottomAnchor].active = YES;
-	[backdropView.leadingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.leadingAnchor].active = YES;
-	[backdropView.trailingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.trailingAnchor].active = YES;
+	[backdropView.topAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.topAnchor].active = YES;
+	[backdropView.bottomAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.bottomAnchor].active = YES;
+	[backdropView.leadingAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.leadingAnchor].active = YES;
+	[backdropView.trailingAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.trailingAnchor].active = YES;
 
-	changelogController.view.tintColor = PSpotifyTintColor;
+	changelogController.view.tintColor = kPSpotifyTintColor;
 	changelogController.modalInPresentation = NO;
 	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
 	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
@@ -170,7 +167,6 @@
 		NSFileManager *fileM = [NSFileManager defaultManager];
 
 		BOOL success = [fileM removeItemAtPath:@"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist" error:nil];
-
 		if(success) [self crossDissolveBlur];
 
 	}];
@@ -230,7 +226,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"PSContributors" target:self];
-
 	return _specifiers;
 
 }
@@ -245,7 +240,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"PSLinks" target:self];
-
 	return _specifiers;
 
 }
@@ -295,8 +289,7 @@
 - (void)setTitle:(NSString *)t {
 
 	[super setTitle:t];
-
-	self.titleLabel.textColor = PSpotifyTintColor;
+	self.titleLabel.textColor = kPSpotifyTintColor;
 
 }
 

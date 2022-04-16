@@ -5,8 +5,7 @@
 
 
 static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
-
-#define PSpotifyTintColor [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0]
+#define kPSpotifyTintColor [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0]
 
 
 @interface OBWelcomeController : UIViewController;
@@ -17,7 +16,7 @@ static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.per
 
 
 @interface _UIBackdropViewSettings : NSObject
-+ (id)settingsForStyle:(long long)arg1;
++ (id)settingsForStyle:(NSInteger)arg1;
 @end
 
 

@@ -242,6 +242,18 @@
 				<key>defaults</key>
 				<string>me.luki.perfectspotifyprefs</string>
 				<key>key</key>
+				<string>hideFeedbackButton</string>
+				<key>label</key>
+				<string>Hide Feedback Button</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
 				<string>hideShareButton</string>
 				<key>label</key>
 				<string>Hide Share Button</string>
