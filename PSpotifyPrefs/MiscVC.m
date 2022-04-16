@@ -7,7 +7,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"PSMisc" target:self];
-
 	return _specifiers;
 
 }
@@ -29,17 +28,16 @@
 	[settings setObject:value forKey:specifier.properties[@"key"]];
 	[settings writeToFile:prefsKeys atomically:YES];
 
-	if([[self readPreferenceValue:[self specifierForID:@"LyricsSwitch"]] boolValue]) {
+	NSString *key = [specifier propertyForKey:@"key"];
+	if(![key isEqualToString:@"enableLyricsForAllTracks"]) return;
+	if(![[self readPreferenceValue:[self specifierForID:@"LyricsSwitch"]] boolValue]) return;
 
-		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"No, this switch doesn't enable lyrics if they aren't available in your country. What this does is to 'unlock' lyrics for new released songs which for some reason still don't have them, do you understand? You better, I don't want to get DM's about this ok? Lol jk, but yeah." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"No, this switch won't enable lyrics if they aren't already available for your country. What it does is to 'unlock' them for new released songs which for some reason still don't have them. Do you understand? You better, I don't want to get DM's about this ok? Lol just kidding, but yeah." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler:nil];
+	[alertController addAction:confirmAction];
+	[self presentViewController:alertController animated:YES completion:nil];
 
-		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler:nil];
-
-		[alertController addAction:confirmAction];
-
-		[self presentViewController:alertController animated:YES completion:nil];
-
-	}
+	[super setPreferenceValue:value specifier:specifier];
 
 }
 
@@ -53,7 +51,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Now Playing UI" target:self];
-
 	return _specifiers;
 
 }
@@ -68,7 +65,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"SpringBoard" target:self];
-
 	return _specifiers;
 
 }
@@ -89,6 +85,8 @@
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
 	[settings writeToFile:prefsKeys atomically:YES];
+
+	[super setPreferenceValue:value specifier:specifier];
 
 	[NSNotificationCenter.defaultCenter postNotificationName:@"updateShortcutItems" object:nil];
 
@@ -108,7 +106,6 @@
 		_specifiers = [self loadSpecifiersFromPlistName:@"++ Features" target:self];
 
 		NSArray *chosenIDs = @[
-
 			@"ArtworkBasedColorsSwitch",
 			@"GroupCell1",
 			@"HapticsSwitch",
@@ -116,10 +113,9 @@
 			@"HapticsOptionsCell",
 			@"GroupCell3",
 			@"CanvasOptionsCell"
-
 		];
 
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
+		self.savedSpecifiers = self.savedSpecifiers ?: [NSMutableDictionary new];
 
 		for(PSSpecifier *specifier in _specifiers)
 
@@ -188,6 +184,8 @@
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
 	[settings writeToFile:prefsKeys atomically:YES];
+
+	[super setPreferenceValue:value specifier:specifier];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
