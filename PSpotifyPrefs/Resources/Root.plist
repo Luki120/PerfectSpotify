@@ -92,6 +92,16 @@
 				<key>footerAlignment</key>
 				<real>1</real>
 				<key>footerText</key>
+				<string>Officially supported Spotify versions ≤ 8.7.21</string>
+				<key>isStaticText</key>
+				<true/>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>footerAlignment</key>
+				<real>1</real>
+				<key>footerText</key>
 				<string>made by Luki with ❤️</string>
 				<key>isStaticText</key>
 				<true/>
