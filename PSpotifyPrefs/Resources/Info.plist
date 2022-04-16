@@ -19,6 +19,6 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSPrincipalClass</key>
-	<string>SPTRootListController</string>
+	<string>PSRootVC.m</string>
 </dict>
 </plist>
