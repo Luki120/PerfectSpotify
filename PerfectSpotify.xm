@@ -1,8 +1,9 @@
 #import "PerfectSpotify.h"
 
 
-// Colors
-
+/*************/
+// ! | Colors |
+/*************/
 
 %group PerfectSpotify
 
@@ -10,17 +11,15 @@
 %hook MPNowPlayingInfoCenterArtworkContext
 
 
-- (void)setArtworkData:(NSData *)arg1 {
+- (void)setArtworkData:(NSData *)data {
 
 	%orig;
-
 	[NSNotificationCenter.defaultCenter postNotificationName:@"kleiUpdateColors" object:nil];
 
 }
 
 
 %end
-
 
 
 %hook SPTNowPlayingBackgroundViewController
@@ -38,42 +37,21 @@
 
 		if(dict) {
             
-			CATransition *transitionKleiView = [CATransition animation];
-			transitionKleiView.type = kCATransitionFade;
-			transitionKleiView.duration = 1.0f;
-			transitionKleiView.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+			CATransition *transition = [CATransition animation];
+			transition.type = kCATransitionFade;
+			transition.duration = 1.0f;
+			transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
 
-			[gradient addAnimation:transitionKleiView forKey:nil];
-
-			CATransition *transitionRewindButton = [CATransition animation];
-			transitionRewindButton.type = kCATransitionFade;
-			transitionRewindButton.duration = 1.0f;
-			transitionRewindButton.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-
-			[headUnitView.rewindButton.layer addAnimation:transitionRewindButton forKey:nil];
-
-			CATransition *transitionPlayPauseButton = [CATransition animation];
-			transitionPlayPauseButton.type = kCATransitionFade;
-			transitionPlayPauseButton.duration = 1.0f;
-			transitionPlayPauseButton.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-
-			[headUnitView.playPauseButton.layer addAnimation:transitionPlayPauseButton forKey:nil];
-
-			CATransition *transitionSkipButtoon = [CATransition animation];
-			transitionSkipButtoon.type = kCATransitionFade;
-			transitionSkipButtoon.duration = 1.0f;
-			transitionSkipButtoon.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-
-			[headUnitView.skipButton.layer addAnimation:transitionSkipButtoon forKey:nil];
+			[gradient addAnimation:transition forKey:nil];
+			[headUnitView.rewindButton.layer addAnimation:transition forKey:nil];
+			[headUnitView.playPauseButton.layer addAnimation:transition forKey:nil];
+			[headUnitView.skipButton.layer addAnimation:transition forKey:nil];
 
 			NSData *artworkData = [dict objectForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
 
-			UIImage *artwork;
-
 			if(artworkData != nil) {
 
-				artwork = [UIImage imageWithData:artworkData];
-
+				UIImage *artwork = [UIImage imageWithData: artworkData];
 				BOOL dont = NO;
 
 				if(artworkData.length == 0x282e && artwork.size.width == 0x258) {
@@ -90,14 +68,12 @@
 				UIColor *secondaryColor = dont ? cachedSecondaryColors : [libKitten secondaryColor:artwork];
 				UIColor *backgroundColor = dont ? cachedBackgroundColors : [libKitten backgroundColor:artwork];
 
-				gradient.colors = [NSArray arrayWithObjects:(id)backgroundColor.CGColor, (id)primaryColor.CGColor, nil];
+				gradient.colors = @[(id)backgroundColor.CGColor, (id)primaryColor.CGColor];
 
 				if(enableArtworkBasedColors) {
-
 					headUnitView.rewindButton.tintColor = secondaryColor;
 					headUnitView.playPauseButton.tintColor = secondaryColor;
 					headUnitView.skipButton.tintColor = secondaryColor;
-
 				}
 
 			}
@@ -108,7 +84,7 @@
 			cachedSecondaryColors = nil;
 			cachedBackgroundColors = nil;
 
-			gradient.colors = [NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil];
+			gradient.colors = nil;
 			headUnitView.rewindButton.tintColor = UIColor.whiteColor;
 			headUnitView.playPauseButton.tintColor = UIColor.whiteColor;
 			headUnitView.skipButton.tintColor = UIColor.whiteColor;
@@ -123,29 +99,25 @@
 - (void)viewDidLoad { // add gradient, Litten's Klei gradients, thank you
 
 	%orig;
+	if(!enableKleiColors) return;
 
-	NSArray *gradientColors = [NSArray arrayWithObjects:(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor, nil];
+	NSArray *gradientColors = @[(id)UIColor.clearColor.CGColor, (id)UIColor.clearColor.CGColor];
+
+	if(gradient) return;
+
+	gradient = [CAGradientLayer layer];
+	gradient.frame = self.view.bounds;
+	gradient.colors = gradientColors;
+	gradient.locations = @[@(-0.5), @(1.5)];
+	gradient.startPoint = CGPointMake(0.0, 0.5);
+	gradient.endPoint = CGPointMake(0.5, 1.0);
+	[self.view.layer insertSublayer:gradient atIndex:0];
 
 	[self setColors];
 
-	if(enableKleiColors) {
-
-		if(!gradient) {
-
-			gradient = [CAGradientLayer layer];
-			gradient.frame = self.view.bounds;
-			gradient.colors = gradientColors;
-			gradient.locations = [NSArray arrayWithObjects:@(-0.5), @(1.5), nil];
-			gradient.startPoint = CGPointMake(0.0, 0.5);
-			gradient.endPoint = CGPointMake(0.5, 1.0);
-			[self.view.layer insertSublayer:gradient atIndex:0];
-
-		}
-
-	}
-
+	// add notification observer to dynamically change artwork
 	[NSNotificationCenter.defaultCenter removeObserver:self name:@"kleiUpdateColors" object:nil];
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil]; // add notification observer to dynamically change artwork
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setColors) name:@"kleiUpdateColors" object:nil];
 
 }
 
@@ -156,11 +128,10 @@
 %hook SPTNowPlayingBackgroundViewController
 
 
-- (id)color { // OLED view to now playing UI or custom colors
+- (UIColor *)color { // OLED view to now playing UI or custom colors
 
-	if(enableNowPlayingUIBGColor) return [GcColorPickerUtils colorWithHex: nowPlayingUIBGColor];
-
-	else return %orig;
+	if(!enableNowPlayingUIBGColor) return %orig;
+	return [GcColorPickerUtils colorWithHex: nowPlayingUIBGColor];
 
 }    
 
@@ -168,8 +139,23 @@
 %end
 
 
-// Miscellaneous Settings
+/*****************************/
+// ! | Miscellaneous Settings |
+/*****************************/
 
+
+%hook RootSettingsViewController
+
+
+- (BOOL)isPlayingRemotely {
+
+	if(!spoofIsPlayingRemotely) return %orig;
+	return NO;
+
+}
+
+
+%end
 
 %hook GLUEGradientView
 
@@ -177,7 +163,6 @@
 - (void)didMoveToWindow { // OLED Spotify
 
 	%orig;
-
 	if(oledSpotify) self.alpha = 0;
 
 }
@@ -192,7 +177,6 @@
 - (void)didMoveToWindow {
 
 	%orig;
-
 	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 }
@@ -207,7 +191,6 @@
 - (void)didMoveToWindow {
 
 	%orig;
-
 	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 }
@@ -216,14 +199,17 @@
 %end
 
 
-%hook HUGSCustomViewControl
+%hook ShortcutPlaylistButton
 
 
 - (void)didMoveToWindow {
 
 	%orig;
+	if(!oledSpotify) return;
 
-	if(oledSpotify) self.contentView.backgroundColor = UIColor.blackColor;
+	for(UIView *shorcutView in [self subviews])
+
+		if([shorcutView isKindOfClass:UIView.class]) shorcutView.backgroundColor = UIColor.blackColor;
 
 }
 
@@ -234,11 +220,12 @@
 %hook SPTNowPlayingBarViewController
 
 
-- (void)viewDidLoad { // OLED tab bar
+- (void)viewDidLoad { // OLED mini now playing bar
 
 	%orig;
+	if(!oledSpotify) return;
 
-	if(oledSpotify) MSHookIvar<UIView *>(self, "_contentView").backgroundColor = UIColor.blackColor;  
+	self.contentView.backgroundColor = UIColor.blackColor;
 
 }
 
@@ -252,29 +239,7 @@
 - (void)didMoveToWindow {
 
 	%orig;
-
 	if(oledSpotify) self.hidden = YES;
-
-}
-
-
-%end
-
-
-%hook UIView
-
-
-- (void)didMoveToWindow { // well fuck
-
-	%orig;
-
-	UIViewController *ancestor = [self _viewControllerForAncestor];
-
-	if(oledSpotify)
-
-		if([ancestor isKindOfClass:%c(SPTNowPlayingBarV2ViewController)])
-
-			self.backgroundColor = UIColor.blackColor;
 
 }
 
@@ -288,14 +253,11 @@
 - (void)didMoveToWindow {
 
 	%orig;
+	if(!oledSpotify) return;
 
-	if(oledSpotify) {
-
-		UITabBarAppearance *tabBar = [UITabBarAppearance new];
-		tabBar.backgroundColor = UIColor.blackColor;
-		self.standardAppearance = tabBar;
-
-	}
+	UITabBarAppearance *tabBar = [UITabBarAppearance new];
+	tabBar.backgroundColor = UIColor.blackColor;
+	self.standardAppearance = tabBar;
 
 }
 
@@ -309,7 +271,6 @@
 - (void)didMoveToWindow { // OLED Search page (when you tap on search)
 
 	%orig;
-
 	if(oledSpotify) self.backgroundColor = UIColor.blackColor;
 
 }
@@ -324,8 +285,7 @@
 - (void)viewDidLoad { // OLED Search page (with history)
 
 	%orig;
-
-	if(oledSpotify) self.view.backgroundColor = [UIColor blackColor];
+	if(oledSpotify) self.view.backgroundColor = UIColor.blackColor;
 
 }
 
@@ -338,15 +298,11 @@
 
 - (void)didMoveToWindow {
 
-	if(!oledSpotify) return %orig;
-
 	%orig;
+	if(!oledSpotify) return;
 
 	self.backgroundColor = UIColor.blackColor;
-
-	for(UIVisualEffectView *effectView in self.subviews)
-
-		[effectView removeFromSuperview];
+	for(UIVisualEffectView *effectView in self.subviews) [effectView removeFromSuperview];
 
 }
 
@@ -357,11 +313,9 @@
 %hook UITabBarButtonLabel
 
 
-- (void)setText:(id)arg1 { // Hide Tab Bar button's labels
+- (void)setText:(NSString *)text { // Hide Tab Bar button's labels
 
-	%orig;
-
-	if(hideTabBarLabels) %orig(nil);
+	if(!hideTabBarLabels) return %orig;
 
 }
 
@@ -375,23 +329,7 @@
 - (void)didMoveToWindow { // Connect Button in main page
 
 	%orig;
-
-	if(hideConnectButton) [self setHidden:YES];
-
-}
-
-
-%end
-
-
-%hook SPTNowPlayingBarPlayButton
-
-
-- (void)didMoveToWindow { // Hide Play Button (Tab Bar)
-
-	%orig;
-
-	if(hideTabBarPlayButton) self.hidden = YES;
+	if(hideConnectButton) [self setHidden: YES];
 
 }
 
@@ -405,7 +343,6 @@
 - (void)didMoveToWindow { // Hide Cancel Button in search page
 
 	%orig;
-
 	if(hideCancelButton) MSHookIvar<UIButton *>(self, "_cancelButton").hidden = YES;
 
 }
@@ -417,11 +354,10 @@
 %hook PlayWhatYouLoveText
 
 
-- (void)didMoveToWindow { // Hide the "Play what you love text"
+- (void)didMoveToWindow { // Hide "Play what you love text" string
 
 	%orig;
-
-	if(hidePlayWhatYouLoveText) [self setHidden:YES];
+	if(hidePlayWhatYouLoveText) [self setHidden: YES];
 
 }
 
@@ -435,8 +371,7 @@
 - (void)didMoveToWindow { // Hide Clear Recent Searches Button
 
 	%orig;
-
-	if(hideClearRecentSearchesButton) [self setHidden:YES];
+	if(hideClearRecentSearchesButton) [self setHidden: YES];
 
 }
 
@@ -450,7 +385,6 @@
 - (void)freeTierPlaylistModel:(id)arg1 playlistModelEntityDidChange:(id)arg2 { // save an instance of PlaylistsController
 
 	%orig;
-
 	playlistController = self;
 
 }
@@ -462,23 +396,21 @@
 %hook SPTEncoreLabel
 
 
-- (void)setText:(id)arg1 { // oh boy, there was no other way tho, show song count :bthishowitis:
+- (void)setText:(NSString *)text { // smh, hooking the source of this didn't work for some reason, so the view it is :deadAf:
 
 	%orig;
-
 	if(!showSongCount) return;
 
 	UIViewController *ancestor = [self _viewControllerForAncestor];
+	if(![ancestor isKindOfClass:%c(SPTFreeTierPlaylistEncoreHeaderViewController)]) return;
 
 	NSUInteger totalCount = [playlistController numberOfItems];
 
-	if([ancestor isKindOfClass:%c(SPTFreeTierPlaylistEncoreHeaderViewController)])
+	if(([self.text containsString:@"h"]
+		|| [self.text containsString:@"m"])
+		&& ![self.text containsString:@"Enhance"])
 
-		if((![self.text containsString:@"Enhance"]) && (![self.text containsString:@"+"]))
-
-			if(([self.text containsString:@"h"]) || ([self.text containsString:@"min"]))
-
-				%orig([NSString stringWithFormat:@"%@, %lu songs", arg1, (long)totalCount]);
+		%orig([NSString stringWithFormat:@"%@, %lu songs", text, totalCount]);
 
 }
 
@@ -491,9 +423,8 @@
 
 - (BOOL)isEnhanceable { // Hide Enhance Button
 
-	if(hideEnhanceButton) return NO;
-
-	else return %orig;
+	if(!hideEnhanceButton) return %orig;
+	return NO;
 
 }
 
@@ -506,9 +437,8 @@
 
 - (BOOL)enabled { // Hide "Add Songs" button in playlist
 
-	if(hideAddSongsButton) return NO;
-
-	return %orig;
+	if(!hideAddSongsButton) return %orig;
+	return NO;
 
 }
 
@@ -519,11 +449,9 @@
 %hook SPTProgressView
 
 
-+ (void)showGaiaContextMenuProgressViewWithTitle:(id)arg1 { // Hide Queue Pop Up
++ (void)showGaiaContextMenuProgressViewWithTitle:(id)arg1 { // No Pop-Up when queuing
 
-	if(hideQueuePopUp) {}
-
-	else %orig;
+	if(!hideQueuePopUp) return %orig;
 
 }
 
@@ -536,9 +464,8 @@
 
 - (id)initWithContentView:(id)arg1 { // No Pop-Up when liking songs
 
-	if(noPopUp) return nil;
-
-	else return %orig;
+	if(!noPopUp) return %orig;
+	return nil;
 
 }
 
@@ -551,9 +478,8 @@
 
 - (id)createShuffledKeyListFromParameters:(id)arg1 { // True Shuffle (experimental)
 
-	if(trueShuffle) return nil;
-	
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
@@ -566,9 +492,8 @@
 
 - (id)shuffleEntriesFromQueryParameters:(id)arg1 {
 
-	if(trueShuffle) return nil;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
@@ -581,9 +506,8 @@
 
 - (id)createHashFromParameterValues:(id)arg1 {
 
-	if(trueShuffle) return nil;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
@@ -596,9 +520,8 @@
 
 - (id)md5FromString:(id)arg1 {
 
-	if(trueShuffle) return nil;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
@@ -611,78 +534,69 @@
 
 - (id)initWithKey:(id)arg1 value:(id)arg2 {
 
-	if(trueShuffle) %orig(nil, nil);
-
-	return %orig;
-
-}
-
-
-- (void)updateIndex:(long long)arg1 andSecret:(id)arg2 {
-
-	if(trueShuffle) %orig(0, nil);
-
-	else %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
 
-- (long long)compareKey:(id)arg1 {
+- (void)updateIndex:(NSInteger)arg1 andSecret:(id)arg2 {
 
-	if(trueShuffle) %orig(nil);
-
-	return %orig;
+	if(!trueShuffle) return %orig;
 
 }
 
 
-- (long long)compareUsingSecretAndThenIndex:(id)arg1 {
+- (NSInteger)compareKey:(id)arg1 {
 
-	if(trueShuffle) %orig(nil);
+	if(!trueShuffle) return %orig;
+	return -100;
 
-	return %orig;
+}
+
+
+- (NSInteger)compareUsingSecretAndThenIndex:(id)arg1 {
+
+	if(!trueShuffle) return %orig;
+	return -100;
 
 }
 
 
 - (id)key {
 
-	if(trueShuffle) return nil;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
 
 - (void)setKey:(id)arg1 {
 
-	if(trueShuffle) %orig(nil);
-
+	if(!trueShuffle) return %orig;
 
 }
 
 
 - (id)value {
 
-	if(trueShuffle) return nil;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
 
 - (void)setValue:(id)arg1 {
 
-	if(trueShuffle) %orig(nil);
+	if(!trueShuffle) return %orig;
 
 }
 
 
 - (id)secret {
 
-	if(trueShuffle) return nil;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return nil;
 
 }
 
@@ -690,23 +604,22 @@
 
 - (void)setSecret:(id)arg1 {
 
-	if(trueShuffle) %orig(nil);
+	if(!trueShuffle) return %orig;
 
 }
 
 
-- (long long)index {
+- (NSInteger)index {
 
-	if(trueShuffle) return 0;
-
-	return %orig;
+	if(!trueShuffle) return %orig;
+	return 0;
 
 }
 
 
-- (void)setIndex:(long long)arg1 {
+- (void)setIndex:(NSInteger)arg1 {
 
-	if(trueShuffle) %orig(0);
+	if(!trueShuffle) return %orig;
 
 }
 
@@ -717,11 +630,10 @@
 %hook SPTStatusBarManager
 
 
-- (void)setStatusBarHiddenImmediate:(BOOL)arg1 withAnimation:(long long)arg2 { // Show Status Bar
+- (void)setStatusBarHiddenImmediate:(BOOL)arg1 withAnimation:(NSInteger)arg2 { // Show Status Bar
 
-	if(showStatusBar) arg1 = NO;
-
-	else %orig;
+	if(!showStatusBar) return %orig;
+	%orig(NO, arg2);
 
 }
 
@@ -734,9 +646,8 @@
 
 - (BOOL)storylinesEnabledForTrack:(id)arg1 { // Disable Storylines
 
-	if(disableStorylines) return NO;
-
-	return %orig;
+	if(!disableStorylines) return %orig;
+	return NO;
 
 }
 
@@ -749,9 +660,8 @@
 
 - (BOOL)isFeatureEnabled { // Lyrics for all tracks
 
-	if(enableLyricsForAllTracks) return YES;
-
-	return %orig;
+	if(!enableLyricsForAllTracks) return %orig;
+	return YES;
 
 }
 
@@ -764,9 +674,8 @@
 
 - (BOOL)lyricsAvailableForTrack:(id)arg1 {
 
-	if(enableLyricsForAllTracks) return YES;
-
-	return %orig;
+	if(!enableLyricsForAllTracks) return %orig;
+	return YES;
 
 }
 
@@ -777,26 +686,10 @@
 %hook SPTGeniusService
 
 
-- (bool)isTrackGeniusEnabled:(id)arg1 { // Disable Genius Lyrics
+- (BOOL)isTrackGeniusEnabled:(id)arg1 { // Disable Genius Lyrics
 
-	if(disableGeniusLyrics) return NO;
-
-	return %orig;
-
-}
-
-
-%end
-
-
-%hook SPTNowPlayingFreeTierFeedbackButton
-
-
-- (void)didMoveToWindow { // Hide Remove Button (Daily Mix)
-
-	%orig;
-
-	if(hideRemoveButton) self.hidden = YES;
+	if(!disableGeniusLyrics) return %orig;
+	return NO;
 
 }
 
@@ -804,8 +697,9 @@
 %end
 
 
-// Now Playing UI
-
+/*********************/
+// ! | Now Playing UI |
+/*********************/
 
 %hook SPTNowPlayingTitleButton
 
@@ -813,7 +707,6 @@
 - (void)didMoveToWindow { // Hide Close Button
 
 	%orig;
-
 	if(hideCloseButton) self.hidden = YES;
 
 }
@@ -828,7 +721,6 @@
 - (void)didMoveToWindow { // Hide Playlist Title
 
 	%orig;
-
 	if(hidePlaylistNameText) MSHookIvar<SPTNowPlayingMarqueeLabel *>(self, "_titleLabel").hidden = YES;
 
 }
@@ -843,23 +735,7 @@
 - (void)didMoveToWindow { // Hide Context Menu Button
 
 	%orig;
-
 	if(hideContextMenuButton) self.hidden = YES;
-
-}
-
-
-%end
-
-
-%hook SPTNowPlayingAnimatedLikeButton
-
-
-- (void)didMoveToWindow { // Hide Like Button
-
-	%orig;
-
-	if(hideLikeButton) self.hidden = YES;
 
 }
 
@@ -870,11 +746,10 @@
 %hook SPTNowPlayingHeartButtonViewController
 
 
-- (void)setHeartButton:(id)arg1 { // Hide Like Button 8.5.60 +
+- (id)initWithModel:(id)arg1 auxiliaryActionsHandler:(id)arg2 testManager:(id)arg3 { // Hide Like Button
 
-	if(hideLikeButton) %orig(nil);
-
-	else %orig;
+	if(!hideLikeButton) return %orig;
+	return nil;
 
 }
 
@@ -888,7 +763,6 @@
 - (void)setAlpha:(double)arg1 { // Hide Knob View
 
 	if(hideSliderKnob) MSHookIvar<UIImageView *>(self, "_thumbView").alpha = 0;
-
 	else %orig;
 
 }
@@ -903,7 +777,6 @@
 - (void)didMoveToWindow { // Hide Time Slider
 
 	%orig;
-
 	if(hideTimeSlider) self.hidden = YES;
 
 }
@@ -918,9 +791,7 @@
 - (void)didMoveToWindow { // Hide elapsed and remaining time labels
 
 	if(hideElapsedTime) MSHookIvar<UILabel *>(self, "_timeTakenLabel").hidden = YES; 
-
 	if(hideRemainingTime) MSHookIvar<UILabel *>(self, "_timeRemainingLabel").hidden = YES; 
-
 	else %orig;
 
 }
@@ -934,24 +805,7 @@
 
 - (void)setShuffleButton:(id)arg1 { // Hide Shuffle Button
 
-	if(hideShuffleButton) {}
-
-	else %orig;
-
-}
-
-
-%end
-
-
-%hook SPTNowPlayingPreviousTrackButton
-
-
-- (void)didMoveToWindow { // Hide Previous Track Button (Legacy versions)
-
-	%orig;
-
-	if(hidePreviousTrackButton) self.hidden = YES;
+	if(!hideShuffleButton) return %orig;
 
 }
 
@@ -964,25 +818,8 @@
 
 - (void)setAlpha:(double)arg1 { // Hide Play/Pause Button
 
-	%orig;
-
 	if(hidePlayPauseButton) %orig(0);
-
-}
-
-
-%end
-
-
-%hook SPTNowPlayingNextTrackButton
-
-
-- (void)didMoveToWindow { // Hide Next Track Button (Legacy versions)
-
-	%orig;
-
-	if(hideNextTrackButton) self.hidden = YES;
-
+	else %orig;
 
 }
 
@@ -995,9 +832,7 @@
 
 - (void)setRepeatButton:(id)arg1 { // Hide Repeat Button
 
-	if(hideRepeatButton) {}
-
-	else %orig;
+	if(!hideRepeatButton) return %orig;
 
 }
 
@@ -1010,9 +845,25 @@
 
 - (id)initWithAuxiliaryActionsHandler:(id)arg1 connectIntegration:(id)arg2 theme:(id)arg3 { // Hide Devices Button
 
-	if(hideDevicesButton) return nil;
+	if(!hideDevicesButton) return %orig;
+	return nil;
 
-	else return %orig;
+}
+
+
+%end
+
+
+%hook SPTNowPlayingBanButtonViewController
+
+
+- (id)initWithModel:(id)arg1
+	auxiliaryActionsHandler:(id)arg2
+	testManager:(id)arg3
+	theme:(id)arg4 { // Hide Feedback Button
+
+	if(!hideFeedbackButton) return %orig;
+	return nil;
 
 }
 
@@ -1023,11 +874,10 @@
 %hook SPTNowPlayingShareButtonViewController
 
 
-- (id)initWithAuxiliaryActionsHandler:(id)arg1 {
+- (id)initWithAuxiliaryActionsHandler:(id)arg1 shareButtonFactory:(id)arg2 { // Hide Share Button
 
-	if(hideShareButton) return nil;
-
-	else return %orig;
+	if(!hideShareButton) return %orig;
+	return nil;
 
 }
 
@@ -1035,14 +885,13 @@
 %end
 
 
-%hook SPTNowPlayingQueueButton
+%hook SPTNowPlayingQueueButtonViewController
 
 
-- (void)didMoveToWindow { // Hide Queue Button
+- (id)initWithAuxiliaryActionsHandler:(id)arg1 queueButtonFactory:(id)arg2 { // Hide Queue Button
 
-	%orig;
-
-	if(hideQueueButton) self.hidden = YES;
+	if(!hideQueueButton) return %orig;
+	return nil;
 
 }
 
@@ -1055,9 +904,7 @@
 
 - (void)setPreviousButton:(id)arg1 {
 
-	if(hideBackButton || hidePreviousTrackButton) {}
-
-	else %orig;
+	if(!hideBackButton && !hidePreviousTrackButton) return %orig;
 
 }
 
@@ -1070,9 +917,7 @@
 
 - (void)setNextButton:(id)arg1 {
 
-	if(hideForwardButton || hideNextTrackButton) {}
-
-	else %orig;
+	if(!hideForwardButton && !hideNextTrackButton) return %orig;
 
 }
 
@@ -1085,9 +930,7 @@
 
 - (void)setSleepTimerButton:(id)arg1 {
 
-	if(hideMoonButton) {}
-
-	else %orig;
+	if(!hideMoonButton) return %orig;
 
 }
 
@@ -1095,8 +938,9 @@
 %end
 
 
-// ++ Features
-
+/******************/
+// ! | ++ Features |
+/******************/
 
 %hook SPTNowPlayingHeadUnitView
 
@@ -1112,7 +956,6 @@
 	id orig = %orig;
 
 	headUnitView = self;
-
 	if(enableSpotifyUI) [self setupSpotifyUI];
 
 	return orig;
@@ -1137,29 +980,11 @@
 	self.buttonsStackView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self addSubview:self.buttonsStackView];
 
-	self.rewindButton = [UIButton new];
-	if(!enableArtworkBasedColors) self.rewindButton.tintColor = UIColor.whiteColor;
-	self.rewindButton.adjustsImageWhenHighlighted = NO;
-	self.rewindButton.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.rewindButton addTarget : self action:@selector(rewind) forControlEvents:UIControlEventTouchUpInside];
-	[self.rewindButton setImage : rewindButtonImage forState:UIControlStateNormal];
-	[self.buttonsStackView addArrangedSubview:self.rewindButton];
+	self.rewindButton = [self createButtonWithImage:rewindButtonImage forSelector:@selector(didTapRewindButton)];
+	self.playPauseButton = [self createButtonWithImage:nil forSelector:@selector(didTapPlayPauseButton)];
+	self.skipButton = [self createButtonWithImage:skipButtonImage forSelector:@selector(didTapSkipButton)];
 
-	self.playPauseButton = [UIButton new];
-	if(!enableArtworkBasedColors) self.playPauseButton.tintColor = UIColor.whiteColor;
-	self.playPauseButton.adjustsImageWhenHighlighted = NO;
-	[self.playPauseButton addTarget : self action:@selector(playPause) forControlEvents:UIControlEventTouchUpInside];
-	[self.playPauseButton setPreferredSymbolConfiguration : [UIImageSymbolConfiguration configurationWithPointSize:35] forImageInState:UIControlStateNormal];
-	[self.buttonsStackView addArrangedSubview:self.playPauseButton];
-
-	self.skipButton = [UIButton new];
-	if(!enableArtworkBasedColors) self.skipButton.tintColor = UIColor.whiteColor;
-	self.skipButton.adjustsImageWhenHighlighted = NO;
-	self.skipButton.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.skipButton addTarget : self action:@selector(skip) forControlEvents:UIControlEventTouchUpInside];
-	[self.skipButton setImage : skipButtonImage forState:UIControlStateNormal];
-	[self.buttonsStackView addArrangedSubview:self.skipButton];
-
+	[self.playPauseButton setPreferredSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:35] forImageInState:UIControlStateNormal];
 	[self setupSpotifyUIConstraints];
 
 }
@@ -1169,71 +994,80 @@
 
 - (void)setupSpotifyUIConstraints {
 
-	[self.buttonsStackView.centerXAnchor constraintEqualToAnchor : self.centerXAnchor].active = YES;
-	[self.buttonsStackView.centerYAnchor constraintEqualToAnchor : self.centerYAnchor].active = YES;
-	[self.buttonsStackView.heightAnchor constraintEqualToConstant : 100].active = YES;
-
-	[self.rewindButton.widthAnchor constraintEqualToConstant : 100].active = YES;
-	[self.rewindButton.heightAnchor constraintEqualToConstant : 90].active = YES;
-
-	[self.skipButton.widthAnchor constraintEqualToConstant : 100].active = YES;
-	[self.skipButton.heightAnchor constraintEqualToConstant : 90].active = YES;
+	[self.buttonsStackView.centerXAnchor constraintEqualToAnchor: self.centerXAnchor].active = YES;
+	[self.buttonsStackView.centerYAnchor constraintEqualToAnchor: self.centerYAnchor].active = YES;
+	[self.buttonsStackView.heightAnchor constraintEqualToConstant: 100].active = YES;
+	[self setupSizeConstraintsForButton: self.rewindButton];
+	[self setupSizeConstraintsForButton: self.skipButton];
 
 }
 
 
 %new
 
-- (void)rewind {
+- (void)didTapRewindButton {
 
-	MRMediaRemoteSendCommand(kMRPreviousTrack, nil);
-	if(enableHaptics) [self triggerHaptics];
-
-}
-
-
-%new
-
-- (void)playPause {
-
-	MRMediaRemoteSendCommand(kMRTogglePlayPause, nil);
-	if(enableHaptics) [self triggerHaptics];
+	[self sendMRCommandAndTriggerHapticsIfRequested: kMRPreviousTrack];
 
 }
 
 
 %new
 
-- (void)skip {
+- (void)didTapPlayPauseButton {
 
-	MRMediaRemoteSendCommand(kMRNextTrack, nil);
-	if(enableHaptics) [self triggerHaptics];
+	[self sendMRCommandAndTriggerHapticsIfRequested: kMRTogglePlayPause];
 
 }
 
 
 %new
 
-- (void)triggerHaptics {
+- (void)didTapSkipButton {
+
+	[self sendMRCommandAndTriggerHapticsIfRequested: kMRNextTrack];
+
+}
+
+
+%new
+
+- (void)sendMRCommandAndTriggerHapticsIfRequested:(MRCommand)command {
+
+	MRMediaRemoteSendCommand(command, nil);
+	if(!enableHaptics) return;
 
 	switch(hapticsStrength) {
-
-		case 0:
-
-			AudioServicesPlaySystemSound(1519);
-			break;
-
-		case 1:
-
-			AudioServicesPlaySystemSound(1520);
-			break;
-
-		case 2:
-
-			AudioServicesPlaySystemSound(1521);
-			break;
-
+		case 0: AudioServicesPlaySystemSound(1519); break;
+		case 1: AudioServicesPlaySystemSound(1520); break;
+		case 2: AudioServicesPlaySystemSound(1521); break;
 	}
+
+}
+
+
+%new
+
+- (UIButton *)createButtonWithImage:(UIImage *_Nullable)image forSelector:(SEL)selector {
+
+	UIButton *button = [UIButton new];
+	if(!enableArtworkBasedColors) button.tintColor = UIColor.whiteColor;
+	button.adjustsImageWhenHighlighted = NO;
+	button.translatesAutoresizingMaskIntoConstraints = NO;
+	[button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+	[button setImage:image forState:UIControlStateNormal];
+	[self.buttonsStackView addArrangedSubview: button];
+	return button;
+
+}
+
+
+%new
+
+- (void)setupSizeConstraintsForButton:(UIButton *)button {
+
+	[button.widthAnchor constraintEqualToConstant: 100].active = YES;
+	[button.heightAnchor constraintEqualToConstant: 90].active = YES;
 
 }
 
@@ -1253,13 +1087,16 @@
 
 	BOOL value = %orig;
 
-	[UIView transitionWithView:headUnitView.playPauseButton duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+	dispatch_async(dispatch_get_main_queue(), ^{
 
-		if(value == YES) [headUnitView.playPauseButton setImage : playButtonImage forState:UIControlStateNormal];
+		[UIView transitionWithView:headUnitView.playPauseButton duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
-		else [headUnitView.playPauseButton setImage : pauseButtonImage forState:UIControlStateNormal];
+			if(value) [headUnitView.playPauseButton setImage:playButtonImage forState:UIControlStateNormal];
+			else [headUnitView.playPauseButton setImage:pauseButtonImage forState:UIControlStateNormal];
 
-	} completion:nil];
+		} completion:nil];
+
+	});
 
 	return value;
 
@@ -1269,67 +1106,30 @@
 %end
 
 
-%hook SPTCanvasContentLayerViewController
+%hook SPTNowPlayingViewController
 
 
 - (void)viewDidLoad { // add gesture to save canvas
 
 	%orig;
-
 	if(!saveCanvas) return;
 
 	canvasContentLayerVC = self;
 
-	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTapCanvas:)];
+	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTapCanvas)];
 	doubleTap.numberOfTapsRequired = 2;
 	[self.view addGestureRecognizer:doubleTap];
 
 }
 
 
-void saveToFilzaAlertController() {
+static void setupAlertControllerWithMessageAndURLString(NSString *messageString, NSString *urlString) {
 
-	NSFileManager *fileM = [NSFileManager defaultManager];
-
-	NSString *documentsPath = [[fileM URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject].URLByDeletingLastPathComponent.path;
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to view it in Filza?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-
-		NSString *pathInFilza = [@"filza://view" stringByAppendingString:documentsPath];
-		NSString *completePath = [pathInFilza stringByAppendingString:@"/Documents/Canvas/"];
-
-		UIApplication *app = [UIApplication sharedApplication];
-
-		NSURL *canvasURL = [NSURL URLWithString:[completePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];			
-
-		[app _openURL:canvasURL];
-
-	}];
-
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Not now" style:UIAlertActionStyleCancel handler:nil];
-
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
-
-	[canvasContentLayerVC presentViewController:alertController animated:YES completion:nil];
-
-}
-
-
-void saveToGalleryAlertController() {
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Canvas downloaded succesfully. Do you want to open gallery?" preferredStyle:UIAlertControllerStyleAlert];
-
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:messageString preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.005 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-
-			UIApplication *application = [UIApplication sharedApplication];
-			NSURL *theURL = [NSURL URLWithString:@"photos-redirect://"];
-			[application _openURL:theURL];
-
+			[UIApplication.sharedApplication _openURL: [NSURL URLWithString: urlString]];
 		});
 
 	}];
@@ -1343,13 +1143,36 @@ void saveToGalleryAlertController() {
 
 }
 
+static void saveToFilzaAlertController() {
 
-void getCanvas() {
+	NSFileManager *fileM = [NSFileManager defaultManager];
+	NSString *documentsPath = [[fileM URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject].URLByDeletingLastPathComponent.path;
+
+	NSString *pathInFilza = [@"filza://view" stringByAppendingString: documentsPath];
+	NSString *completePath = [[pathInFilza stringByAppendingString:@"/Documents/Canvas/"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+
+	setupAlertControllerWithMessageAndURLString(
+		@"Canvas downloaded succesfully. Do you want to view it in Filza?",
+		completePath
+	);
+
+}
+
+static void saveToGalleryAlertController() {
+
+	setupAlertControllerWithMessageAndURLString(
+		@"Canvas downloaded succesfully. Do you want to open gallery?",
+		@"photos-redirect://"
+	);
+
+}
+
+static void getCanvas() {
 
 	NSFileManager *fileM = [NSFileManager defaultManager];
 
 	NSString *documentsPath = [[fileM URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject].URLByDeletingLastPathComponent.path;
-	NSString *completePath = [documentsPath stringByAppendingPathComponent:@"/Library/Caches/com.spotify.service.network/"];	
+	NSString *completePath = [documentsPath stringByAppendingPathComponent:@"/Library/Caches/Canvases/"];	
 	NSString *newPath = [documentsPath stringByAppendingPathComponent:@"/Documents/Canvas/"];
 	NSString *canvasDirectory = [documentsPath stringByAppendingPathComponent:@"/Documents/Canvas/"];
 
@@ -1357,7 +1180,6 @@ void getCanvas() {
 	NSError *dirError;
 
 	NSDirectoryEnumerator *directoryEnumerator = [fileM enumeratorAtPath:completePath];
-
 	NSDate *lastDate = [NSDate dateWithTimeIntervalSinceNow:-300]; // check for the canvas cached within the last 5 minutes
 
 	for(NSString *path in directoryEnumerator) {
@@ -1376,31 +1198,25 @@ void getCanvas() {
 					BOOL isDir;
 
 					if(![fileM fileExistsAtPath:canvasDirectory isDirectory:&isDir])
-
 						[fileM createDirectoryAtPath:canvasDirectory withIntermediateDirectories:NO attributes:nil error:&dirError];
 
 					[fileM copyItemAtPath:[completePath stringByAppendingPathComponent:path] toPath:[newPath stringByAppendingPathComponent:path] error:&error];
 
-					if(!error) saveToFilzaAlertController();
-
-					else {
-
+					if(error) {
 						SPTPopupDialog *notSoProudPopup = [%c(SPTPopupDialog) popupWithTitle:@"PerfectSpotify" message:@"Oops, looks like there was an errow downloading this canvas, most likely because you already downloaded it. Otherwise try retrying." dismissButtonTitle:@"Got it"];
 						[[%c(SPTPopupManager) sharedManager].presentationQueue addObject:notSoProudPopup];
 						[[%c(SPTPopupManager) sharedManager] presentNextQueuedPopup];
-
-//						NSLog(@"PS:Your dumb af code caused this error %@", error);
-
+						// NSLog(@"PS:Your dumb af code caused this error %@", error);
+						return;
 					}
 
+					saveToFilzaAlertController();
 					break;
 
 				case 1:
 
 					UISaveVideoAtPathToSavedPhotosAlbum([completePath stringByAppendingPathComponent:path], canvasContentLayerVC, nil, nil);
-
 					saveToGalleryAlertController();
-
 					break;
 
 			}
@@ -1414,7 +1230,7 @@ void getCanvas() {
 
 %new
 
-- (void)didDoubleTapCanvas:(UITapGestureRecognizer *)gesture {
+- (void)didDoubleTapCanvas {
 
 	getCanvas();
 
@@ -1422,165 +1238,22 @@ void getCanvas() {
 
 
 %end
-
-
-%hook SPTNowPlayingInformationUnitViewController
-
-
-- (void)viewDidLoad { // Center song & artist title
-
-	// Following code is from iCrazeiOS, https://github.com/iCrazeiOS
-
-	%orig;
-
-	if(centerText) {
-
-		[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-		[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.subtitleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-
-	}
-
-}
-
-
 %end
 
 
-%hook SPTNowPlayingViewController
-
-
-- (void)viewDidLayoutSubviews { // Align song & artist title to the top
-
-	%orig;
-
-	if(!textToTheTop) return;
-
-	// Declare all the ViewControllers we need
-
-	SPTNowPlayingInformationUnitViewController *informationUnitViewController = NULL;
-	UIViewController *navigationBarUnitViewController = NULL;
-	SPTNowPlayingContentLayerViewController *contentLayerViewController = NULL;
-
-	// Get a reference to the ViewControllers by iterating through the children of self
-
-	for(UIViewController *controller in self.childViewControllers) {
-
-		if([controller isKindOfClass:%c(SPTNowPlayingInformationUnitViewController)]) informationUnitViewController = (SPTNowPlayingInformationUnitViewController*)controller;
-		else if([controller isKindOfClass:%c(SPTNowPlayingNavigationBarUnitViewController)]) navigationBarUnitViewController = controller;
-		else if([controller isKindOfClass:%c(SPTNowPlayingContentLayerViewController)]) contentLayerViewController = (SPTNowPlayingContentLayerViewController*)controller;
-
-	}
-
-	// Only align the label if all controllers have been found (there would be issues otherwise)
-
-	if(informationUnitViewController && navigationBarUnitViewController && contentLayerViewController) {
-
-		// Remove the old Y-Position of the titleLabel && Like Button
-
-		for (NSLayoutConstraint *c in informationUnitViewController.view.constraints) {
-
-			if((c.firstItem == informationUnitViewController.titleLabel || c.secondItem == informationUnitViewController.titleLabel) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY))
-
-				[informationUnitViewController.view removeConstraint:c];
-
-
-			if(informationUnitViewController.heartButtonViewController && (c.firstItem == informationUnitViewController.heartButtonViewController.view || c.secondItem == informationUnitViewController.heartButtonViewController.view) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY))
-			
-				[informationUnitViewController.view removeConstraint:c];
-
-
-		}
-
-		// Align the titleLabel bellow the NavigationBar
-
-		if(informationUnitViewController.titleLabel.window == navigationBarUnitViewController.view.window && informationUnitViewController.titleLabel.window) [informationUnitViewController.titleLabel.topAnchor constraintEqualToAnchor:navigationBarUnitViewController.view.bottomAnchor].active = true;
-
-		// Move the Like Button down (if it's there)
-
-		if(informationUnitViewController.heartButtonViewController && informationUnitViewController.heartButtonViewController.view.window == informationUnitViewController.view.window && informationUnitViewController.heartButtonViewController.view.window) [informationUnitViewController.heartButtonViewController.view.centerYAnchor constraintEqualToAnchor:informationUnitViewController.view.bottomAnchor].active = true;
-
-	}
-
-}
-
-
-%end
-
-
-%hook SPTNowPlayingCoverArtCell
-
-
-- (void)didMoveToSuperview {
-
-	%orig;
-
-	if(!textToTheTop) return;
-
-	// Declare all the ViewControllers we need
-
-	SPTNowPlayingInformationUnitViewController *informationUnitViewController = NULL;
-	UIViewController *navigationBarUnitViewController = NULL;
-	SPTNowPlayingViewController *nowPlayingController = ((SPTNowPlayingViewController*)((SPTNowPlayingContentLayerViewController*)self.collectionView.dataSource).parentViewController);
-	
-	// Get a reference to the ViewControllers by iterating through the children of self
-
-	for(UIViewController *controller in nowPlayingController.childViewControllers) {
-
-		if([controller isKindOfClass:%c(SPTNowPlayingInformationUnitViewController)]) informationUnitViewController = (SPTNowPlayingInformationUnitViewController*)controller;
-		else if([controller isKindOfClass:%c(SPTNowPlayingNavigationBarUnitViewController)]) navigationBarUnitViewController = controller;
-
-	}
-
-	// Only align the label if all controllers have been found (there would be issues otherwise)
-
-	if(informationUnitViewController && navigationBarUnitViewController && nowPlayingController) {
-
-		UIImageView *artworkView = self.imageView;
-		
-		// Remove the old Y-Position of the artworkView
-
-		for (NSLayoutConstraint *c in artworkView.superview.constraints) {
-
-			if((c.firstItem == artworkView || c.secondItem == artworkView) && (c.firstAttribute == NSLayoutAttributeCenterY || c.secondAttribute == NSLayoutAttributeCenterY))
-
-				[artworkView.superview removeConstraint:c];
-
-
-		}
-		
-		// Create a UILayoutGuide ranging from the Track Title Label to above the Duration Slider
-
-		UILayoutGuide *guide = [UILayoutGuide new];
-		[nowPlayingController.view addLayoutGuide:guide];
-		
-		if(guide.owningView.window == informationUnitViewController.subtitleLabel.window && guide.owningView.window) [guide.topAnchor constraintEqualToAnchor:informationUnitViewController.subtitleLabel.bottomAnchor].active = true;
-		if(guide.owningView.window == informationUnitViewController.view.window && guide.owningView.window) [guide.bottomAnchor constraintEqualToAnchor:informationUnitViewController.view.bottomAnchor].active = true;
-		
-		// Center the artwork between the Track Title Label and the Duration Slider using the previously created LayoutGuide
-
-		if(guide.owningView.window == artworkView.window && guide.owningView.window) [artworkView.centerYAnchor constraintEqualToAnchor:guide.centerYAnchor].active = true;
-
-	}
-
-}
-
-
-%end
-%end
-
-
-void launchPSpotify() {
-
-	NSString *urlString = kOrionExists || kShuffleExists ? @"prefs:root=Tweaks&path=PerfectSpotify" : @"prefs:root=PerfectSpotify";
-
-	UIApplication *application = [UIApplication sharedApplication];
-	NSURL *theURL = [NSURL URLWithString:urlString];
-	[application _openURL:theURL];
-
-}
-
+/******************/
+// ! | SpringBoard |
+/******************/
 
 %group PSpotifySpringBoard
+
+
+static void launchPSpotify() {
+
+	NSString *urlString = kOrionExists || kShuffleExists ? @"prefs:root=Tweaks&path=PerfectSpotify" : @"prefs:root=PerfectSpotify";
+	[UIApplication.sharedApplication _openURL: [NSURL URLWithString: urlString]];
+
+}
 
 
 %hook SBIconView
@@ -1603,47 +1276,35 @@ void launchPSpotify() {
 
 	for(SBSApplicationShortcutItem *shortcutItem in items) {
 
-		if(self.icon.isApplicationIcon) {
+		if(!self.icon.isApplicationIcon) return;
 
-			if([shortcutItem.type isEqualToString:editHSShortcutString]) {
+		if([shortcutItem.type isEqualToString:editHSShortcutString]) {
 
-				if(removeEditHSShortcut)
+			if(removeEditHSShortcut) [shortcutsArray removeObject:shortcutItem];
 
-					[shortcutsArray removeObject:shortcutItem];
+		}
 
-			}
+		else if([shortcutItem.type isEqualToString:shareAppShortcutString]) {
 
-			else if([shortcutItem.type isEqualToString:shareAppShortcutString]) {
+			if(removeShareAppShortcut) [shortcutsArray removeObject:shortcutItem];
 
-				if(removeShareAppShortcut)
+		}
 
-					[shortcutsArray removeObject:shortcutItem];
+		else if([shortcutItem.type isEqualToString:removeAppShortcutString]) {
 
-			}
+			if(removeRemoveAppShortcut) [shortcutsArray removeObject:shortcutItem];
 
-			else if([shortcutItem.type isEqualToString:removeAppShortcutString]) {
+		}
 
-				if(removeRemoveAppShortcut)
+		else if([shortcutItem.type isEqualToString:sptSearchShortcutString]) {
 
-					[shortcutsArray removeObject:shortcutItem];
+			if(removeSpotifySearchShortcut) [shortcutsArray removeObject:shortcutItem];
 
-			}
+		}
 
-			else if([shortcutItem.type isEqualToString:sptSearchShortcutString]) {
+		else if([shortcutItem.type isEqualToString:sptRecentlyPlayedShortcutString]) {
 
-				if(removeSpotifySearchShortcut)
-
-					[shortcutsArray removeObject:shortcutItem];
-
-			}
-
-			else if([shortcutItem.type isEqualToString:sptRecentlyPlayedShortcutString]) {
-
-				if(removeSpotifyRecentlyPlayedShortcut)
-
-					[shortcutsArray removeObject:shortcutItem];
-
-			}
+			if(removeSpotifyRecentlyPlayedShortcut) [shortcutsArray removeObject:shortcutItem];
 
 		}
 
@@ -1667,19 +1328,15 @@ void launchPSpotify() {
 }
 
 
-+ (void)activateShortcut:(SBSApplicationShortcutItem *)item withBundleIdentifier:(NSString *)bundleID forIconView:(id)iconView {
++ (void)activateShortcut:(SBSApplicationShortcutItem *)item
+	withBundleIdentifier:(NSString *)bundleID
+	forIconView:(id)iconView {
 
-	if([item.type isEqualToString:@"me.luki.pspotify.item"]) {
+	if(![item.type isEqualToString:@"me.luki.pspotify.item"]) return %orig;
 
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.001 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-
-			launchPSpotify();
-
-		});
-
-	}
-
-	else %orig;
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.001 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+		launchPSpotify();
+	});
 
 }
 
@@ -1701,11 +1358,17 @@ void launchPSpotify() {
 %ctor {
 
 	loadPrefs();
-
 	%init(PSpotifySpringBoard);
 
-	if(!isCurrentApp(@"com.apple.springboard"))
+	if(!kIsCurrentApp(@"com.apple.springboard"))
 
-		%init(PerfectSpotify, ConnectButton=Class(@"ConnectUIFeatureImpl.ConnectButtonView"), ClearRecentSearchesButton=Class(@"SPTTing.ChipView"), PlayWhatYouLoveText=Class(@"SPTTing.EmptyState"), PlayButton=Class(@"EncoreConsumerMobile.PlayButtonView"), PlaylistsController=Class(@"PlaylistMigrationFeatureImpl.PLItemsViewModelImplementation"));
+		%init(PerfectSpotify,
+			ConnectButton=kClass(@"ConnectUIFeatureImpl.ConnectButtonView"),
+			ClearRecentSearchesButton=kClass(@"SPTTing.ChipView"),
+			PlayWhatYouLoveText=kClass(@"SPTTing.EmptyState"),
+			PlayButton=kClass(@"EncoreConsumerMobile.PlayButtonView"),
+			PlaylistsController=kClass(@"PlaylistUXPlatform_PlaylistMigrationImpl.PLItemsViewModelImplementation"),
+			ShortcutPlaylistButton=kClass(@"EncoreMobile.InteractableLayoutBackingButton")
+		);
 
 }

@@ -10,7 +10,6 @@
 static BOOL oledSpotify;
 static BOOL hideTabBarLabels;
 static BOOL hideConnectButton;
-static BOOL hideTabBarPlayButton;
 
 static BOOL hideCancelButton;
 static BOOL hidePlayWhatYouLoveText;
@@ -27,7 +26,7 @@ static BOOL showStatusBar;
 static BOOL disableStorylines;
 static BOOL enableLyricsForAllTracks;
 static BOOL disableGeniusLyrics;
-static BOOL hideRemoveButton;
+static BOOL spoofIsPlayingRemotely;
 
 
 // Now Playing UI
@@ -35,7 +34,7 @@ static BOOL hideRemoveButton;
 static BOOL enableKleiColors;
 static BOOL enableNowPlayingUIBGColor;
 
-NSString *nowPlayingUIBGColor;
+static NSString *nowPlayingUIBGColor;
 
 static BOOL hideCloseButton;
 static BOOL hidePlaylistNameText;
@@ -51,6 +50,7 @@ static BOOL hidePlayPauseButton;
 static BOOL hideNextTrackButton;
 static BOOL hideRepeatButton;
 static BOOL hideDevicesButton;
+static BOOL hideFeedbackButton;
 static BOOL hideShareButton;
 static BOOL hideQueueButton;
 
@@ -63,11 +63,11 @@ static BOOL enableSpotifyUI;
 static BOOL enableHaptics;
 static BOOL enableArtworkBasedColors;
 
-static int hapticsStrength;
+static NSInteger hapticsStrength;
 
 static BOOL saveCanvas;
 
-static int saveCanvasDestination;
+static NSInteger saveCanvasDestination;
 
 static BOOL centerText;
 static BOOL textToTheTop;
@@ -87,10 +87,10 @@ static BOOL removeSpotifyRecentlyPlayedShortcut;
 
 static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
 
-#define Class(string) NSClassFromString(string)
-#define isCurrentApp(string) [[[NSBundle mainBundle] bundleIdentifier] isEqual : string]
-#define kOrionExists [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/OrionSettings.dylib"]
-#define kShuffleExists [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/shuffle.dylib"]
+#define kClass(string) NSClassFromString(string)
+#define kIsCurrentApp(string) [[[NSBundle mainBundle] bundleIdentifier] isEqual: string]
+#define kOrionExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/OrionSettings.dylib"]
+#define kShuffleExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/shuffle.dylib"]
 
 
 static void loadPrefs() {
@@ -99,11 +99,9 @@ static void loadPrefs() {
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
 
 	// Miscellaneous
-
 	oledSpotify = prefs[@"oledSpotify"] ? [prefs[@"oledSpotify"] boolValue] : NO;
 	hideTabBarLabels = prefs[@"hideTabBarLabels"] ? [prefs[@"hideTabBarLabels"] boolValue] : NO;
 	hideConnectButton = prefs[@"hideConnectButton"] ? [prefs[@"hideConnectButton"] boolValue] : NO;
-	hideTabBarPlayButton = prefs[@"hideTabBarPlayButton"] ? [prefs[@"hideTabBarPlayButton"] boolValue] : NO;
 
 	hideCancelButton = prefs[@"hideCancelButton"] ? [prefs[@"hideCancelButton"] boolValue] : NO;
 	hidePlayWhatYouLoveText = prefs[@"hidePlayWhatYouLoveText"] ? [prefs[@"hidePlayWhatYouLoveText"] boolValue] : NO;
@@ -120,10 +118,9 @@ static void loadPrefs() {
 	disableStorylines = prefs[@"disableStorylines"] ? [prefs[@"disableStorylines"] boolValue] : NO;
 	enableLyricsForAllTracks = prefs[@"enableLyricsForAllTracks"] ? [prefs[@"enableLyricsForAllTracks"] boolValue] : NO;
 	disableGeniusLyrics = prefs[@"disableGeniusLyrics"] ? [prefs[@"disableGeniusLyrics"] boolValue] : NO;
-	hideRemoveButton = prefs[@"hideRemoveButton"] ? [prefs[@"hideRemoveButton"] boolValue] : NO;
+	spoofIsPlayingRemotely = prefs[@"spoofIsPlayingRemotely"] ? [prefs[@"spoofIsPlayingRemotely"] boolValue] : NO;
 
 	// Now Playing UI
-
 	enableKleiColors = prefs[@"enableKleiColors"] ? [prefs[@"enableKleiColors"] boolValue] : NO;
 	enableNowPlayingUIBGColor = prefs[@"enableNowPlayingUIBGColor"] ? [prefs[@"enableNowPlayingUIBGColor"] boolValue] : NO;
 
@@ -143,6 +140,7 @@ static void loadPrefs() {
 	hideNextTrackButton = prefs[@"hideNextTrackButton"] ? [prefs[@"hideNextTrackButton"] boolValue] : NO;
 	hideRepeatButton = prefs[@"hideRepeatButton"] ? [prefs[@"hideRepeatButton"] boolValue] : NO;
 	hideDevicesButton = prefs[@"hideDevicesButton"] ? [prefs[@"hideDevicesButton"] boolValue] : NO;
+	hideFeedbackButton = prefs[@"hideFeedbackButton"] ? [prefs[@"hideFeedbackButton"] boolValue] : NO;
 	hideShareButton = prefs[@"hideShareButton"] ? [prefs[@"hideShareButton"] boolValue] : NO;
 	hideQueueButton = prefs[@"hideQueueButton"] ? [prefs[@"hideQueueButton"] boolValue] : NO;
 
@@ -163,7 +161,6 @@ static void loadPrefs() {
 	hideMoonButton = prefs[@"hideMoonButton"] ? [prefs[@"hideMoonButton"] boolValue] : NO;
 
 	// SpringBoard
-
 	addPSpotifyShortcut = prefs[@"addPSpotifyShortcut"] ? [prefs[@"addPSpotifyShortcut"] boolValue] : NO;
 
 	removeEditHSShortcut = prefs[@"removeEditHSShortcut"] ? [prefs[@"removeEditHSShortcut"] boolValue] : NO;
@@ -178,10 +175,10 @@ static void loadPrefs() {
 
 // Global
 
-CAGradientLayer *gradient;
-UIColor *cachedPrimaryColors;
-UIColor *cachedSecondaryColors;
-UIColor *cachedBackgroundColors;
+static CAGradientLayer *gradient;
+static UIColor *cachedPrimaryColors;
+static UIColor *cachedSecondaryColors;
+static UIColor *cachedBackgroundColors;
 
 
 @interface SPTNowPlayingBackgroundViewController : UIViewController
@@ -192,7 +189,7 @@ UIColor *cachedBackgroundColors;
 // Miscellaneous
 
 @interface GLUEGradientView : UIView
-@property (assign, nonatomic, readwrite) CGFloat alpha;
+@property (assign, nonatomic) CGFloat alpha;
 @end
 
 
@@ -204,17 +201,7 @@ UIColor *cachedBackgroundColors;
 @end
 
 
-@interface HUGSCustomViewControl : UIControl
-@property UIView *contentView;
-@end
-
-
 @interface SPTBarGradientView : UIView
-@end
-
-
-@interface UIView ()
-- (id)_viewControllerForAncestor;
 @end
 
 
@@ -230,15 +217,13 @@ UIColor *cachedBackgroundColors;
 @end
 
 
-@interface SPTNowPlayingBarPlayButton : UIButton
+@interface SPTNowPlayingBarViewController : UIViewController
+@property (nonatomic, strong) UIView *contentView;
 @end
 
 
 @interface SPTEncoreLabel : UILabel
-@end
-
-
-@interface SPTNowPlayingFreeTierFeedbackButton : UIButton
+- (UIViewController *)_viewControllerForAncestor;
 @end
 
 
@@ -258,28 +243,11 @@ UIColor *cachedBackgroundColors;
 @end
 
 
-@interface SPTNowPlayingAnimatedLikeButton : UIButton
-@end
-
-
 @interface SPTNowPlayingSliderV2 : UIView
 @end
 
 
-@interface SPTNowPlayingPreviousTrackButton : UIButton
-@end
-
-
-@interface SPTNowPlayingNextTrackButton : UIButton
-@end
-
-
-@interface SPTNowPlayingQueueButton : UIButton
-@end
-
-
 // ++ Features
-
 // Spotify UI
 
 @interface SPTNowPlayingHeadUnitView : UIView
@@ -287,24 +255,26 @@ UIColor *cachedBackgroundColors;
 @property (nonatomic, strong) UIButton *skipButton;
 @property (nonatomic, strong) UIButton *playPauseButton;
 @property (nonatomic, strong) UIStackView *buttonsStackView;
-- (void)rewind;
-- (void)playPause;
-- (void)skip;
-- (void)triggerHaptics;
+- (void)didTapRewindButton;
+- (void)didTapPlayPauseButton;
+- (void)didTapSkipButton;
+- (void)sendMRCommandAndTriggerHapticsIfRequested:(MRCommand)command;
 - (void)setupSpotifyUI;
 - (void)setupSpotifyUIConstraints;
+- (UIButton *)createButtonWithImage:(UIImage *)image forSelector:(SEL)selector;
+- (void)setupSizeConstraintsForButton:(UIButton *)button;
 @end
 
 
 @interface SPTPlayerState : NSObject
-@property (assign, getter=isPaused, nonatomic, readwrite) BOOL paused;
+@property (assign, getter=isPaused, nonatomic) BOOL paused;
 @end
 
 
 // Canvas
 
-@interface SPTCanvasContentLayerViewController : UIViewController
-- (void)didDoubleTapCanvas:(UITapGestureRecognizer *)gesture;
+@interface SPTNowPlayingViewController : UIViewController
+- (void)didDoubleTapCanvas;
 @end
 
 
@@ -314,49 +284,20 @@ UIColor *cachedBackgroundColors;
 
 
 @interface SPTPopupManager : NSObject
-@property (assign, nonatomic, readwrite) NSMutableArray *presentationQueue;
+@property (assign, nonatomic) NSMutableArray *presentationQueue;
 + (SPTPopupManager *)sharedManager;
 - (void)presentNextQueuedPopup;
 @end
 
 
-@interface UIApplication ()
-- (BOOL)_openURL:(id)arg1;
-@end
-
-
-// Center artist and song title & align to the top
-
-@interface SPTNowPlayingInformationUnitViewController : UIViewController
-@property UIView *titleLabel;
-@property UIView *subtitleLabel;
-@property UIViewController *heartButtonViewController;
-@end
-
-
-@interface SPTNowPlayingViewController : UIViewController
-@end
-
-
-@interface SPTNowPlayingContentLayerViewController : UIViewController
-@property UICollectionView *collectionView;
-@end
-
-
-@interface SPTNowPlayingCoverArtCell : UICollectionViewCell
-@property (getter=_collectionView) UICollectionView *collectionView;
-@property UIImageView *imageView;
-@end
-
-
-// 3DTouch shortcut item
+// 3DTouch shortcut items
 
 @interface SBSApplicationShortcutIcon : NSObject
 @end
 
 
 @interface SBSApplicationShortcutCustomImageIcon : SBSApplicationShortcutIcon
-- (id)initWithImageData:(id)arg1 dataType:(long long)arg2 isTemplate:(BOOL)arg3;
+- (id)initWithImageData:(id)arg1 dataType:(NSInteger)arg2 isTemplate:(BOOL)arg3;
 @end
 
 
@@ -382,12 +323,12 @@ UIColor *cachedBackgroundColors;
 
 
 @interface UIApplication ()
-- (BOOL)_openURL:(id)arg1;
+- (BOOL)_openURL:(NSURL *)url;
 @end
 
 
 // For instances
 
-id playlistController = nil;
-SPTNowPlayingHeadUnitView *headUnitView = nil;
-SPTCanvasContentLayerViewController *canvasContentLayerVC = nil;
+static id playlistController = nil;
+static SPTNowPlayingHeadUnitView *headUnitView = nil;
+static SPTNowPlayingViewController *canvasContentLayerVC = nil;
