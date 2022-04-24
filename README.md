@@ -11,12 +11,13 @@
 - OLED Spotify
 - Hide Tab Bar Labels
 - Hide Connect Button
-- Hide Tab Bar Play Button
 
 - Hide Cancel Button
 - Hide Play What You Love Text
 - Hide Clear Recent Searches Button
 
+- Show Songs Count
+- Hide Enhance Button
 - Hide Add Songs Button
 - No Pop-Up When Queuing
 - No Pop-Up When Liking Songs
@@ -26,7 +27,7 @@
 - Disable Storylines
 - Lyrics For All Tracks
 - Disable Genius Lyrics
-- Hide Remove Button (Daily Mix)
+- Spoof Playing Remotely Status
 
 ## Now Playing UI
 
@@ -47,6 +48,7 @@
 - Hide Next Track Button
 - Hide Repeat Button
 - Hide Devices Button
+- Hide Feedback Button
 - Hide Share Button
 - Hide Queue Button
 
