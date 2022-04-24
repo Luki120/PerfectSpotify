@@ -222,6 +222,18 @@
 				<key>label</key>
 				<string>Disable Genius Lyrics</string>
 			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>spoofIsPlayingRemotely</string>
+				<key>label</key>
+				<string>Spoof Playing Remotely Status</string>
+			</dict>
 		</array>
 		<key>title</key>
 		<string>PerfectSpotify</string>
