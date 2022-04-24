@@ -96,17 +96,16 @@
 	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Spotify was succesfully destroyed and shattered into pieces, shall we rebuild it by launching it again?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
 		[self launchSpotify];
 
 	}];
 
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Maybe later" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Maybe later" style:UIAlertActionStyleDefault handler:nil];
 
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
+	[alertController addAction: confirmAction];
+	[alertController addAction: cancelAction];
 
 	[self presentViewController:alertController animated:YES completion:nil];
 
@@ -131,9 +130,8 @@
 	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/PSpotifyPrefs.bundle/Assets/PSpotifyIcon.png"];
 	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.2~EOL" icon: tweakIconImage];
-
-	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"• Fixed Enable Custom BG Color option." image: checkmarkImage];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"PerfectSpotify" detailText:@"2.3~EOL" icon: tweakIconImage];
+	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"Please visit the source on GitHub to see the changelog." image: checkmarkImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
