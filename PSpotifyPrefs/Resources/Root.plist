@@ -92,7 +92,7 @@
 				<key>footerAlignment</key>
 				<real>1</real>
 				<key>footerText</key>
-				<string>Officially supported Spotify versions ≤ 8.7.21</string>
+				<string>Officially supported Spotify versions ≤ 8.7.22</string>
 				<key>isStaticText</key>
 				<true/>
 			</dict>
