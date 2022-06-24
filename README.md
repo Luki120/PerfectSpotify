@@ -1,8 +1,6 @@
 # PerfectSpotify
 
-![download](https://twickd.com/images/cf59460372b0f5db74143d603be9a92071f23ce3.jpeg)
-
-## An awesome enhancement to your Spotify application
+![PS](https://twickd.com/images/cf59460372b0f5db74143d603be9a92071f23ce3.jpeg)
 
 ## This project is EOL, the chances of it being updated are slim.
 
@@ -78,4 +76,4 @@
 
 ## Assets LICENSE
 
-* Under no means shall the visual assets of this repository – i.e., all photo-, picto-, icono-, and videographic material – (if any) be altered and/or redistributed for any independent commercial or non-commercial intent beyond it's original function in this project. Permissible usage of such content is restricted solely to it's express application in this repository and any forks that retain the material in it's original, unaltered form only.
+* Under no means shall the visual assets of this repository – i.e., all photo-, picto-, icono-, and videographic material – (if any) be altered and/or redistributed for any independent commercial or non-commercial intent beyond its original function in this project. Permissible usage of such content is restricted solely to its express application in this repository and any forks that retain the material in its original, unaltered form only.
