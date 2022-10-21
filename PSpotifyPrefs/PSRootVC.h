@@ -1,15 +1,14 @@
+@import AudioToolbox.AudioServices;
+@import Preferences.PSSpecifier;
+@import Preferences.PSListController;
 #import <spawn.h>
-#import <Preferences/PSSpecifier.h>
-#import <AudioToolbox/AudioServices.h>
-#import <Preferences/PSListController.h>
+#import "Common/Common.h"
 
 
-static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
 #define kPSpotifyTintColor [UIColor colorWithRed: 0.11 green: 0.73 blue: 0.33 alpha: 1.0]
 
 
 @interface OBWelcomeController : UIViewController;
-@property (assign, nonatomic) BOOL _shouldInlineButtontray;
 - (id)initWithTitle:(id)arg1 detailText:(id)arg2 icon:(id)arg3;
 - (void)addBulletedListItemWithTitle:(id)arg1 description:(id)arg2 image:(id)arg3;
 @end
@@ -42,7 +41,7 @@ static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.per
 
 
 @interface PSTableCell ()
-- (void)setTitle:(NSString *)t;
+- (void)setTitle:(NSString *)title;
 @end
 
 

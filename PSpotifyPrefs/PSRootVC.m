@@ -158,21 +158,17 @@
 
 - (void)resetPreferences {
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Do You Really Want To Reset Your Preferences?" preferredStyle:UIAlertControllerStyleAlert];
-
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"PerfectSpotify" message:@"Are you sure bozo?" preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
-		NSFileManager *fileM = [NSFileManager defaultManager];
-
-		BOOL success = [fileM removeItemAtPath:@"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist" error:nil];
-		if(success) [self crossDissolveBlur];
+		[[NSFileManager defaultManager] removeItemAtPath:kPath error:nil];
+		[self crossDissolveBlur];
 
 	}];
-
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Maybe not" style:UIAlertActionStyleCancel handler:nil];
 
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
+	[alertController addAction: confirmAction];
+	[alertController addAction: cancelAction];
 
 	[self presentViewController:alertController animated:YES completion:nil];
 
@@ -181,11 +177,11 @@
 
 - (void)crossDissolveBlur {
 
-	UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-	UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
+	UIBlurEffect *blur = [UIBlurEffect effectWithStyle: UIBlurEffectStyleRegular];
+	UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect: blur];
 	blurView.alpha = 0;
 	blurView.frame = self.view.bounds;
-	[self.view addSubview:blurView];
+	[self.view addSubview: blurView];
 
 	[UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 
@@ -205,7 +201,7 @@
 }
 
 
-// Table view data source
+// ! UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -214,12 +210,10 @@
 
 }
 
-
 @end
 
 
 @implementation PSContributorsVC
-
 
 - (NSArray *)specifiers {
 
@@ -228,12 +222,10 @@
 
 }
 
-
 @end
 
 
 @implementation PSLinksVC
-
 
 - (NSArray *)specifiers {
 
@@ -245,51 +237,55 @@
 
 - (void)launchLyricsLink {
 
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://techcrunch.com/2020/06/29/in-a-significant-expansion-spotify-to-launch-real-time-lyrics-in-26-markets/"] options:@{} completionHandler:nil];
+	[self launchURL: [NSURL URLWithString: @"https://techcrunch.com/2020/06/29/in-a-significant-expansion-spotify-to-launch-real-time-lyrics-in-26-markets/"]];
 
 }
 
 
 - (void)launchPayPal {
 
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
+	[self launchURL: [NSURL URLWithString: @"https://paypal.me/Luki120"]];
 
 }
 
 
 - (void)launchGitHub {
 
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://github.com/Luki120/PerfectSpotify"] options:@{} completionHandler:nil];
+	[self launchURL: [NSURL URLWithString: @"https://github.com/Luki120/PerfectSpotify"]];
 
 }
 
 
 - (void)launchAmelija {
 
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/me.luki.amelija"] options:@{} completionHandler:nil];
+	[self launchURL: [NSURL URLWithString: @"https://repo.twickd.com/get/me.luki.amelija"]];
 
 }
 
 
 - (void)launchApril {
 
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
+	[self launchURL: [NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"]];
 
 }
 
+
+- (void)launchURL:(NSURL *)url {
+
+	[UIApplication.sharedApplication openURL:url options:@{} completionHandler:nil];	
+
+}
 
 @end
 
 
 @implementation PSpotifyTableCell
 
+- (void)setTitle:(NSString *)title {
 
-- (void)setTitle:(NSString *)t {
-
-	[super setTitle:t];
+	[super setTitle: title];
 	self.titleLabel.textColor = kPSpotifyTintColor;
 
 }
-
 
 @end

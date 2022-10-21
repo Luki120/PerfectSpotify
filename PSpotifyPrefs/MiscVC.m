@@ -1,8 +1,26 @@
 #import "MiscVC.h"
 
 
-@implementation MiscVC
+// Reusable
 
+static id readPreferenceValue(PSSpecifier *specifier) {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
+	return settings[specifier.properties[@"key"]] ?: specifier.properties[@"default"];
+
+}
+
+static void setPreferenceValue(id value, PSSpecifier *specifier) {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:kPath atomically:YES];
+
+}
+
+@implementation MiscVC
 
 - (NSArray *)specifiers {
 
@@ -12,21 +30,10 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
+- (id)readPreferenceValue:(PSSpecifier *)specifier { return readPreferenceValue(specifier); }
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:prefsKeys atomically:YES];
+	setPreferenceValue(value, specifier);
 
 	NSString *key = [specifier propertyForKey:@"key"];
 	if(![key isEqualToString:@"enableLyricsForAllTracks"]) return;
@@ -41,12 +48,10 @@
 
 }
 
-
 @end
 
 
 @implementation NowPlayingUIVC
-
 
 - (NSArray *)specifiers {
 
@@ -55,12 +60,10 @@
 
 }
 
-
 @end
 
 
 @implementation SpringBoardVC
-
 
 - (NSArray *)specifiers {
 
@@ -70,60 +73,43 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
+- (id)readPreferenceValue:(PSSpecifier *)specifier { return readPreferenceValue(specifier); }
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:prefsKeys atomically:YES];
-
+	setPreferenceValue(value, specifier);
 	[super setPreferenceValue:value specifier:specifier];
 
 	[NSNotificationCenter.defaultCenter postNotificationName:@"updateShortcutItems" object:nil];
 
 }
 
-
 @end
 
 
 @implementation ExtraFeaturesVC
 
-
 - (NSArray *)specifiers {
 
-	if(!_specifiers) {
+	if(_specifiers) return nil;
+	_specifiers = [self loadSpecifiersFromPlistName:@"++ Features" target:self];
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"++ Features" target:self];
+	NSArray *chosenIDs = @[
+		@"ArtworkBasedColorsSwitch",
+		@"GroupCell1",
+		@"HapticsSwitch",
+		@"GroupCell2",
+		@"HapticsOptionsCell",
+		@"GroupCell3",
+		@"CanvasOptionsCell"
+	];
 
-		NSArray *chosenIDs = @[
-			@"ArtworkBasedColorsSwitch",
-			@"GroupCell1",
-			@"HapticsSwitch",
-			@"GroupCell2",
-			@"HapticsOptionsCell",
-			@"GroupCell3",
-			@"CanvasOptionsCell"
-		];
+	self.savedSpecifiers = self.savedSpecifiers ?: [NSMutableDictionary new];
 
-		self.savedSpecifiers = self.savedSpecifiers ?: [NSMutableDictionary new];
+	for(PSSpecifier *specifier in _specifiers)
 
-		for(PSSpecifier *specifier in _specifiers)
+		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	}
+			[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	return _specifiers;
 
@@ -169,22 +155,10 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
+- (id)readPreferenceValue:(PSSpecifier *)specifier { return readPreferenceValue(specifier); }
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsKeys]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:prefsKeys atomically:YES];
-
+	setPreferenceValue(value, specifier);
 	[super setPreferenceValue:value specifier:specifier];
 
 	NSString *key = [specifier propertyForKey:@"key"];

@@ -1,8 +1,6 @@
-#import <Preferences/PSSpecifier.h>
-#import <Preferences/PSListController.h>
-
-
-static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
+@import Preferences.PSSpecifier;
+@import Preferences.PSListController;
+#import "Common/Common.h"
 
 
 @interface SpringBoardVC : PSListController
