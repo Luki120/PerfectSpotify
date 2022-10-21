@@ -1360,15 +1360,15 @@ static void launchPSpotify() {
 	loadPrefs();
 	%init(PSpotifySpringBoard);
 
-	if(!kIsCurrentApp(@"com.apple.springboard"))
+	if(kIsCurrentApp(@"com.apple.springboard")) return;
 
-		%init(PerfectSpotify,
-			ConnectButton=kClass(@"ConnectUIFeatureImpl.ConnectButtonView"),
-			ClearRecentSearchesButton=kClass(@"SPTTing.ChipView"),
-			PlayWhatYouLoveText=kClass(@"SPTTing.EmptyState"),
-			PlayButton=kClass(@"EncoreConsumerMobile.PlayButtonView"),
-			PlaylistsController=kClass(@"PlaylistUXPlatform_PlaylistMigrationImpl.PLItemsViewModelImplementation"),
-			ShortcutPlaylistButton=kClass(@"EncoreMobile.InteractableLayoutBackingButton")
-		);
+	%init(PerfectSpotify,
+		ConnectButton=kClass(@"ConnectUIFeatureImpl.ConnectButtonView"),
+		ClearRecentSearchesButton=kClass(@"SPTTing.ChipView"),
+		PlayWhatYouLoveText=kClass(@"SPTTing.EmptyState"),
+		PlayButton=kClass(@"EncoreConsumerMobile.PlayButtonView"),
+		PlaylistsController=kClass(@"PlaylistUXPlatform_PlaylistMigrationImpl.PLItemsViewModelImplementation"),
+		ShortcutPlaylistButton=kClass(@"EncoreMobile.InteractableLayoutBackingButton")
+	);
 
 }

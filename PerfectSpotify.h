@@ -1,4 +1,5 @@
 @import UIKit;
+#import "Common/Common.h"
 #import "MediaRemote.h"
 #import <Kitten/libKitten.h>
 #import <AudioToolbox/AudioServices.h>
@@ -84,9 +85,6 @@ static BOOL removeRemoveAppShortcut;
 static BOOL removeSpotifySearchShortcut;
 static BOOL removeSpotifyRecentlyPlayedShortcut;
 
-
-static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.perfectspotifyprefs.plist";
-
 #define kClass(string) NSClassFromString(string)
 #define kIsCurrentApp(string) [[[NSBundle mainBundle] bundleIdentifier] isEqual: string]
 #define kOrionExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/OrionSettings.dylib"]
@@ -95,7 +93,7 @@ static NSString *const prefsKeys = @"/var/mobile/Library/Preferences/me.luki.per
 
 static void loadPrefs() {
 
-	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:prefsKeys];
+	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: kPath];
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
 
 	// Miscellaneous
