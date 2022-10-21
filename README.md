@@ -1,8 +1,6 @@
 # PerfectSpotify
 
-![PS](https://twickd.com/images/cf59460372b0f5db74143d603be9a92071f23ce3.jpeg)
-
-## This project is EOL, the chances of it being updated are slim.
+<img src="https://twickd.com/images/cf59460372b0f5db74143d603be9a92071f23ce3.jpeg" width="300">
 
 ## Miscellaneous
 
@@ -72,7 +70,7 @@
 
 ## LICENSE
 
-* [GNU General Public License 2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+* [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0/)
 
 ## Assets LICENSE
 
