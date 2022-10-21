@@ -1,5 +1,4 @@
-export ARCHS = arm64 arm64e
-export TARGET := iphone:clang:14.4:latest
+export TARGET := iphone:clang:latest:14.0
 INSTALL_TARGET_PROCESSES = Spotify Preferences
 
 TWEAK_NAME = PerfectSpotify
