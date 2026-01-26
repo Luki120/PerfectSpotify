@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>3D Touch</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>addPSpotifyShortcut</string>
+				<key>label</key>
+				<string>Add PSpotify Shortcut</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Spotify</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>removeSpotifySearchShortcut</string>
+				<key>label</key>
+				<string>Remove "Search"</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>removeSpotifyRecentlyPlayedShortcut</string>
+				<key>label</key>
+				<string>Remove "Recently Played"</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Stock</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>removeEditHSShortcut</string>
+				<key>label</key>
+				<string>Remove "Edit HomeScreen"</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>removeShareAppShortcut</string>
+				<key>label</key>
+				<string>Remove "Share App"</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.perfectspotifyprefs</string>
+				<key>key</key>
+				<string>removeRemoveAppShortcut</string>
+				<key>label</key>
+				<string>Remove "Remove App"</string>
+			</dict>
+
+		</array>
+		<key>title</key>
+		<string>PerfectSpotify</string>
+	</dict>
+</plist>
